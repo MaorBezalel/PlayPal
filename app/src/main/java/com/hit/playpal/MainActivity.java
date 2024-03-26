@@ -10,15 +10,14 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.Firebase;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.hit.playpal.data.enums.Genre;
-import com.hit.playpal.data.enums.Platform;
-import com.hit.playpal.data.models.Game;
+
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
