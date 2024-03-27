@@ -1,7 +1,8 @@
 package com.hit.playpal.home.domain.repositories;
 
-import games.Game;
-import home.domain.util.GameFilterOptions;
+import com.hit.playpal.home.domain.util.GameFilterOptions;
+
+import com.hit.playpal.entities.games.Game;
 
 import java.util.List;
 

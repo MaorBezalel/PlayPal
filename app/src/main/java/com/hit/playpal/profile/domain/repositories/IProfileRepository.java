@@ -1,8 +1,8 @@
 package com.hit.playpal.profile.domain.repositories;
 
-import chats.GroupChat;
-import games.Game;
-import users.User;
+import com.hit.playpal.entities.chats.GroupChat;
+import com.hit.playpal.entities.games.Game;
+import com.hit.playpal.entities.users.User;
 
 import java.util.List;
 

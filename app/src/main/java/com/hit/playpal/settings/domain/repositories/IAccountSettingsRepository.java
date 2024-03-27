@@ -1,6 +1,8 @@
 package com.hit.playpal.settings.domain.repositories;
 
-import users.User;
+
+
+import com.hit.playpal.entities.users.User;
 
 import java.util.List;
 

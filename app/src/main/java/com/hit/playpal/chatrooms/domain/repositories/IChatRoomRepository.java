@@ -1,11 +1,11 @@
 package com.hit.playpal.chatrooms.domain.repositories;
 
-import chats.Chat;
-import chats.enums.AppearancePolicy;
-import chats.enums.ContentType;
-import chats.enums.JoiningPolicy;
-import chats.enums.UserChatRole;
-import users.User;
+import com.hit.playpal.entities.chats.Chat;
+import com.hit.playpal.entities.chats.enums.AppearancePolicy;
+import com.hit.playpal.entities.chats.enums.ContentType;
+import com.hit.playpal.entities.chats.enums.JoiningPolicy;
+import com.hit.playpal.entities.chats.enums.UserChatRole;
+import com.hit.playpal.entities.users.User;
 
 import java.util.Date;
 import java.util.HashMap;

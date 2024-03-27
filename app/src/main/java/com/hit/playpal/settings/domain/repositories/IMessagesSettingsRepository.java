@@ -1,6 +1,6 @@
 package com.hit.playpal.settings.domain.repositories;
 
-import users.enums.MessagesPolicy;
+import com.hit.playpal.entities.users.enums.MessagesPolicy;
 
 public interface IMessagesSettingsRepository {
     MessagesPolicy getMessagesSettingsForThisAccount();

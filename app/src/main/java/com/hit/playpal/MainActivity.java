@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.Firebase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hit.playpal.R;
 
 
 import java.lang.reflect.Array;

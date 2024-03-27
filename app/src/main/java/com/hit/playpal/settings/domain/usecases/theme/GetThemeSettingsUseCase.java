@@ -1,7 +1,7 @@
 package com.hit.playpal.settings.domain.usecases.theme;
 
 import com.hit.playpal.settings.domain.repositories.IThemeSettingsRepository;
-import users.enums.ThemePolicy;
+import com.hit.playpal.entities.users.enums.ThemePolicy;
 
 public class GetThemeSettingsUseCase {
     private IThemeSettingsRepository mThemeSettingsRepository;
