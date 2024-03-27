@@ -40,6 +40,8 @@ dependencies {
     implementation(libs.firebase.ui.auth)
     implementation(libs.firebase.ui.firestore)
     implementation(files("..\\lib\\DataModels.jar"))
+    implementation(files("..\\lib\\DataModels.jar"))
+    implementation(files("..\\lib\\DataModels.jar"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
