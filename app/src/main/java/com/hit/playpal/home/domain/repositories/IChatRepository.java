@@ -1,11 +1,10 @@
 package com.hit.playpal.home.domain.repositories;
 
-import chats.Chat;
-import chats.GroupChat;
-import chats.OneToOneChat;
-import chats.enums.ChatType;
+import com.hit.playpal.entities.chats.Chat;
+import com.hit.playpal.entities.chats.GroupChat;
+import com.hit.playpal.entities.chats.OneToOneChat;
+import com.hit.playpal.entities.chats.enums.ChatType;
 
-import javax.swing.*;
 import java.util.List;
 
 public interface IChatRepository {

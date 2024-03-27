@@ -1,6 +1,6 @@
 package com.hit.playpal.settings.domain.repositories;
 
-import users.enums.ThemePolicy;
+import com.hit.playpal.entities.users.enums.ThemePolicy;
 
 public interface IThemeSettingsRepository {
     ThemePolicy getThemeSettingsForThisAccount();

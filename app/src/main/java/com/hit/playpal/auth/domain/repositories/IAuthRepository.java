@@ -1,6 +1,7 @@
 package com.hit.playpal.auth.domain.repositories;
 
-import users.User;
+
+import com.hit.playpal.entities.users.User;
 
 public interface IAuthRepository {
     User loginWithEmail(String iEmail, String iPassword);

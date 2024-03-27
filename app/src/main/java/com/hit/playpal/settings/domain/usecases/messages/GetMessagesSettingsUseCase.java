@@ -1,7 +1,7 @@
 package com.hit.playpal.settings.domain.usecases.messages;
 
 import com.hit.playpal.settings.domain.repositories.IMessagesSettingsRepository;
-import users.enums.MessagesPolicy;
+import com.hit.playpal.entities.users.enums.MessagesPolicy;
 
 public class GetMessagesSettingsUseCase {
     private IMessagesSettingsRepository mMessagesSettingsRepository;

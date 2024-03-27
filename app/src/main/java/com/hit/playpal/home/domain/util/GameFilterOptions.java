@@ -1,7 +1,7 @@
 package com.hit.playpal.home.domain.util;
 
-import games.enums.Genre;
-import games.enums.Platform;
+import com.hit.playpal.entities.games.enums.Genre;
+import com.hit.playpal.entities.games.enums.Platform;
 
 public class GameFilterOptions {
     private String mGameName;

@@ -1,6 +1,6 @@
 package com.hit.playpal.settings.domain.repositories;
 
-import users.enums.NotificationPolicy;
+import com.hit.playpal.entities.users.enums.NotificationPolicy;
 
 import java.util.HashMap;
 
