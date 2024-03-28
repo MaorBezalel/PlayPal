@@ -39,7 +39,7 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.ui.auth)
     implementation(libs.firebase.ui.firestore)
-    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     testImplementation(libs.junit)
