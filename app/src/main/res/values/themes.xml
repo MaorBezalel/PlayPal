@@ -4,5 +4,48 @@
 
     </style>
 
+    <style name="PrimaryButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/background</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginStart">30dp</item>
+        <item name="android:layout_marginEnd">30dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:animation">@android:anim/fade_in</item>
+        <item name="cornerRadius">60dp</item>
+    </style>
+
+    <style name="DangerousButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/error_500</item>
+        <item name="android:textColor">@color/background</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginStart">30dp</item>
+        <item name="android:layout_marginEnd">30dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">60dp</item>
+        <item name="android:animation">@android:anim/fade_in</item>
+    </style>
+
+
+    <style name="InputFieldLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/secondary_50</item>
+        <item name="boxStrokeColor">@color/secondary_500</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="hintTextColor">@color/secondary</item>
+        <item name="errorTextColor">@color/error</item>
+        <item name="android:textColorHint">#A5A5A5</item>
+    </style>
+
     <style name="Theme.PlayPal" parent="Base.Theme.PlayPal" />
 </resources>

@@ -2,65 +2,102 @@ package com.hit.playpal.auth.ui.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.hit.playpal.R;
+import com.hit.playpal.auth.ui.validations.AuthValidations;
+import com.hit.playpal.auth.ui.viewmodels.AuthViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LoginTabFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LoginTabFragment extends Fragment {
+    private AuthViewModel mAuthViewModel;
+    private TextInputLayout mEmailOrUsernameTextInputLayout;
+    private TextInputLayout mPasswordTextInputLayout;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public LoginTabFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LoginTabFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LoginTabFragment newInstance(String param1, String param2) {
-        LoginTabFragment fragment = new LoginTabFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public View onCreateView(@NonNull LayoutInflater iInflater, ViewGroup iContainer,
+                             Bundle iSavedInstanceState) {
+        return iInflater.inflate(R.layout.fragment_login_tab, iContainer, false);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onViewCreated(@NonNull View iView, Bundle iSavedInstanceState) {
+        super.onViewCreated(iView, iSavedInstanceState);
+        initAndSubscribeToViewModels();
+        initViews(iView);
+        setListeners(iView);
+    }
+
+    public void onLoginButtonClicked(View iView) {
+        String emailOrUsername = mEmailOrUsernameTextInputLayout.getEditText().getText().toString().trim().toLowerCase();
+        String password = mPasswordTextInputLayout.getEditText().getText().toString().trim();
+        boolean isValid = performInputValidation(emailOrUsername, password);
+
+        if (isValid) {
+            if (isEmail(emailOrUsername)) {
+                mAuthViewModel.loginWithEmail(emailOrUsername, password);
+            } else {
+                mAuthViewModel.loginWithUsername(emailOrUsername, password);
+            }
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login_tab, container, false);
+    private void initAndSubscribeToViewModels() {
+        mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+
+        mAuthViewModel.getLoginFailure().observe(getViewLifecycleOwner(), loginFailure -> {
+            if (loginFailure != null) {
+                switch (loginFailure) {
+                    case INVALID_DETAILS:
+                        mEmailOrUsernameTextInputLayout.setError("Invalid email/username or password");
+                        mPasswordTextInputLayout.setError("Invalid email/username or password");
+                        break;
+                    case UNKNOWN_ERROR:
+                        Toast.makeText(requireContext(), "Internal error", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+    }
+
+    private void initViews(@NonNull View iView) {
+        mEmailOrUsernameTextInputLayout = iView.findViewById(R.id.textinputlayout_login_email_or_username);
+        mPasswordTextInputLayout = iView.findViewById(R.id.textinputlayout_login_password);
+    }
+
+    private void setListeners(@NonNull View iView) {
+        iView.findViewById(R.id.button_login).setOnClickListener(this::onLoginButtonClicked);
+    }
+
+    private boolean performInputValidation(String iEmailOrUsername, String iPassword) {
+        boolean isValid = true;
+
+        if (!AuthValidations.isEmailValid(iEmailOrUsername) && !AuthValidations.isUsernameValid(iEmailOrUsername)) {
+            mEmailOrUsernameTextInputLayout.setError("Invalid email or username");
+            isValid = false;
+        } else {
+            mEmailOrUsernameTextInputLayout.setError(null);
+        }
+
+        if (!AuthValidations.isPasswordValid(iPassword)) {
+            mPasswordTextInputLayout.setError("Invalid password");
+            isValid = false;
+        } else {
+            mPasswordTextInputLayout.setError(null);
+        }
+
+        return isValid;
+    }
+
+    private boolean isEmail(String iEmailOrUsername) {
+        return Patterns.EMAIL_ADDRESS.matcher(iEmailOrUsername).matches();
     }
 }

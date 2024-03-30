@@ -3,6 +3,9 @@
     <color name="splash_screen">#543885</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--   Text Colors    -->
+    <color name="text">#120227</color> <!-- default text color -->
     <color name="text_50">#FFF1E7FE</color>
     <color name="text_100">#FFE2CFFC</color>
     <color name="text_200">#FFC69EFA</color>
@@ -14,6 +17,9 @@
     <color name="text_800">#FF2D0561</color>
     <color name="text_900">#FF160330</color>
     <color name="text_950">#FF0B0118</color>
+
+    <!--   Background Colors    -->
+    <color name="background">#F2ECFE</color> <!-- default background color -->
     <color name="background_50">#FFEEE7FE</color>
     <color name="background_100">#FFDECFFC</color>
     <color name="background_200">#FFBD9EFA</color>
@@ -25,6 +31,9 @@
     <color name="background_800">#FF240561</color>
     <color name="background_900">#FF120330</color>
     <color name="background_950">#FF090118</color>
+
+    <!--   Primary Colors    -->
+    <color name="primary">#543885</color> <!-- default primary color -->
     <color name="primary_50">#FFF1EDF7</color>
     <color name="primary_100">#FFE3DBF0</color>
     <color name="primary_200">#FFC6B7E1</color>
@@ -36,6 +45,9 @@
     <color name="primary_800">#FF2D1E48</color>
     <color name="primary_900">#FF170F24</color>
     <color name="primary_950">#FF0B0812</color>
+
+    <!--   Secondary Colors    -->
+    <color name="secondary">#FBA213</color> <!-- default secondary color -->
     <color name="secondary_50">#FFFFF5E6</color>
     <color name="secondary_100">#FFFEEBCD</color>
     <color name="secondary_200">#FFFDD89B</color>
@@ -47,6 +59,9 @@
     <color name="secondary_800">#FF643F02</color>
     <color name="secondary_900">#FF321F01</color>
     <color name="secondary_950">#FF191000</color>
+
+    <!--   Accent Colors    -->
+    <color name="accent">#F65846</color> <!-- default accent color -->
     <color name="accent_50">#FFFee9e7</color>
     <color name="accent_100">#FFFdd3ce</color>
     <color name="accent_200">#FFfaa79e</color>
@@ -58,4 +73,21 @@
     <color name="accent_800">#FF610e05</color>
     <color name="accent_900">#FF310702</color>
     <color name="accent_950">#FF180301</color>
+
+    <!--   Error Colors    -->
+    <color name="error">#B50000</color> <!-- default error color -->
+    <color name="error_50">#FFFAE6E6</color>
+    <color name="error_100">#FFF5CDCD</color>
+    <color name="error_200">#FFEB9999</color>
+    <color name="error_300">#FFE16666</color>
+    <color name="error_400">#FFD73333</color>
+    <color name="error_500">#FFCC0000</color>
+    <color name="error_600">#FF990000</color>
+    <color name="error_700">#FF660000</color>
+    <color name="error_800">#FF330000</color>
+    <color name="error_900">#FF000000</color>
+    <color name="light_blue_400">#FF29B6F6</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="gray_400">#FFBDBDBD</color>
+    <color name="gray_600">#FF757575</color>
 </resources>
