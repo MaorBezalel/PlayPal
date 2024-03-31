@@ -67,15 +67,14 @@
         android:hint="@string/display_name"
         app:counterEnabled="true"
         app:counterMaxLength="32"
-        app:helperText="This is how others see you. You can use special characters and emoji."
-        app:helperTextEnabled="false"
         app:endIconMode="clear_text"
         app:errorEnabled="true"
         app:expandedHintEnabled="true"
+        app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Body1"
         app:hintAnimationEnabled="true"
         app:hintEnabled="true"
-        app:startIconTint="@color/accent"
-        app:startIconDrawable="@android:drawable/ic_menu_myplaces">
+        app:startIconDrawable="@android:drawable/ic_menu_myplaces"
+        app:startIconTint="@color/accent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textinput_signup_display_name"

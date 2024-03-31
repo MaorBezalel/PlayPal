@@ -92,6 +92,10 @@ public class SignupTabFragment extends Fragment {
 
     private void setListeners(@NonNull View iView) {
         iView.findViewById(R.id.button_signup).setOnClickListener(this::handleSignupButtonClick);
+
+        mDisplayNameTextInputLayout.getEditText().setOnFocusChangeListener((v, hasFocus) -> {
+           mDisplayNameTextInputLayout.setHelperText(hasFocus ? "This is how others see you. You can use special characters and emoji." : null);
+        });
     }
 
     private boolean performInputValidation(String iEmail, String iUsername, String iDisplayName, String iPassword, String iConfirmPassword) {

@@ -34,7 +34,8 @@
             android:theme="@style/Theme.PlayPal" />
         <activity
             android:name=".auth.ui.activities.AuthActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

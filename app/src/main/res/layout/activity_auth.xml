@@ -9,35 +9,50 @@
     android:background="@color/background"
     tools:context=".auth.ui.activities.AuthActivity">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tablayout_auth"
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:tabIndicatorHeight="3dp"
-        app:tabIndicatorFullWidth="true"
-        app:tabIndicatorColor="@color/secondary"
-        app:tabSelectedTextColor="@color/secondary"
-        app:tabTextColor="@color/text">
+        android:adjustViewBounds="true"
+        app:srcCompat="@drawable/logo_with_bg" />
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabitem_auth_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabitem_auth_signup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/signup" />
-    </com.google.android.material.tabs.TabLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewpager2_auth"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_auth_body"
+        android:orientation="vertical">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tablayout_auth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:tabIndicatorColor="@color/secondary"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorHeight="3dp"
+            app:tabSelectedTextColor="@color/secondary"
+            app:tabTextColor="@color/text">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabitem_auth_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabitem_auth_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signup" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewpager2_auth"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
 </LinearLayout>
