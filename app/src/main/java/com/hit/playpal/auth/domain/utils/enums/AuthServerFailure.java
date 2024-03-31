@@ -16,10 +16,11 @@ public enum AuthServerFailure {
     USERNAME_ALREADY_TAKEN,
 
     /**
-     * <p>When the user tries to login with invalid details, such as:</p>
+     * <p>When the user provides invalid details during login or forgot password. Can be due to:</p>
      * <ul>
-     *     <li>Unknown email/username</li>
-     *     <li>Incorrect password</li>
+     *     <li>Unknown email/username during login</li>
+     *     <li>Incorrect password during login</li>
+     *     <li>Unknown email during forgot password</li>
      * </ul>
      */
     INVALID_DETAILS,

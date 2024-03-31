@@ -40,4 +40,8 @@ public class FirebaseFirestoreDataSource {
     public Task<Void> storeUserDefaultSettingsData(String iUid, Settings iSettings) {
         return DB.collection("users").document(iUid).collection("settings").document("data").set(iSettings);
     }
+
+    public Task<QuerySnapshot> getUserPrivateByEmail(String iEmail) {
+        return DB.collection("users").whereEqualTo("email", iEmail).get();
+    }
 }

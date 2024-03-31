@@ -8,12 +8,11 @@ import com.hit.playpal.auth.domain.usecases.CreateUserUseCase;
 import com.hit.playpal.auth.domain.usecases.GetUserByUidUseCase;
 import com.hit.playpal.auth.domain.usecases.GetUserByUsernameUseCase;
 import com.hit.playpal.auth.domain.usecases.GetUserPrivateByUidUseCase;
+import com.hit.playpal.auth.domain.usecases.ResetPasswordUseCase;
 import com.hit.playpal.auth.domain.usecases.StoreUserDefaultSettingsDataUseCase;
 import com.hit.playpal.auth.domain.usecases.StoreUserPrivateDataUseCase;
 import com.hit.playpal.auth.domain.usecases.StoreUserPublicDataUseCase;
 import com.hit.playpal.auth.domain.utils.enums.AuthServerFailure;
-import com.hit.playpal.auth.domain.utils.enums.LoginFailure;
-import com.hit.playpal.auth.domain.utils.enums.SignupFailure;
 import com.hit.playpal.auth.domain.usecases.IsUsernameUniqueUseCase;
 import com.hit.playpal.auth.domain.usecases.LoginWithEmailUseCase;
 import com.hit.playpal.utils.UseCaseResult;
@@ -43,6 +42,18 @@ public class AuthViewModel extends ViewModel {
     private final MutableLiveData<AuthServerFailure> mLoginFailure = new MutableLiveData<>();
     public MutableLiveData<AuthServerFailure> getLoginFailure() {
         return mLoginFailure;
+    }
+
+    // If mResetPasswordSuccess changes, an observer in ForgotPasswordFragment will be triggered indicating that the password reset was successful
+    private final MutableLiveData<Void> mResetPasswordSuccess = new MutableLiveData<>();
+    public MutableLiveData<Void> getResetPasswordSuccess() {
+        return mResetPasswordSuccess;
+    }
+
+    // If mResetPasswordFailure changes, an observer in ForgotPasswordFragment will be triggered indicating that the password reset failed
+    private final MutableLiveData<AuthServerFailure> mResetPasswordFailure = new MutableLiveData<>();
+    public MutableLiveData<AuthServerFailure> getResetPasswordFailure() {
+        return mResetPasswordFailure;
     }
 
     public void loginWithEmail(String iEmail, String iPassword) {
@@ -170,6 +181,19 @@ public class AuthViewModel extends ViewModel {
                         mUser.setValue(userPublic.get());
                     } else {
                         mSignupFailure.setValue(storeUserDefaultSettingsDataResult.getFailure());
+                    }
+                });
+    }
+
+    public void forgotPassword(String iEmail) {
+        ResetPasswordUseCase resetPasswordUseCase = new ResetPasswordUseCase(new AuthRepository());
+
+        resetPasswordUseCase.execute(iEmail)
+                .thenAccept(resetPasswordResult -> {
+                    if (resetPasswordResult.isSuccessful()) {
+                        mResetPasswordSuccess.setValue(null);
+                    } else {
+                        mResetPasswordFailure.setValue(resetPasswordResult.getFailure());
                     }
                 });
     }

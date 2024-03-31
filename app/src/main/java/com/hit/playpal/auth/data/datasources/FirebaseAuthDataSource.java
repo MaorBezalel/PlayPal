@@ -29,4 +29,8 @@ public class FirebaseAuthDataSource {
             return null;
         }
     }
+
+    public Task<Void> resetPassword(String iEmail) {
+        return AUTH.sendPasswordResetEmail(iEmail);
+    }
 }

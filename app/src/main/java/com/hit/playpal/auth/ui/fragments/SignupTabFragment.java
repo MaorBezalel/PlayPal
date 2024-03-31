@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -26,6 +27,7 @@ public class SignupTabFragment extends Fragment {
     private TextInputLayout mDisplayNameTextInputLayout;
     private TextInputLayout mPasswordTextInputLayout;
     private TextInputLayout mConfirmPasswordTextInputLayout;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater iInflater, ViewGroup iContainer, Bundle iSavedInstanceState) {
@@ -49,6 +51,9 @@ public class SignupTabFragment extends Fragment {
         boolean isValid = performInputValidation(email, username, displayName, password, confirmPassword);
 
         if (isValid) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            requireActivity().findViewById(R.id.button_signup).setVisibility(View.GONE);
+
             mAuthViewModel.signup(email, username, displayName, password);
         }
     }
@@ -57,6 +62,9 @@ public class SignupTabFragment extends Fragment {
         mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
         mAuthViewModel.getSignupFailure().observe(getViewLifecycleOwner(), signupFailure -> {
+            mProgressBar.setVisibility(View.GONE);
+            requireActivity().findViewById(R.id.button_signup).setVisibility(View.VISIBLE);
+
             if (signupFailure!= null) {
                 switch (signupFailure) {
                     case EMAIL_ALREADY_TAKEN:
@@ -88,6 +96,7 @@ public class SignupTabFragment extends Fragment {
         mDisplayNameTextInputLayout = iView.findViewById(R.id.textinputlayout_signup_display_name);
         mPasswordTextInputLayout = iView.findViewById(R.id.textinputlayout_signup_password);
         mConfirmPasswordTextInputLayout = iView.findViewById(R.id.textinputlayout_signup_confirm_password);
+        mProgressBar = iView.findViewById(R.id.progressbar_signup);
     }
 
     private void setListeners(@NonNull View iView) {

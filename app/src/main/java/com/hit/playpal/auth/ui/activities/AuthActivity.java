@@ -2,8 +2,10 @@ package com.hit.playpal.auth.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
@@ -15,6 +17,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.hit.playpal.R;
 import com.hit.playpal.auth.ui.adapters.AuthViewPagerAdapter;
+import com.hit.playpal.auth.ui.fragments.ForgotPasswordFragment;
 import com.hit.playpal.auth.ui.viewmodels.AuthViewModel;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.home.ui.activities.HomeActivity;
@@ -25,6 +28,7 @@ public class AuthActivity extends AppCompatActivity {
 
     private TabLayout mTabLayout;
     private ViewPager2 mViewPager2;
+    private ForgotPasswordFragment mForgotPasswordFragment;
     private AuthViewPagerAdapter mViewPagerAdapter;
 
     @Override
@@ -45,11 +49,6 @@ public class AuthActivity extends AppCompatActivity {
 
         initViewPagerAndItsAdapter();
         initTabLayoutAndHandleTabSelection();
-
-        // TODO: check if user is authenticated
-//        if (mViewModel.isUserAuthenticated()) {
-//            // what to do if user is authenticated
-//        }
     }
 
     private void handleAuthenticatedUser(User user) {
@@ -87,5 +86,10 @@ public class AuthActivity extends AppCompatActivity {
                 mTabLayout.selectTab(mTabLayout.getTabAt(position));
             }
         });
+    }
+
+    public void initForgotPasswordFragment() {
+        mForgotPasswordFragment = new ForgotPasswordFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.linearlayout_auth_login_and_signup, mForgotPasswordFragment).commit();
     }
 }

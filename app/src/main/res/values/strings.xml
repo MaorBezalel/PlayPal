@@ -10,4 +10,8 @@
     <string name="email">Email</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="display_name">Display Name</string>
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="forgot_password_description">Provide your account\'s email for which you want to reset your password!</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="back">Back</string>
 </resources>

@@ -58,12 +58,37 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_login"
-        style="@style/PrimaryButtonStyle"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textview_forgot_password"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:animation="@android:anim/fade_in"
-        android:text="@string/login" />
+        android:layout_gravity="right"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="15dp"
+        android:text="forgot password?"
+        android:textSize="16sp"
+        android:textColor="@color/accent"
+         />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:id="@+id/progressbar_login"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="invisible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_login"
+            style="@style/PrimaryButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animation="@android:anim/fade_in"
+            android:text="@string/login" />
+
+    </FrameLayout>
 
 </LinearLayout>

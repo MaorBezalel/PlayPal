@@ -17,6 +17,7 @@
         app:srcCompat="@drawable/logo_with_bg" />
 
     <LinearLayout
+        android:id="@+id/linearlayout_auth_login_and_signup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_auth_body"

@@ -1,5 +1,7 @@
 package com.hit.playpal.auth.data.repositories;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
@@ -83,8 +85,25 @@ public class AuthRepository implements IAuthRepository {
     }
 
     @Override
-    public void forgotPassword(String iEmail) {
+    public Task<Void> resetPassword(String iEmail) {
+        return AUTH.resetPassword(iEmail).continueWithTask(task -> {
+            if (task.isSuccessful()) {
+                Log.d("AuthRepository", "Password reset email sent successfully");
+                return task;
+            } else {
+                if (task.getException() instanceof FirebaseAuthException) {
+                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
+                    if (errorCode.equals("ERROR_USER_NOT_FOUND")) {
+                        return Tasks.forException(new InvalidDetailsException());
+                    } else {
+                        return Tasks.forException(new InternalErrorException());
+                    }
+                } else {
+                    return Tasks.forException(new InternalErrorException());
+                }
+            }
+        });
     }
 
     @Override
@@ -110,5 +129,10 @@ public class AuthRepository implements IAuthRepository {
     @Override
     public Task<QuerySnapshot> getUserByEmail(String iEmail) {
         return DB.getUserByEmail(iEmail);
+    }
+
+    @Override
+    public Task<QuerySnapshot> getUserPrivateByEmail(String iEmail) {
+        return DB.getUserPrivateByEmail(iEmail);
     }
 }
