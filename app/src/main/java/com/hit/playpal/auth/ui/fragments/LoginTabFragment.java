@@ -17,6 +17,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.hit.playpal.R;
 import com.hit.playpal.auth.ui.validations.AuthValidations;
 import com.hit.playpal.auth.ui.viewmodels.AuthViewModel;
+import com.hit.playpal.utils.Out;
 
 public class LoginTabFragment extends Fragment {
     private static final String TAG = "LoginTabFragment";
@@ -95,16 +96,17 @@ public class LoginTabFragment extends Fragment {
 
     private boolean performInputValidation(String iEmailOrUsername, String iPassword) {
         boolean isValid = true;
+        Out<String> invalidationReason = Out.of(String.class);
 
-        if (!AuthValidations.isEmailValid(iEmailOrUsername) && !AuthValidations.isUsernameValid(iEmailOrUsername)) {
-            mEmailOrUsernameTextInputLayout.setError("Invalid email or username");
+        if (!AuthValidations.isEmailOrUsernameValid(iEmailOrUsername, invalidationReason)) {
+            mEmailOrUsernameTextInputLayout.setError(invalidationReason.get());
             isValid = false;
         } else {
             mEmailOrUsernameTextInputLayout.setError(null);
         }
 
-        if (!AuthValidations.isPasswordValid(iPassword)) {
-            mPasswordTextInputLayout.setError("Invalid password");
+        if (!AuthValidations.isPasswordValid(iPassword, invalidationReason)) {
+            mPasswordTextInputLayout.setError(invalidationReason.get());
             isValid = false;
         } else {
             mPasswordTextInputLayout.setError(null);

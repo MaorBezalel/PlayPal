@@ -16,6 +16,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.hit.playpal.R;
 import com.hit.playpal.auth.ui.validations.AuthValidations;
 import com.hit.playpal.auth.ui.viewmodels.AuthViewModel;
+import com.hit.playpal.utils.Out;
 
 public class SignupTabFragment extends Fragment {
 
@@ -45,11 +46,10 @@ public class SignupTabFragment extends Fragment {
         String displayName = mDisplayNameTextInputLayout.getEditText().getText().toString().trim();
         String password = mPasswordTextInputLayout.getEditText().getText().toString().trim();
         String confirmPassword = mConfirmPasswordTextInputLayout.getEditText().getText().toString().trim();
-        boolean isValid = performInputValidation(email, username, displayName, password);
+        boolean isValid = performInputValidation(email, username, displayName, password, confirmPassword);
 
         if (isValid) {
             mAuthViewModel.signup(email, username, displayName, password);
-            //mAuthViewModel.nestedSignup(email, username, displayName, password);
         }
     }
 
@@ -94,39 +94,42 @@ public class SignupTabFragment extends Fragment {
         iView.findViewById(R.id.button_signup).setOnClickListener(this::handleSignupButtonClick);
     }
 
-    private boolean performInputValidation(String iEmail, String iUsername, String iDisplayName, String iPassword) {
+    private boolean performInputValidation(String iEmail, String iUsername, String iDisplayName, String iPassword, String iConfirmPassword) {
         boolean isValid = true;
+        Out<String> invalidationReason = Out.of(String.class);
 
-        if (!AuthValidations.isEmailValid(iEmail)) {
-            mEmailTextInputLayout.setError("Invalid email");
+        if (!AuthValidations.isEmailValid(iEmail, invalidationReason)) {
+            mEmailTextInputLayout.setError(invalidationReason.get());
             isValid = false;
         } else {
             mEmailTextInputLayout.setError(null);
         }
 
-        if (!AuthValidations.isUsernameValid(iUsername)) {
-            mUsernameTextInputLayout.setError("Invalid username");
+        if (!AuthValidations.isUsernameValid(iUsername, invalidationReason)) {
+            Log.d("SignupTabFragment", "Username is invalid: " + invalidationReason.get());
+            mUsernameTextInputLayout.setError(invalidationReason.get());
             isValid = false;
         } else {
             mUsernameTextInputLayout.setError(null);
         }
 
-        if (!AuthValidations.isDisplayNameValid(iDisplayName)) {
-            mDisplayNameTextInputLayout.setError("Invalid display name");
+        if (!AuthValidations.isDisplayNameValid(iDisplayName, invalidationReason)) {
+            mDisplayNameTextInputLayout.setError(invalidationReason.get());
             isValid = false;
         } else {
             mDisplayNameTextInputLayout.setError(null);
         }
 
-        if (!AuthValidations.isPasswordValid(iPassword)) {
-            mPasswordTextInputLayout.setError("Invalid password");
+        if (!AuthValidations.isPasswordValid(iPassword, invalidationReason)) {
+            mPasswordTextInputLayout.setError(invalidationReason.get());
             isValid = false;
         } else {
             mPasswordTextInputLayout.setError(null);
+
         }
 
-        if (!iPassword.equals(mConfirmPasswordTextInputLayout.getEditText().getText().toString().trim())) {
-            mConfirmPasswordTextInputLayout.setError("Passwords do not match");
+        if (!AuthValidations.isConfirmPasswordValid(iPassword, iConfirmPassword, invalidationReason)) {
+            mConfirmPasswordTextInputLayout.setError(invalidationReason.get());
             isValid = false;
         } else {
             mConfirmPasswordTextInputLayout.setError(null);
