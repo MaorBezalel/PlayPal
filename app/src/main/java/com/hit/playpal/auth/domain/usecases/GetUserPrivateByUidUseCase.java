@@ -3,7 +3,7 @@ package com.hit.playpal.auth.domain.usecases;
 import androidx.annotation.NonNull;
 
 import com.hit.playpal.auth.domain.repositories.IAuthRepository;
-import com.hit.playpal.auth.domain.utils.enums.LoginFailure;
+import com.hit.playpal.auth.domain.utils.enums.AuthServerFailure;
 import com.hit.playpal.utils.UseCaseResult;
 import com.hit.playpal.entities.users.UserPrivate;
 
@@ -16,15 +16,15 @@ public class GetUserPrivateByUidUseCase {
         mRepository = iRepository;
     }
 
-    public CompletableFuture<UseCaseResult<UserPrivate, LoginFailure>> execute(@NonNull String iUid) {
-        CompletableFuture<UseCaseResult<UserPrivate, LoginFailure>> future = new CompletableFuture<>();
+    public CompletableFuture<UseCaseResult<UserPrivate, AuthServerFailure>> execute(@NonNull String iUid) {
+        CompletableFuture<UseCaseResult<UserPrivate, AuthServerFailure>> future = new CompletableFuture<>();
 
         mRepository.getUserPrivateByUid(iUid).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 UserPrivate userPrivate = task.getResult().toObject(UserPrivate.class);
-                future.complete(new UseCaseResult<UserPrivate, LoginFailure>(userPrivate));
+                future.complete(new UseCaseResult<UserPrivate, AuthServerFailure>(userPrivate));
             } else {
-                future.complete(new UseCaseResult<UserPrivate, LoginFailure>(LoginFailure.UNKNOWN_ERROR));
+                future.complete(new UseCaseResult<UserPrivate, AuthServerFailure>(AuthServerFailure.INTERNAL_DB_ERROR));
             }
         });
 

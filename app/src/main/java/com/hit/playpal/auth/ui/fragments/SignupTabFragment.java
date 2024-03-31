@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,13 +60,22 @@ public class SignupTabFragment extends Fragment {
             if (signupFailure!= null) {
                 switch (signupFailure) {
                     case EMAIL_ALREADY_TAKEN:
-                        mEmailTextInputLayout.setError("Email already taken");
+                        mEmailTextInputLayout.setError("Email already belongs to an existing account, try logging in");
                         break;
                     case USERNAME_ALREADY_TAKEN:
-                        mUsernameTextInputLayout.setError("Username already taken");
+                        mUsernameTextInputLayout.setError("Username already belongs to an existing account, try logging in");
+                        break;
+                    case INTERNAL_AUTH_ERROR:
+                        Toast.makeText(requireContext(), "Signup failed due to an internal error, please try again later", Toast.LENGTH_SHORT).show();
+                        Log.e("SignupTabFragment", "Internal error occurred during Authentication while signing up");
+                        break;
+                    case INTERNAL_DB_ERROR:
+                        Toast.makeText(requireContext(), "Signup failed due to an internal error, please try again later", Toast.LENGTH_SHORT).show();
+                        Log.e("SignupTabFragment", "Internal error occurred during Database operation while signing up");
                         break;
                     default:
-                        Toast.makeText(requireContext(), "Signup failed due to an unknown error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Signup failed due to an unknown error, please try again later", Toast.LENGTH_SHORT).show();
+                        Log.e("SignupTabFragment", "Unknown error occurred while signing up (might mixed up with login errors)");
                         break;
                 }
             }

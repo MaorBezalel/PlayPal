@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.hit.playpal.auth.ui.validations.AuthValidations;
 import com.hit.playpal.auth.ui.viewmodels.AuthViewModel;
 
 public class LoginTabFragment extends Fragment {
+    private static final String TAG = "LoginTabFragment";
+
     private AuthViewModel mAuthViewModel;
     private TextInputLayout mEmailOrUsernameTextInputLayout;
     private TextInputLayout mPasswordTextInputLayout;
@@ -60,8 +63,21 @@ public class LoginTabFragment extends Fragment {
                         mEmailOrUsernameTextInputLayout.setError("Invalid email/username or password");
                         mPasswordTextInputLayout.setError("Invalid email/username or password");
                         break;
-                    case UNKNOWN_ERROR:
-                        Toast.makeText(requireContext(), "Internal error", Toast.LENGTH_SHORT).show();
+                    case INTERNAL_AUTH_ERROR:
+                        Toast.makeText(requireContext(), "Login failed due to an internal error, please try again later", Toast.LENGTH_SHORT).show();
+                        Log.e(LoginTabFragment.TAG, "Internal error occurred during Authentication while logging in");
+                        break;
+                    case INTERNAL_DB_ERROR:
+                        Toast.makeText(requireContext(), "Login failed due to an internal error, please try again later", Toast.LENGTH_SHORT).show();
+                        Log.e(LoginTabFragment.TAG, "Internal error occurred during Database operation while logging in");
+                        break;
+                    case DISABLED_ACCOUNT:
+                        Toast.makeText(requireContext(), "Your account has been disabled, please try again later or contact support", Toast.LENGTH_SHORT).show();
+                        Log.e(LoginTabFragment.TAG, "Account might have been disabled after multiple failed login attempts");
+                        break;
+                    default:
+                        Toast.makeText(requireContext(), "Login failed due to an unknown error, please try again later", Toast.LENGTH_SHORT).show();
+                        Log.e(LoginTabFragment.TAG, "Unknown error occurred while logging in (might mixed up with signup errors)");
                         break;
                 }
             }

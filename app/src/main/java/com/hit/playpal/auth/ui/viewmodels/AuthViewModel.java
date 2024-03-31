@@ -11,6 +11,7 @@ import com.hit.playpal.auth.domain.usecases.GetUserPrivateByUidUseCase;
 import com.hit.playpal.auth.domain.usecases.StoreUserDefaultSettingsDataUseCase;
 import com.hit.playpal.auth.domain.usecases.StoreUserPrivateDataUseCase;
 import com.hit.playpal.auth.domain.usecases.StoreUserPublicDataUseCase;
+import com.hit.playpal.auth.domain.utils.enums.AuthServerFailure;
 import com.hit.playpal.auth.domain.utils.enums.LoginFailure;
 import com.hit.playpal.auth.domain.utils.enums.SignupFailure;
 import com.hit.playpal.auth.domain.usecases.IsUsernameUniqueUseCase;
@@ -33,14 +34,14 @@ public class AuthViewModel extends ViewModel {
     }
 
     // If mSignupFailure changes, an observer in AuthActivity will be triggered indicating that the signup failed
-    private final MutableLiveData<SignupFailure> mSignupFailure = new MutableLiveData<>();
-    public MutableLiveData<SignupFailure> getSignupFailure() {
+    private final MutableLiveData<AuthServerFailure> mSignupFailure = new MutableLiveData<>();
+    public MutableLiveData<AuthServerFailure> getSignupFailure() {
         return mSignupFailure;
     }
 
     // If mLoginFailure changes, an observer in AuthActivity will be triggered indicating that the login failed
-    private final MutableLiveData<LoginFailure> mLoginFailure = new MutableLiveData<>();
-    public MutableLiveData<LoginFailure> getLoginFailure() {
+    private final MutableLiveData<AuthServerFailure> mLoginFailure = new MutableLiveData<>();
+    public MutableLiveData<AuthServerFailure> getLoginFailure() {
         return mLoginFailure;
     }
 

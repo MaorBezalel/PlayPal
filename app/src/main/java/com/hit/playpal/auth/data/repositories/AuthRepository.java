@@ -3,6 +3,7 @@ package com.hit.playpal.auth.data.repositories;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -10,6 +11,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.auth.data.datasources.FirebaseAuthDataSource;
 import com.hit.playpal.auth.data.datasources.FirebaseFirestoreDataSource;
 import com.hit.playpal.auth.domain.repositories.IAuthRepository;
+import com.hit.playpal.auth.domain.utils.exceptions.DisabledAccountException;
 import com.hit.playpal.auth.domain.utils.exceptions.EmailAlreadyTakenException;
 import com.hit.playpal.auth.domain.utils.exceptions.InternalErrorException;
 import com.hit.playpal.auth.domain.utils.exceptions.InvalidDetailsException;
@@ -17,36 +19,52 @@ import com.hit.playpal.entities.users.Settings;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.entities.users.UserPrivate;
 
+import org.jetbrains.annotations.Contract;
+
 public class AuthRepository implements IAuthRepository {
     private final FirebaseAuthDataSource AUTH = new FirebaseAuthDataSource();
     private final FirebaseFirestoreDataSource DB = new FirebaseFirestoreDataSource();
 
-    private static void handleDataSourceFailure(Exception e) {
-        if (e instanceof FirebaseAuthException) {
-            handleFirebaseAuthFailure((FirebaseAuthException) e);
-        } else {
-            throw new InternalErrorException();
-        }
-    }
+    @NonNull
+    private Task<AuthResult> interpretFirebaseAuthTaskBeforeSendingItBackToTheDomain(@NonNull Task<AuthResult> iTask) {
+        Task<AuthResult> interpretedTask = null;
 
-    private static void handleFirebaseAuthFailure(@NonNull FirebaseAuthException e) {
-        if (e.getErrorCode().equals("ERROR_EMAIL_ALREADY_IN_USE")) {
-            throw new EmailAlreadyTakenException();
-        } else if (e.getErrorCode().equals("ERROR_WRONG_PASSWORD") || e.getErrorCode().equals("ERROR_USER_NOT_FOUND")) {
-            throw new InvalidDetailsException();
+        if (iTask.isSuccessful()) {
+            interpretedTask = iTask;
+        } else if (!(iTask.getException() instanceof FirebaseAuthException)) {
+            interpretedTask = Tasks.forException(new InternalErrorException());
         } else {
-            throw new InternalErrorException();
+            String errorCode = ((FirebaseAuthException) iTask.getException()).getErrorCode();
+
+            switch (errorCode) {
+                case "ERROR_EMAIL_ALREADY_IN_USE":
+                    interpretedTask = Tasks.forException(new EmailAlreadyTakenException());
+                    break;
+                case "ERROR_WRONG_PASSWORD":
+                case "ERROR_USER_NOT_FOUND":
+                case "ERROR_INVALID_CREDENTIAL":
+                    interpretedTask = Tasks.forException(new InvalidDetailsException());
+                    break;
+                case "ERROR_USER_DISABLED":
+                    interpretedTask = Tasks.forException(new DisabledAccountException());
+                    break;
+                default:
+                    interpretedTask = Tasks.forException(new InternalErrorException());
+                    break;
+            }
         }
+
+        return interpretedTask;
     }
 
     @Override
     public Task<AuthResult> loginWithEmail(String iEmail, String iPassword) {
-        return AUTH.loginWithEmail(iEmail, iPassword);
+        return AUTH.loginWithEmail(iEmail, iPassword).continueWithTask(this::interpretFirebaseAuthTaskBeforeSendingItBackToTheDomain);
     }
 
     @Override
     public Task<AuthResult> createUser(String iEmail, String iPassword) {
-        return AUTH.createUser(iEmail, iPassword).addOnFailureListener(AuthRepository::handleDataSourceFailure);
+        return AUTH.createUser(iEmail, iPassword).continueWithTask(this::interpretFirebaseAuthTaskBeforeSendingItBackToTheDomain);
     }
 
     @Override

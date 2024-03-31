@@ -3,7 +3,8 @@ package com.hit.playpal.auth.domain.usecases;
 import androidx.annotation.NonNull;
 
 import com.hit.playpal.auth.domain.repositories.IAuthRepository;
-import com.hit.playpal.auth.domain.utils.enums.LoginFailure;
+import com.hit.playpal.auth.domain.utils.enums.AuthServerFailure;
+import com.hit.playpal.auth.domain.utils.exceptions.DisabledAccountException;
 import com.hit.playpal.auth.domain.utils.exceptions.InvalidDetailsException;
 import com.hit.playpal.utils.UseCaseResult;
 
@@ -16,17 +17,20 @@ public class LoginWithEmailUseCase {
         mRepository = iRepository;
     }
 
-    public CompletableFuture<UseCaseResult<String, LoginFailure>> execute(@NonNull String iEmail, @NonNull String iPassword) {
-        CompletableFuture<UseCaseResult<String, LoginFailure> > future = new CompletableFuture<>();
+    public CompletableFuture<UseCaseResult<String, AuthServerFailure>> execute(@NonNull String iEmail, @NonNull String iPassword) {
+        CompletableFuture<UseCaseResult<String, AuthServerFailure> > future = new CompletableFuture<>();
 
         mRepository.loginWithEmail(iEmail, iPassword).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 String uid = task.getResult().getUser().getUid();
-                future.complete(new UseCaseResult<String, LoginFailure>(uid));
+                future.complete(new UseCaseResult<String, AuthServerFailure>(uid));
             } else if (task.getException() instanceof InvalidDetailsException) {
-                future.complete(new UseCaseResult<String, LoginFailure>(LoginFailure.INVALID_DETAILS));
-            } else {
-                future.complete(new UseCaseResult<String, LoginFailure>(LoginFailure.UNKNOWN_ERROR));
+                future.complete(new UseCaseResult<String, AuthServerFailure>(AuthServerFailure.INVALID_DETAILS));
+            } else if (task.getException() instanceof DisabledAccountException) {
+                future.complete(new UseCaseResult<String, AuthServerFailure>(AuthServerFailure.DISABLED_ACCOUNT));
+            }
+            else {
+                future.complete(new UseCaseResult<String, AuthServerFailure>(AuthServerFailure.INTERNAL_AUTH_ERROR));
             }
         });
 

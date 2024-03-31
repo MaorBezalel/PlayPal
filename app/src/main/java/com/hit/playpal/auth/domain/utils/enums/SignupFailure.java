@@ -13,5 +13,5 @@ public enum SignupFailure {
 
 
     // Return this error if the error is internal or indeed unknown
-    UNKNOWN_ERROR
+    INTERNAL_ERROR
 }

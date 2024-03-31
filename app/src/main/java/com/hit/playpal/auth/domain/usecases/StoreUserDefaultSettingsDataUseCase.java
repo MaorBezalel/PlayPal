@@ -1,7 +1,7 @@
 package com.hit.playpal.auth.domain.usecases;
 
 import com.hit.playpal.auth.domain.repositories.IAuthRepository;
-import com.hit.playpal.auth.domain.utils.enums.SignupFailure;
+import com.hit.playpal.auth.domain.utils.enums.AuthServerFailure;
 import com.hit.playpal.utils.UseCaseResult;
 import com.hit.playpal.entities.users.Settings;
 
@@ -14,14 +14,14 @@ public class StoreUserDefaultSettingsDataUseCase {
         mRepository = iRepository;
     }
 
-    public CompletableFuture<UseCaseResult<Void, SignupFailure>> execute(String iUid, Settings iSettings) {
-        CompletableFuture<UseCaseResult<Void, SignupFailure>> future = new CompletableFuture<>();
+    public CompletableFuture<UseCaseResult<Void, AuthServerFailure>> execute(String iUid, Settings iSettings) {
+        CompletableFuture<UseCaseResult<Void, AuthServerFailure>> future = new CompletableFuture<>();
 
         mRepository.storeUserDefaultSettingsData(iUid, iSettings).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                future.complete(new UseCaseResult<Void, SignupFailure>());
+                future.complete(new UseCaseResult<Void, AuthServerFailure>());
             } else {
-                future.complete(new UseCaseResult<Void, SignupFailure>(SignupFailure.UNKNOWN_ERROR));
+                future.complete(new UseCaseResult<Void, AuthServerFailure>(AuthServerFailure.INTERNAL_DB_ERROR));
             }
         });
 
