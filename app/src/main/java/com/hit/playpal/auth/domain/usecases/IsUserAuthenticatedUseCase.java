@@ -1,4 +1,4 @@
 package com.hit.playpal.auth.domain.usecases;
 
-public class ForgotPasswordUseCase {
+public class IsUserAuthenticatedUseCase {
 }

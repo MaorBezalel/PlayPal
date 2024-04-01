@@ -14,31 +14,37 @@
         tools:targetApi="31">
         <activity
             android:name=".chatrooms.ui.activities.ChatActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.PlayPal" />
         <activity
             android:name=".game.ui.GameActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.PlayPal" />
         <activity
             android:name=".settings.ui.activities.SettingsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.PlayPal" />
         <activity
             android:name=".profile.ui.activities.ProfileActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.PlayPal" />
         <activity
             android:name=".home.ui.activities.HomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.PlayPal" />
         <activity
             android:name=".auth.ui.activities.AuthActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
