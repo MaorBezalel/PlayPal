@@ -5,6 +5,68 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".home.ui.activities.HomeActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/homeContainerFragments"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.1"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/home_navigation" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/myProfileButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/home_nav_button"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_home_nav_myprofile" />
+
+        <ImageButton
+            android:id="@+id/gamesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/home_nav_button"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_home_nav_game" />
+
+        <ImageButton
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/home_nav_button"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_home_nav_search" />
+
+        <ImageButton
+            android:id="@+id/chatsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/home_nav_button"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_home_nav_chat" />
+
+        <ImageButton
+            android:id="@+id/notificationsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/home_nav_button"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_home_nav_notification" />
+    </LinearLayout>
 
 </LinearLayout>

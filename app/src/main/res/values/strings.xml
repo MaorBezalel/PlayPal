@@ -14,4 +14,35 @@
     <string name="forgot_password_description">Provide your account\'s email for which you want to reset your password!</string>
     <string name="reset_password">Reset Password</string>
     <string name="back">Back</string>
+
+    <string-array name="game_platforms">
+        <item name="PC">PC</item>
+        <item name="PLAYSTATION_5">Playstation 5</item>
+        <item name="PLAYSTATION_4">Playstation 4</item>
+        <item name="XBOX_SERIES_X_s">Xbox Series X S</item>
+        <item name="XBOX_ONE">Xbox One</item>
+        <item name="NINTENDO_SWITCH">Nintendo Switch</item>
+    </string-array>
+
+    <string-array name="game_genres">
+        <item name="ACTION">Action</item>
+        <item name="INDIE">Indie</item>
+        <item name="ADVENTURE">Adventure</item>
+        <item name="RPG">RPG</item>
+        <item name="STRATEGY">Strategy</item>
+        <item name="SHOOTER">Shooter</item>
+        <item name="CASUAL">Casual</item>
+        <item name="SIMULATION">Simulation</item>
+        <item name="PUZZLE">Puzzle</item>
+        <item name="ARCADE">Arcade</item>
+        <item name="PLATFORMER">Platformer</item>
+        <item name="RACING">Racing</item>
+        <item name="MASSIVELY_MULTIPLAYER">Massively Multiplayer</item>
+        <item name="SPORTS">Sports</item>
+        <item name="FIGHTING">Fighting</item>
+        <item name="FAMILY">Family</item>
+        <item name="BOARD_GAMES">Board Games</item>
+        <item name="EDUCATIONAL">Educational</item>
+        <item name="CARD">Card</item>
+    </string-array>
 </resources>
