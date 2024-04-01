@@ -19,12 +19,24 @@ public class Out<T> {
     public Out() { mValue = null; }
     public Out(T iValue) { mValue = iValue; }
 
+
+    /**
+     * <p>A factory method to create a new instance of <code>Out</code> in a more readable way.</p>
+     * @param iClass The class of the value to hold (will be used to infer <code>T</code>).
+     * @return A new instance of <code>Out</code> with T inferred from <code>iClass</code>.
+     */
     @NonNull
     @Contract(value = "_ -> new", pure = true)
     public static <T> Out<T> of(Class<T> iClass) {
         return new Out<>();
     }
 
+    /**
+     * <p>Creates a new instance of <code>Out</code> with a value of <code>null</code>.</p>
+     * <p>It can be used on methods that require an <code>Out</code> parameter, but the value is not required by the caller.</p>
+     * @param <T> The type of the value to hold.
+     * @return A new instance of <code>Out</code> with a value of <code>null</code>.
+     */
     @NonNull
     @Contract(value = " -> new", pure = true)
     public static <T> Out<T> notRequired() {

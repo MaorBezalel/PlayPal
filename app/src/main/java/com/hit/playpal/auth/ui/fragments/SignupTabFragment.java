@@ -15,10 +15,16 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.hit.playpal.R;
+import com.hit.playpal.auth.domain.utils.enums.AuthServerFailure;
 import com.hit.playpal.auth.ui.validations.AuthValidations;
 import com.hit.playpal.auth.ui.viewmodels.AuthViewModel;
 import com.hit.playpal.utils.Out;
 
+/**
+ * <p>A Fragment representing the Signup tab in the authentication process.</p>
+ * <p>It handles user input validation and communicates with the AuthViewModel to perform the signup operation.</p>
+ * @see AuthViewModel
+ */
 public class SignupTabFragment extends Fragment {
 
     private AuthViewModel mAuthViewModel;
@@ -51,43 +57,59 @@ public class SignupTabFragment extends Fragment {
         boolean isValid = performInputValidation(email, username, displayName, password, confirmPassword);
 
         if (isValid) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            requireActivity().findViewById(R.id.button_signup).setVisibility(View.GONE);
-
+            beginLoadingState();
             mAuthViewModel.signup(email, username, displayName, password);
         }
+    }
+
+    /**
+     * <p>Changes the UI to a loading state, hiding the signup button and showing a progress bar.</p>
+     */
+    private void beginLoadingState() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        requireActivity().findViewById(R.id.button_signup).setVisibility(View.GONE);
+    }
+
+    /**
+     * <p>Changes the UI back to its original state, hiding the progress bar and showing the signup button.</p>
+     */
+    private void endLoadingState() {
+        mProgressBar.setVisibility(View.GONE);
+        requireActivity().findViewById(R.id.button_signup).setVisibility(View.VISIBLE);
     }
 
     private void initAndSubscribeToViewModels() {
         mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
         mAuthViewModel.getSignupFailure().observe(getViewLifecycleOwner(), signupFailure -> {
-            mProgressBar.setVisibility(View.GONE);
-            requireActivity().findViewById(R.id.button_signup).setVisibility(View.VISIBLE);
-
-            if (signupFailure!= null) {
-                switch (signupFailure) {
-                    case EMAIL_ALREADY_TAKEN:
-                        mEmailTextInputLayout.setError("Email already belongs to an existing account, try logging in");
-                        break;
-                    case USERNAME_ALREADY_TAKEN:
-                        mUsernameTextInputLayout.setError("Username already belongs to an existing account, try logging in");
-                        break;
-                    case INTERNAL_AUTH_ERROR:
-                        Toast.makeText(requireContext(), "Signup failed due to an internal error, please try again later", Toast.LENGTH_SHORT).show();
-                        Log.e("SignupTabFragment", "Internal error occurred during Authentication while signing up");
-                        break;
-                    case INTERNAL_DB_ERROR:
-                        Toast.makeText(requireContext(), "Signup failed due to an internal error, please try again later", Toast.LENGTH_SHORT).show();
-                        Log.e("SignupTabFragment", "Internal error occurred during Database operation while signing up");
-                        break;
-                    default:
-                        Toast.makeText(requireContext(), "Signup failed due to an unknown error, please try again later", Toast.LENGTH_SHORT).show();
-                        Log.e("SignupTabFragment", "Unknown error occurred while signing up (might mixed up with login errors)");
-                        break;
-                }
-            }
+            endLoadingState();
+            handleSignupFailure(signupFailure);
         });
+    }
+
+    private void handleSignupFailure(AuthServerFailure iSignupFailure) {
+        if (iSignupFailure != null) {
+            switch (iSignupFailure) {
+                case EMAIL_ALREADY_TAKEN:
+                    mEmailTextInputLayout.setError("Email already belongs to an existing account, try logging in");
+                    break;
+                case USERNAME_ALREADY_TAKEN:
+                    mUsernameTextInputLayout.setError("Username already belongs to an existing account, try logging in");
+                    break;
+                case INTERNAL_AUTH_ERROR:
+                    Toast.makeText(requireContext(), "Signup failed due to an internal error, please try again later", Toast.LENGTH_SHORT).show();
+                    Log.e("SignupTabFragment", "Internal error occurred during Authentication while signing up");
+                    break;
+                case INTERNAL_DB_ERROR:
+                    Toast.makeText(requireContext(), "Signup failed due to an internal error, please try again later", Toast.LENGTH_SHORT).show();
+                    Log.e("SignupTabFragment", "Internal error occurred during Database operation while signing up");
+                    break;
+                default:
+                    Toast.makeText(requireContext(), "Signup failed due to an unknown error, please try again later", Toast.LENGTH_SHORT).show();
+                    Log.e("SignupTabFragment", "Unknown error occurred while signing up (might mixed up with login errors)");
+                    break;
+            }
+        }
     }
 
     private void initViews(@NonNull View iView) {
@@ -108,46 +130,87 @@ public class SignupTabFragment extends Fragment {
     }
 
     private boolean performInputValidation(String iEmail, String iUsername, String iDisplayName, String iPassword, String iConfirmPassword) {
-        boolean isValid = true;
+        boolean isEmailValid = performEmailValidation(iEmail);
+        boolean isUsernameValid = performUsernameValidation(iUsername);
+        boolean isDisplayNameValid = performDisplayNameValidation(iDisplayName);
+        boolean isPasswordValid = performPasswordValidation(iPassword);
+        boolean isConfirmPasswordValid = performConfirmPasswordValidation(iPassword, iConfirmPassword);
+
+        return isEmailValid &&
+                isUsernameValid &&
+                isDisplayNameValid &&
+                isPasswordValid &&
+                isConfirmPasswordValid;
+    }
+
+    private boolean performEmailValidation(String iEmail) {
+        boolean isEmailValid = true;
         Out<String> invalidationReason = Out.of(String.class);
 
         if (!AuthValidations.isEmailValid(iEmail, invalidationReason)) {
             mEmailTextInputLayout.setError(invalidationReason.get());
-            isValid = false;
+            isEmailValid = false;
         } else {
             mEmailTextInputLayout.setError(null);
         }
 
+        return isEmailValid;
+    }
+
+    private boolean performUsernameValidation(String iUsername) {
+        boolean isUsernameValid = true;
+        Out<String> invalidationReason = Out.of(String.class);
+
         if (!AuthValidations.isUsernameValid(iUsername, invalidationReason)) {
             Log.d("SignupTabFragment", "Username is invalid: " + invalidationReason.get());
             mUsernameTextInputLayout.setError(invalidationReason.get());
-            isValid = false;
+            isUsernameValid = false;
         } else {
             mUsernameTextInputLayout.setError(null);
         }
 
+        return isUsernameValid;
+    }
+
+    private boolean performDisplayNameValidation(String iDisplayName) {
+        boolean isDisplayNameValid = true;
+        Out<String> invalidationReason = Out.of(String.class);
+
         if (!AuthValidations.isDisplayNameValid(iDisplayName, invalidationReason)) {
             mDisplayNameTextInputLayout.setError(invalidationReason.get());
-            isValid = false;
+            isDisplayNameValid = false;
         } else {
             mDisplayNameTextInputLayout.setError(null);
         }
 
+        return isDisplayNameValid;
+    }
+
+    private boolean performPasswordValidation(String iPassword) {
+        boolean isPasswordValid = true;
+        Out<String> invalidationReason = Out.of(String.class);
+
         if (!AuthValidations.isPasswordValid(iPassword, invalidationReason)) {
             mPasswordTextInputLayout.setError(invalidationReason.get());
-            isValid = false;
+            isPasswordValid = false;
         } else {
             mPasswordTextInputLayout.setError(null);
-
         }
+
+        return isPasswordValid;
+    }
+
+    private boolean performConfirmPasswordValidation(String iPassword, String iConfirmPassword) {
+        boolean isConfirmPasswordValid = true;
+        Out<String> invalidationReason = Out.of(String.class);
 
         if (!AuthValidations.isConfirmPasswordValid(iPassword, iConfirmPassword, invalidationReason)) {
             mConfirmPasswordTextInputLayout.setError(invalidationReason.get());
-            isValid = false;
+            isConfirmPasswordValid = false;
         } else {
             mConfirmPasswordTextInputLayout.setError(null);
         }
 
-        return isValid;
+        return isConfirmPasswordValid;
     }
 }

@@ -15,6 +15,7 @@ import com.hit.playpal.auth.domain.usecases.StoreUserPublicDataUseCase;
 import com.hit.playpal.auth.domain.utils.enums.AuthServerFailure;
 import com.hit.playpal.auth.domain.usecases.IsUsernameUniqueUseCase;
 import com.hit.playpal.auth.domain.usecases.LoginWithEmailUseCase;
+import com.hit.playpal.utils.SingleLiveEvent;
 import com.hit.playpal.utils.UseCaseResult;
 import com.hit.playpal.entities.users.Settings;
 import com.hit.playpal.entities.users.User;
@@ -23,11 +24,15 @@ import com.hit.playpal.entities.users.UserPrivate;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * <p>The AuthViewModel class is a ViewModel that provides the data and functionality needed for the AuthActivity and its fragments.</p>
+ * <p>It is responsible for handling the authentication logic and updating the UI accordingly.</p>
+ */
 public class AuthViewModel extends ViewModel {
     private static final String TAG = "AuthViewModel";
 
     // Currently, if mUser changes, an observer in AuthActivity will be triggered indicating that the user is authenticated (either by login or signup)
-    private final MutableLiveData<User> mUser = new MutableLiveData<>();
+    private final MutableLiveData<User> mUser = new SingleLiveEvent<>();
     public MutableLiveData<User> getUser() {
         return mUser;
     }
@@ -45,8 +50,8 @@ public class AuthViewModel extends ViewModel {
     }
 
     // If mResetPasswordSuccess changes, an observer in ForgotPasswordFragment will be triggered indicating that the password reset was successful
-    private final MutableLiveData<Void> mResetPasswordSuccess = new MutableLiveData<>();
-    public MutableLiveData<Void> getResetPasswordSuccess() {
+    private final SingleLiveEvent<Void> mResetPasswordSuccess = new SingleLiveEvent<>();
+    public SingleLiveEvent<Void> getResetPasswordSuccess() {
         return mResetPasswordSuccess;
     }
 
@@ -56,6 +61,23 @@ public class AuthViewModel extends ViewModel {
         return mResetPasswordFailure;
     }
 
+    /**
+     * <p>Logs in a user with an email and password.</p>
+     * <p>Runs the following sequence of use cases:</p>
+     *
+     * <ol>
+     *     <li>LoginWithEmailUseCase</li>
+     *     <li>GetUserByUidUseCase</li>
+     * </ol>
+     *
+     * <p>If the login is successful, the user is retrieved by UID and set in the view model, signaling that the user is authenticated.</p>
+     * <p>If the login fails, the failure is set in the view model.</p>
+     *
+     * @param iEmail The user's email
+     * @param iPassword The user's password
+     * @see LoginWithEmailUseCase
+     * @see GetUserByUidUseCase
+     */
     public void loginWithEmail(String iEmail, String iPassword) {
         LoginWithEmailUseCase loginWithEmailUseCase = new LoginWithEmailUseCase(new AuthRepository());
         GetUserByUidUseCase getUserByUidUseCase = new GetUserByUidUseCase(new AuthRepository());
@@ -81,6 +103,24 @@ public class AuthViewModel extends ViewModel {
                 });
     }
 
+    /**
+     * <p>Logs in a user with a username and password.</p>
+     * <p>Runs the following sequence of use cases:</p>
+     *
+     * <ol>
+     *     <li>GetUserByUsernameUseCase</li>
+     *     <li>GetUserPrivateByUidUseCase</li>
+     *     <li>LoginWithEmailUseCase</li>
+     * </ol>
+     *
+     * <p>If the login is successful, the user is set in the view model, signaling that the user is authenticated.</p>
+     * <p>If the login fails, the failure is set in the view model.</p>
+     *
+     * @param iUsername The user's username
+     * @param iPassword The user's password
+     * @see GetUserByUsernameUseCase
+     * @see GetUserPrivateByUidUseCase
+     */
     public void loginWithUsername(String iUsername, String iPassword) {
         GetUserByUsernameUseCase getUserByUsernameUseCase = new GetUserByUsernameUseCase(new AuthRepository());
         GetUserPrivateByUidUseCase getUserPrivateByUidUseCase = new GetUserPrivateByUidUseCase(new AuthRepository());
@@ -119,6 +159,31 @@ public class AuthViewModel extends ViewModel {
                 });
     }
 
+    /**
+     * <p>Signs up a user with an email, username, display name, and password.</p>
+     * <p>Runs the following sequence of use cases:</p>
+     *
+     * <ol>
+     *     <li>IsUsernameUniqueUseCase</li>
+     *     <li>CreateUserUseCase</li>
+     *     <li>StoreUserPublicDataUseCase</li>
+     *     <li>StoreUserPrivateDataUseCase</li>
+     *     <li>StoreUserDefaultSettingsDataUseCase</li>
+     * </ol>
+     *
+     * <p>If the signup is successful, the user is set in the view model, signaling that the user is authenticated.</p>
+     * <p>If the signup fails, the failure is set in the view model.</p>
+     *
+     * @param iEmail The user's email
+     * @param iUsername The user's username
+     * @param iDisplayName The user's display name
+     * @param iPassword The user's password
+     * @see IsUsernameUniqueUseCase
+     * @see CreateUserUseCase
+     * @see StoreUserPublicDataUseCase
+     * @see StoreUserPrivateDataUseCase
+     * @see StoreUserDefaultSettingsDataUseCase
+     */
     public void signup(String iEmail, String iUsername, String iDisplayName, String iPassword) {
         IsUsernameUniqueUseCase isUsernameUniqueUseCase = new IsUsernameUniqueUseCase(new AuthRepository());
         CreateUserUseCase createUserUseCase = new CreateUserUseCase(new AuthRepository());
@@ -185,13 +250,27 @@ public class AuthViewModel extends ViewModel {
                 });
     }
 
+    /**
+     * <p>Sends a password reset email to the user's email.</p>
+     * <p>Runs the following sequence of use cases:</p>
+     *
+     * <ol>
+     *     <li>ResetPasswordUseCase</li>
+     * </ol>
+     *
+     * <p>If the password reset is successful, the success is set in the view model.</p>
+     * <p>If the password reset fails, the failure is set in the view model.</p>
+     *
+     * @param iEmail The user's email
+     * @see ResetPasswordUseCase
+     */
     public void forgotPassword(String iEmail) {
         ResetPasswordUseCase resetPasswordUseCase = new ResetPasswordUseCase(new AuthRepository());
 
         resetPasswordUseCase.execute(iEmail)
                 .thenAccept(resetPasswordResult -> {
                     if (resetPasswordResult.isSuccessful()) {
-                        mResetPasswordSuccess.setValue(null);
+                        mResetPasswordSuccess.call();
                     } else {
                         mResetPasswordFailure.setValue(resetPasswordResult.getFailure());
                     }

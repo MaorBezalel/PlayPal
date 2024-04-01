@@ -21,11 +21,25 @@ import com.hit.playpal.auth.ui.fragments.ForgotPasswordFragment;
 import com.hit.playpal.auth.ui.viewmodels.AuthViewModel;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.home.ui.activities.HomeActivity;
+import com.hit.playpal.auth.ui.fragments.LoginTabFragment;
+import com.hit.playpal.auth.ui.fragments.SignupTabFragment;
 
+/**
+ * <p>This activity is the entry point of the application. It is responsible for handling the authentication process of the user.</p>
+ * <p>It contains a view pager that holds the login and sign up fragments and a tab layout that allows the user to switch between the two fragments.</p>
+ * <p>It also contains a view model that is responsible for handling the authentication process of the user.</p>
+ * <p>After the user is authenticated, the activity will navigate to the home activity.</p>
+ *
+ * @see AuthViewModel
+ * @see AuthViewPagerAdapter
+ * @see LoginTabFragment
+ * @see SignupTabFragment
+ * @see ForgotPasswordFragment
+ * @see HomeActivity
+ */
 public class AuthActivity extends AppCompatActivity {
     private static final String TAG = "AuthActivity";
     private AuthViewModel mViewModel;
-
     private TabLayout mTabLayout;
     private ViewPager2 mViewPager2;
     private ForgotPasswordFragment mForgotPasswordFragment;
