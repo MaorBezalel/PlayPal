@@ -57,7 +57,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void navigateToMyProfileFragment() {
-        mNavController.navigate(R.id.profile_activity);
+        String Uid = "IO6HNmPe34g1qFdIZXUbyR0zreR2";
+        Bundle bundle = new Bundle();
+        bundle.putString("Uid", Uid);
+        mNavController.navigate(R.id.profile_activity, bundle);
     }
 
     private void navigateToNotificationsFragment() {

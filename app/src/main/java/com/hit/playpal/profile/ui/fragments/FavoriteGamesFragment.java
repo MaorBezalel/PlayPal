@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.hit.playpal.R;
 
@@ -54,6 +55,7 @@ public class FavoriteGamesFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            String Uid = getArguments().getString("Uid");
         }
     }
 
@@ -61,6 +63,14 @@ public class FavoriteGamesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite_games, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorite_games, container, false);
+        Button buttonReturn = view.findViewById(R.id.buttonFavGamesReturn);
+        buttonReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+        return view;
     }
 }
