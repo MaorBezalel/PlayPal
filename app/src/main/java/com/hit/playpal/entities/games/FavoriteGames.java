@@ -14,9 +14,24 @@ public class FavoriteGames {
     @PropertyName("user") public User getUser() { return mUser; }
     @PropertyName("user") public void setUser(User iUser) { mUser = iUser; }
 
+    @PropertyName("game_image") private String mGameImage;
+    @PropertyName("game_image") public String getGameImage() { return mGameImage; }
+    @PropertyName("game_image") public void setGameImage(String iGameImage) { mGameImage = iGameImage; }
+
+    @PropertyName("game_rating") private float mGameRating;
+    @PropertyName("game_rating") public float getGameRating() { return mGameRating; }
+    @PropertyName("game_rating") public void setGameRating(float iGameRating) { mGameRating = iGameRating; }
+
     public FavoriteGames(){}
     public FavoriteGames(String iGameName, User iUser){
         mGameName = iGameName;
         mUser = iUser;
+    }
+
+    public FavoriteGames(String iGameName, String iGameImage, float iGameRating, User iUser){
+        mGameName = iGameName;
+        mUser = iUser;
+        mGameImage = iGameImage;
+        mGameRating = iGameRating;
     }
 }

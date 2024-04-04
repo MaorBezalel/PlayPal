@@ -11,11 +11,11 @@ import java.util.concurrent.CompletableFuture;
 public class UpdateFavoriteGameStatusUseCase {
     private final GameRepository gameRepository = GameRepository.getGameRepository();
 
-    public CompletableFuture<Void> execute(String iGameId, boolean iNewStatus)
+    public CompletableFuture<Void> execute(String iGameName, String iGameImage, float iGameRating,  boolean iNewStatus)
     {
         CompletableFuture<Void> future = new CompletableFuture<>();
 
-        gameRepository.updateGameToFavorites(iGameId, iNewStatus, CurrentlyLoggedUser.getCurrentlyLoggedUser()).
+        gameRepository.updateGameToFavorites(iGameName,iGameImage,iGameRating, iNewStatus, CurrentlyLoggedUser.getCurrentlyLoggedUser()).
                 addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {

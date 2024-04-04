@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".profile.ui.fragments.FriendsFragment" >
+    tools:context=".profile.ui.fragments.FriendsFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.1"
         android:orientation="horizontal">
 
         <TextView
@@ -27,6 +27,57 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Return" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <SearchView
+            android:id="@+id/searchViewFriends"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/home_search_view"
+            android:iconifiedByDefault="false"
+            android:queryBackground="@null"
+            android:queryHint="Search by display name...">
+
+        </SearchView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/friendsSearchButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/primary_500"
+                android:fontFamily="@font/dosis_extrabold"
+                android:text="Search"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/friendsClearButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+                android:background="@color/accent_300"
+                android:backgroundTint="@color/accent_300"
+                android:fontFamily="@font/dosis_extrabold"
+                android:includeFontPadding="true"
+                android:padding="0dp"
+                android:text="Clear"
+                android:textSize="20sp"
+                app:backgroundTint="@null"
+                app:cornerRadius="0dp" />
+        </LinearLayout>
 
     </LinearLayout>
 

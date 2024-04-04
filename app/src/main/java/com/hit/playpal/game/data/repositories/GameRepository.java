@@ -54,10 +54,10 @@ public class GameRepository implements IGameRepository {
     }
 
     @Override
-    public Task<Void> updateGameToFavorites(String iGameId, boolean iNewStatus, User iCurrentlyLoggedUser) {
+    public Task<Void> updateGameToFavorites(String iGameId,String iGameImage, float iGameRating, boolean iNewStatus, User iCurrentlyLoggedUser) {
         if(iNewStatus)
         {
-            return favGameDataSource.addGameToFavorites(iGameId, iCurrentlyLoggedUser);
+            return favGameDataSource.addGameToFavorites(iGameId,iGameImage,iGameRating, iCurrentlyLoggedUser);
         }
         else
         {

@@ -23,6 +23,7 @@ import com.hit.playpal.profile.ui.fragments.FavoriteGamesFragment;
 import com.hit.playpal.profile.ui.fragments.FriendsFragment;
 import com.hit.playpal.profile.ui.fragments.RoomsFragment;
 import com.hit.playpal.settings.ui.activities.SettingsActivity;
+import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -33,7 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView mTextViewGetDisplayName;
     private TextView mTextViewGetAboutMe;
 
-    private String mcurrentUserUid = "IO6HNmPe34g1qFdIZXUbyR0zreR2";
+    private final String  currentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
 
     private FrameLayout mFragmentContainer;
 
@@ -49,7 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        String Uid = intent.getStringExtra("Uid");
+        String Uid = intent.getStringExtra("userId");
 
         mTextViewGetUserName = findViewById(R.id.textViewGetUserName);
         mImageViewAvatar = findViewById(R.id.imageViewAvatar);
@@ -59,7 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
         Button buttonSettings = findViewById(R.id.buttonSettings);
         Button buttonAddFriend = findViewById(R.id.buttonAddFriend);
 
-        if (!mcurrentUserUid.equals(Uid)) {
+        if (!currentUser.equals(Uid)) {
             buttonSettings.setVisibility(View.GONE);
             buttonAddFriend.setVisibility(View.VISIBLE);}
 
@@ -116,7 +117,7 @@ public class ProfileActivity extends AppCompatActivity {
         try {
             Fragment fragment = fragmentClass.newInstance();
             Bundle args = new Bundle();
-            args.putString("Uid", Uid);
+            args.putString("userId", Uid);
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()

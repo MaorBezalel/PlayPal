@@ -18,10 +18,10 @@ import java.util.List;
 public class FavGameDataSource {
     private final CollectionReference favGameInstance = FirebaseFirestore.getInstance().collection("fav_games");
 
-    public Task<Void> addGameToFavorites(String iGameName, User iCurrentlyLoggedUser) {
+    public Task<Void> addGameToFavorites(String iGameName,String iGameImage, float iGameRating, User iCurrentlyLoggedUser) {
 
         return favGameInstance.
-                add(new FavoriteGames(iGameName, iCurrentlyLoggedUser)).
+                add(new FavoriteGames(iGameName,iGameImage,iGameRating,iCurrentlyLoggedUser)).
                 continueWithTask(task -> {
             if (task.isSuccessful()) {
                 return Tasks.forResult(null);

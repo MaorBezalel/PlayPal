@@ -1,60 +1,41 @@
 package com.hit.playpal.profile.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.R;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FavoriteGamesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.hit.playpal.entities.games.FavoriteGames;
+import com.hit.playpal.entities.users.User;
+import com.hit.playpal.game.ui.activities.GameActivity;
+import com.hit.playpal.home.adapters.GameAdapter;
+import com.hit.playpal.home.adapters.IBindableGame;
+import com.hit.playpal.home.adapters.IBindableUser;
+import com.hit.playpal.home.adapters.IGameAdapter;
+import com.hit.playpal.home.adapters.IUserAdapter;
+import com.hit.playpal.home.adapters.UserAdapter;
+import com.hit.playpal.profile.ui.activities.ProfileActivity;
 public class FavoriteGamesFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private RecyclerView mRecyclerView;
+    private GameAdapter<FavoriteGames> mGameAdapter;
     public FavoriteGamesFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FavoriteGamesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FavoriteGamesFragment newInstance(String param1, String param2) {
-        FavoriteGamesFragment fragment = new FavoriteGamesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
             String Uid = getArguments().getString("Uid");
         }
     }
@@ -71,6 +52,43 @@ public class FavoriteGamesFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+
+        mRecyclerView = view.findViewById(R.id.recyclerViewFavoriteGames);
+        mGameAdapter = new GameAdapter<FavoriteGames>(new IGameAdapter() {
+            @Override
+            public void onGameClick(String iGameId) {
+                Intent intent = new Intent(getContext(), GameActivity.class);
+                intent.putExtra("gameId", iGameId);
+                startActivity(intent);
+            }
+        }, new IBindableGame<FavoriteGames>() {
+            @Override
+            public String getTitle(FavoriteGames item) {
+                return item.getGameName();
+            }
+
+            @Override
+            public float getRating(FavoriteGames item) {
+                return item.getGameRating();
+            }
+
+            @Override
+            public String getBackgroundImage(FavoriteGames item) {
+                return item.getGameImage();
+            }
+
+            @Override
+            public String getId(FavoriteGames item) {
+                //return item.getGameId();
+                return null;
+            }
+
+
+        },this, FavoriteGames.class, FirebaseFirestore.getInstance().collection("fav_games"));
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mGameAdapter);
+
         return view;
     }
 }

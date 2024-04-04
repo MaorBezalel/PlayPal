@@ -1,68 +1,47 @@
 package com.hit.playpal.profile.ui.fragments;
 
-import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.R;
 import com.hit.playpal.entities.users.Relationship;
+
 import com.hit.playpal.entities.users.enums.RelationshipStatus;
-import com.hit.playpal.profile.domain.usecases.GetFriendListByDisplayNameUseCase;
+import com.hit.playpal.home.adapters.IBindableUser;
+import com.hit.playpal.home.adapters.IUserAdapter;
+import com.hit.playpal.home.adapters.UserAdapter;
+
 import com.hit.playpal.profile.ui.activities.ProfileActivity;
-import com.hit.playpal.profile.ui.adapters.FriendsAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class FriendsFragment extends Fragment implements FriendsAdapter.OnFriendClickListener {
-    private List<Relationship> friends;
+public class FriendsFragment extends Fragment {
     private String Uid;
-    private RecyclerView recyclerView;
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
+    private RecyclerView mRecyclerView;
+    private UserAdapter<Relationship> mUserAdapter;
 
     public FriendsFragment() {
         // Required empty public constructor
     }
 
-    public static FriendsFragment newInstance(String param1, String param2) {
-        FriendsFragment fragment = new FriendsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    private DocumentSnapshot lastVisible = null;
-    private int limit = 10; // Number of friends to display
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-            Uid = getArguments().getString("Uid");
-            friends = new ArrayList<>();
+            Uid = getArguments().getString("userId");
         }
     }
 
@@ -79,40 +58,56 @@ public class FriendsFragment extends Fragment implements FriendsAdapter.OnFriend
             }
         });
 
-        // Initialize the RecyclerView
-        recyclerView = view.findViewById(R.id.recyclerViewFriends);
+        mRecyclerView = view.findViewById(R.id.recyclerViewFriends);
+        mUserAdapter = new UserAdapter<Relationship>(new IUserAdapter() {
+            @Override
+            public void onUserClick(String iUserId) {
+                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                intent.putExtra("userId", iUserId);
+                startActivity(intent);
+            }
+        }, new IBindableUser<Relationship>() {
+            @Override
+            public String getUserId(Relationship iItem) {
+                return iItem.getOther_user().getUid();
+            }
 
-        // Set a layout manager for the RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            @Override
+            public String getUserImage(Relationship iItem) {
+                return iItem.getOther_user().getProfilePicture();
+            }
 
-        // Set an adapter for the RecyclerView
-        FriendsAdapter adapter = new FriendsAdapter(friends, this);
-        recyclerView.setAdapter(adapter);
+            @Override
+            public String getDisplayName(Relationship iItem) {
+                return iItem.getOther_user().getDisplayName();
+            }
+        }, this, FirebaseFirestore.getInstance().collection("users").document(Uid).collection("relationships").whereEqualTo("status",RelationshipStatus.friends), Relationship.class);
+        mRecyclerView.setAdapter(mUserAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Fetch the friends and update the RecyclerView
-        GetFriendListByDisplayNameUseCase getFriendListByDisplayNameUseCase = new GetFriendListByDisplayNameUseCase();
-        getFriendListByDisplayNameUseCase.execute(Uid, lastVisible, limit).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                List<Relationship> relationships = task.getResult();
-                if (!relationships.isEmpty()) {
-                    friends.addAll(relationships);
-                    recyclerView.getAdapter().notifyDataSetChanged();
+        Button friendsSearchButton = view.findViewById(R.id.friendsSearchButton);
+        SearchView friendsSearchView = view.findViewById(R.id.searchViewFriends);
+
+        friendsSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String query = friendsSearchView.getQuery().toString();
+                if (query.trim().isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter a search query", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            } else {
-                Log.e("FriendsFragment", "Error getting friends: ", task.getException());
+                mUserAdapter.applyFilters(query);
+            }
+        });
+
+        Button friendsClearButton = view.findViewById(R.id.friendsClearButton);
+        friendsClearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUserAdapter.applyFilters("");
             }
         });
 
         return view;
-    }
-
-    @Override
-    public void onFriendClick(Relationship relationship) {
-        // Create an intent to start the ProfileActivity
-        Intent intent = new Intent(getActivity(), ProfileActivity.class);
-        // Pass the UID of the clicked user as an extra in the intent
-        intent.putExtra("Uid", relationship.getOther_user().getUid());
-        // Start the ProfileActivity
-        startActivity(intent);
     }
 }

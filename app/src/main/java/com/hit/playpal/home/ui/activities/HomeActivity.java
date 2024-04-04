@@ -12,6 +12,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.hit.playpal.R;
+import com.hit.playpal.utils.CurrentlyLoggedUser;
 
 public class HomeActivity extends AppCompatActivity {
     private NavController mNavController;
@@ -57,9 +58,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void navigateToMyProfileFragment() {
-        String Uid = "IO6HNmPe34g1qFdIZXUbyR0zreR2";
+        String Uid = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
         Bundle bundle = new Bundle();
-        bundle.putString("Uid", Uid);
+        bundle.putString("userId", Uid);
         mNavController.navigate(R.id.profile_activity, bundle);
     }
 
