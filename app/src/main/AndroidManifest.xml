@@ -19,7 +19,7 @@
             android:exported="false"
             android:theme="@style/Theme.PlayPal" />
         <activity
-            android:name=".game.ui.GameActivity"
+            android:name=".game.ui.activities.GameActivity"
             android:exported="false"
             android:theme="@style/Theme.PlayPal" />
         <activity

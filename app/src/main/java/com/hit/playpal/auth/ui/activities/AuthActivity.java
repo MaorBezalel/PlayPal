@@ -2,10 +2,8 @@ package com.hit.playpal.auth.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
@@ -23,6 +21,7 @@ import com.hit.playpal.entities.users.User;
 import com.hit.playpal.home.ui.activities.HomeActivity;
 import com.hit.playpal.auth.ui.fragments.LoginTabFragment;
 import com.hit.playpal.auth.ui.fragments.SignupTabFragment;
+import com.hit.playpal.utils.CurrentlyLoggedUser;
 
 /**
  * <p>This activity is the entry point of the application. It is responsible for handling the authentication process of the user.</p>
@@ -66,6 +65,9 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void handleAuthenticatedUser(User user) {
+
+        CurrentlyLoggedUser.setCurrentlyLoggedUser(user);
+
         Intent intent = new Intent(this, HomeActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);

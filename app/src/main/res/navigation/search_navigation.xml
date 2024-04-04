@@ -3,28 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_navigation"
-    app:startDestination="@id/searchFragment">
+    app:startDestination="@id/searchByUsersFragment">
 
     <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.hit.playpal.home.ui.fragments.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        android:id="@+id/searchByRoomsFragment"
+        android:name="com.hit.playpal.home.ui.fragments.SearchByRoomsFragment"
+        android:label="fragment_search_by_rooms"
+        tools:layout="@layout/fragment_search_by_rooms" >
         <action
-            android:id="@+id/action_searchFragment_to_profileActivity"
-            app:destination="@id/profile_activity" />
-        <action
-            android:id="@+id/action_searchFragment_to_chatActivity2"
-            app:destination="@id/chatActivity2" />
+            android:id="@+id/action_searchByRoomsFragment_to_searchByUsersFragment"
+            app:destination="@id/searchByUsersFragment" />
     </fragment>
-    <activity
-        android:id="@+id/profile_activity"
-        android:name="com.hit.playpal.profile.ui.activities.ProfileActivity"
-        android:label="activity_profile"
-        tools:layout="@layout/activity_profile" />
-    <activity
-        android:id="@+id/chatActivity2"
-        android:name="com.hit.playpal.chatrooms.ui.activities.ChatActivity"
-        android:label="activity_chat"
-        tools:layout="@layout/activity_chat" />
+    <fragment
+        android:id="@+id/searchByUsersFragment"
+        android:name="com.hit.playpal.home.ui.fragments.SearchByUsersFragment"
+        android:label="fragment_search_by_users"
+        tools:layout="@layout/fragment_search_by_users" >
+        <action
+            android:id="@+id/action_searchByUsersFragment_to_searchByRoomsFragment"
+            app:destination="@id/searchByRoomsFragment" />
+    </fragment>
 </navigation>

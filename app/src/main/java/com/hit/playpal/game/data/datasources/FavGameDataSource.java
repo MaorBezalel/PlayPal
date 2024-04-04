@@ -5,43 +5,46 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.entities.games.FavoriteGames;
 import com.hit.playpal.entities.users.User;
+import com.hit.playpal.game.data.utils.exceptions.DatabaseErrorException;
+
+import java.util.List;
 
 public class FavGameDataSource {
-    private static CollectionReference sFavGameInstance = FirebaseFirestore.getInstance().collection("fav_games");
+    private final CollectionReference favGameInstance = FirebaseFirestore.getInstance().collection("fav_games");
 
-    // TODO: Delete after AndroidViewModel is implemented
-    private static User sCurrentUser = new User("123", "username", "displayname", "picture", "aboutme");
+    public Task<Void> addGameToFavorites(String iGameName, User iCurrentlyLoggedUser) {
 
-    public Task<Void> addGameToFavorites(String iGameName)
-    {
-
-            FavoriteGames favGame = new FavoriteGames();
-            favGame.setGameName(iGameName);
-            favGame.setUser(sCurrentUser);
-
-            return sFavGameInstance.add(favGame).continueWith(task -> {
-                if (task.isSuccessful())
-                {
-                    return null;
-                }
-                else
-                {
-                    throw new Exception("Failed to add game to favorites");
-                }
-            });
-
+        return favGameInstance.
+                add(new FavoriteGames(iGameName, iCurrentlyLoggedUser)).
+                continueWithTask(task -> {
+            if (task.isSuccessful()) {
+                return Tasks.forResult(null);
+            } else {
+                return Tasks.forException(task.getException());
+            }
+        });
     }
 
-    public Task<QuerySnapshot> getGameFavoriteStatus(String iGameName)
+    public Task<Void> removeGameFromFavorites(String iDocumentId)
     {
-        return sFavGameInstance.
+        return favGameInstance.
+                document(iDocumentId).
+                delete();
+    }
+
+
+    public Task<QuerySnapshot> getGameFavoriteStatus(String iGameName, User iCurrentlyLoggedUser)
+    {
+        return favGameInstance.
                 whereEqualTo("game_name", iGameName).
-                whereEqualTo("user.uid",sCurrentUser).get();
+                whereEqualTo("user", iCurrentlyLoggedUser).
+                get();
     }
 
 

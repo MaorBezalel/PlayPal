@@ -5,12 +5,27 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.hit.playpal.entities.games.Game;
 import com.hit.playpal.game.data.repositories.GameRepository;
 
+import org.checkerframework.checker.units.qual.C;
+
+import java.util.concurrent.CompletableFuture;
+
 public class GetGameInfoUseCase {
-    private static GameRepository sGameRepository = new GameRepository();
-    public void execute(String iGameId, OnSuccessListener<Game> iOnSuccessListener, OnFailureListener iOnFailureListener)
+    private final GameRepository gameRepository = GameRepository.getGameRepository();
+    public CompletableFuture<Game> execute(String iGameId)
     {
-        sGameRepository.getGameInfo(iGameId).
-                addOnSuccessListener(iOnSuccessListener).
-                addOnFailureListener(iOnFailureListener);
+        CompletableFuture<Game> future = new CompletableFuture<>();
+
+        gameRepository.getGameInfo(iGameId).addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+            {
+                future.complete(task.getResult());
+            }
+            else
+            {
+                future.completeExceptionally(task.getException());
+            }
+        });
+
+        return future;
     }
 }

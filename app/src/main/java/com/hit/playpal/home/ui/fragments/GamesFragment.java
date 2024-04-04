@@ -17,11 +17,14 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.R;
+import com.hit.playpal.entities.games.Game;
 import com.hit.playpal.entities.games.enums.Genre;
 import com.hit.playpal.entities.games.enums.Platform;
-import com.hit.playpal.game.ui.GameActivity;
+import com.hit.playpal.game.ui.activities.GameActivity;
 import com.hit.playpal.home.adapters.GameAdapter;
+import com.hit.playpal.home.adapters.IBindableGame;
 import com.hit.playpal.home.adapters.IGameAdapter;
 import com.hit.playpal.home.adapters.MultiSelectionAdapter;
 import com.hit.playpal.home.domain.util.GameFilterOptions;
@@ -60,7 +63,7 @@ public class GamesFragment extends Fragment {
     // ADAPTERS & MANAGERS
     private MultiSelectionAdapter mPlatformsAdapter;
     private MultiSelectionAdapter mGenresAdapter;
-    private GameAdapter mGameAdapter;
+    private GameAdapter<Game> mGameAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
 
@@ -122,7 +125,8 @@ public class GamesFragment extends Fragment {
     {
         mLinearLayoutManager = new LinearLayoutManager(requireContext());
 
-        mGameAdapter = new GameAdapter(new IGameAdapter() {
+        mGameAdapter = new GameAdapter<Game>(
+                new IGameAdapter() {
             @Override
             public void onGameClick(String iGameId) {
                 Intent intent = new Intent(getActivity(), GameActivity.class);
@@ -131,7 +135,30 @@ public class GamesFragment extends Fragment {
 
                 startActivity(intent);
             }
-        }, this);
+        }, new IBindableGame<Game>() {
+            @Override
+            public String getTitle(Game iItem) {
+                return iItem.getGameName();
+            }
+
+            @Override
+            public float getRating(Game iItem) {
+                return iItem.getRating();
+            }
+
+            @Override
+            public String getBackgroundImage(Game iItem) {
+                return iItem.getBackgroundImage();
+            }
+
+            @Override
+            public String getId(Game iItem) {
+                return iItem.getGameId();
+            }
+        },
+                this,
+                Game.class,
+                FirebaseFirestore.getInstance().collection("games"));
 
         mGamesRecyclerView = iView.findViewById(R.id.games_fragment_gameList);
         mGamesRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -219,7 +246,7 @@ public class GamesFragment extends Fragment {
 
         mCurrentGameFilterOptions = gameFilterOptions;
 
-        mGameAdapter.applyFilters(mCurrentGameFilterOptions, mCurrentGameFilterType,  this);
+        mGameAdapter.applyFilters(mCurrentGameFilterOptions, mCurrentGameFilterType);
     }
 
     public void changeFilterType(View iView)
