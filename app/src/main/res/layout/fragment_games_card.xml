@@ -22,7 +22,7 @@
                 android:layout_height="150dp">
 
                 <ImageView
-                    android:id="@+id/gameImage"
+                    android:id="@+id/fragment_games_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY" />
@@ -48,7 +48,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/gameTitle"
+                    android:id="@+id/fragment_games_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"

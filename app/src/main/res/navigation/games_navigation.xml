@@ -16,7 +16,7 @@
     </fragment>
     <activity
         android:id="@+id/gameActivity"
-        android:name="com.hit.playpal.game.ui.GameActivity"
+        android:name="com.hit.playpal.game.ui.activities.GameActivity"
         android:label="activity_game"
         tools:layout="@layout/activity_game" />
 </navigation>

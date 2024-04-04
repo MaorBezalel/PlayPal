@@ -5,20 +5,34 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.entities.games.Game;
+import com.hit.playpal.entities.users.User;
 import com.hit.playpal.game.data.datasources.FavGameDataSource;
 import com.hit.playpal.game.data.datasources.GameDataSource;
+import com.hit.playpal.game.data.utils.exceptions.DatabaseErrorException;
 import com.hit.playpal.game.domain.repositories.IGameRepository;
-import com.hit.playpal.game.exceptions.GameNotFoundException;
-
-import java.util.List;
+import com.hit.playpal.game.data.utils.exceptions.GameNotFoundException;
 
 public class GameRepository implements IGameRepository {
-    private static GameDataSource sGameDataSource = new GameDataSource();
-    private static FavGameDataSource sFavGameDataSource = new FavGameDataSource();
+    private final GameDataSource gameDataSource = new GameDataSource();
+    private final FavGameDataSource favGameDataSource = new FavGameDataSource();
+
+
+    private static GameRepository sGameRepositorySingleton = new GameRepository();
+    public static GameRepository getGameRepository() {
+        if(sGameRepositorySingleton == null)
+        {
+            sGameRepositorySingleton = new GameRepository();
+        }
+
+        return sGameRepositorySingleton;
+    }
+
+    private GameRepository() {}
+
 
     @Override
     public Task<Game> getGameInfo(String iGameName) {
-        return sGameDataSource.getGame(iGameName).continueWith(task -> {
+        return gameDataSource.getGame(iGameName).continueWith(task -> {
             if (task.isSuccessful()) {
 
                 DocumentSnapshot document = task.getResult();
@@ -29,43 +43,64 @@ public class GameRepository implements IGameRepository {
                 }
                 else
                 {
-                    throw new GameNotFoundException("Game not found");
+                    throw new GameNotFoundException();
                 }
             }
             else
             {
-                throw new Exception("Failed to get game info");
+                throw new DatabaseErrorException();
             }
         });
     }
 
     @Override
-    public Task<Void> addGameToFavorites(String iGameId) {
-        // TODO: add userId from AndroidViewModel implementation
-        return sFavGameDataSource.addGameToFavorites(iGameId).continueWith(task -> {
-            if (task.isSuccessful())
-            {
-                return null;
-            }
-            else
-            {
-                throw new Exception("Failed to add game to favorites");
-            }
-        });
+    public Task<Void> updateGameToFavorites(String iGameId, boolean iNewStatus, User iCurrentlyLoggedUser) {
+        if(iNewStatus)
+        {
+            return favGameDataSource.addGameToFavorites(iGameId, iCurrentlyLoggedUser);
+        }
+        else
+        {
+            return favGameDataSource.getGameFavoriteStatus(iGameId, iCurrentlyLoggedUser).continueWithTask(task -> {
+                if(task.isSuccessful())
+                {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if(querySnapshot.isEmpty())
+                    {
+                        return Tasks.forException(new GameNotFoundException());
+                    }
+                    else
+                    {
+                        return favGameDataSource.removeGameFromFavorites(querySnapshot.getDocuments().get(0).getId()).continueWithTask(task1 -> {
+                            if(task1.isSuccessful())
+                            {
+                                return Tasks.forResult(null);
+                            }
+                            else
+                            {
+                                return Tasks.forException(new DatabaseErrorException());
+                            }
+                        });
+                    }
+                }
+                else
+                {
+                    return Tasks.forException(new DatabaseErrorException());
+                }
+            });
+        }
     }
 
     @Override
-    public Task<Boolean> getGameFavoriteStatus(String iGameName) {
-        return sFavGameDataSource.getGameFavoriteStatus(iGameName).continueWith(task -> {
+    public Task<Boolean> getGameFavoriteStatus(String iGameName, User iCurrentlyLoggedUser) {
+        return favGameDataSource.getGameFavoriteStatus(iGameName, iCurrentlyLoggedUser).continueWith(task -> {
             if(task.isSuccessful())
             {
-                QuerySnapshot querySnapshot = task.getResult();
-
-                return !querySnapshot.isEmpty();
+                return !task.getResult().isEmpty();
             }
             else
             {
-                throw new Exception("Failed to get game favorite status");
+                throw new DatabaseErrorException();
             }
         });
     }

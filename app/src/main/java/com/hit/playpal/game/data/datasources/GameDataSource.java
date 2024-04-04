@@ -6,15 +6,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.hit.playpal.entities.users.User;
 
 import java.util.Collection;
 
 public class GameDataSource {
-    private static CollectionReference sGameInstance = FirebaseFirestore.getInstance().collection("games");
+    private final CollectionReference gameInstance = FirebaseFirestore.getInstance().collection("games");
 
 
     public Task<DocumentSnapshot> getGame(String iGameId)
     {
-        return sGameInstance.document(iGameId).get();
+        return gameInstance.document(iGameId).get();
     }
 }
