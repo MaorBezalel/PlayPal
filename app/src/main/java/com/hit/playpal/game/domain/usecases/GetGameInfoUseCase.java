@@ -11,11 +11,11 @@ import java.util.concurrent.CompletableFuture;
 
 public class GetGameInfoUseCase {
     private final GameRepository gameRepository = GameRepository.getGameRepository();
-    public CompletableFuture<Game> execute(String iGameId)
+    public CompletableFuture<Game> execute(String iGameName)
     {
         CompletableFuture<Game> future = new CompletableFuture<>();
 
-        gameRepository.getGameInfo(iGameId).addOnCompleteListener(task -> {
+        gameRepository.getGameInfo(iGameName).addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {
                 future.complete(task.getResult());

@@ -18,6 +18,8 @@ import androidx.fragment.app.Fragment;
 
 
 import com.hit.playpal.R;
+
+import com.hit.playpal.home.ui.fragments.GamesFragment;
 import com.hit.playpal.profile.domain.usecases.GetProfileAccountInfoUseCase;
 import com.hit.playpal.profile.ui.fragments.FavoriteGamesFragment;
 import com.hit.playpal.profile.ui.fragments.FriendsFragment;

@@ -54,4 +54,17 @@ public class Game {
         mRating = iRating;
         mReleaseDate = iReleaseDate;
     }
+
+    public Game(
+            String iGameName,
+            String iBackgroundImage,
+            String iGameId,
+            float iGameRating)
+    {
+        mGameName = iGameName;
+        mBackgroundImage = iBackgroundImage;
+        mGameId = iGameId;
+        mRating = iGameRating;
+    }
+
 }

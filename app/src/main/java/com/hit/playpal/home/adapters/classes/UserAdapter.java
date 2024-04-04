@@ -1,4 +1,4 @@
-package com.hit.playpal.home.adapters;
+package com.hit.playpal.home.adapters.classes;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,22 +8,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.paging.PagingConfig;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.hit.playpal.R;
-import com.hit.playpal.entities.users.User;
+import com.hit.playpal.home.adapters.interfaces.IBindableUser;
+import com.hit.playpal.home.adapters.interfaces.IUserAdapter;
 
 public class UserAdapter<T> extends FirestorePagingAdapter<T, UserAdapter.UserViewHolder> {
     private static final int PAGE_SIZE = 20;
     private static final int PAGE_PREFETCH_DISTANCE = 5;
     private Query mBaseQuery;
+    String mUserPrefixPath;
     private static final PagingConfig PAGING_CONFIG = new PagingConfig(PAGE_SIZE, PAGE_PREFETCH_DISTANCE, false);
     private final LifecycleOwner mCurrentLifecycleOwner;
     private final IBindableUser<T> mBindableUser;
@@ -99,7 +99,7 @@ public class UserAdapter<T> extends FirestorePagingAdapter<T, UserAdapter.UserVi
         else
         {
             Query filteredQuery = mBaseQuery
-                    .orderBy("display_name")
+                    .orderBy(mUserPrefixPath + "display_name")
                     .startAt(iUserDisplayName)
                     .endAt(iUserDisplayName + "\uf8ff");
 

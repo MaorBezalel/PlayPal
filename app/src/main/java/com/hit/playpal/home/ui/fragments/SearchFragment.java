@@ -19,9 +19,10 @@ import android.widget.TextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.R;
 import com.hit.playpal.entities.users.User;
-import com.hit.playpal.home.adapters.IBindableUser;
-import com.hit.playpal.home.adapters.IUserAdapter;
-import com.hit.playpal.home.adapters.UserAdapter;
+import com.hit.playpal.home.adapters.classes.AllUsersAdapter;
+import com.hit.playpal.home.adapters.interfaces.IBindableUser;
+import com.hit.playpal.home.adapters.interfaces.IUserAdapter;
+import com.hit.playpal.home.adapters.classes.UserAdapter;
 import com.hit.playpal.profile.ui.activities.ProfileActivity;
 
 /**
@@ -72,29 +73,14 @@ public class SearchFragment extends Fragment {
         mUsersRecyclerView = view.findViewById(R.id.fragment_search_users_list);
         mUserSearchView = view.findViewById(R.id.fragment_search_bar_users);
         mUsersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mUserAdapter = new UserAdapter<User>(new IUserAdapter() {
+        mUserAdapter = new AllUsersAdapter(new IUserAdapter() {
             @Override
             public void onUserClick(String iUserId) {
-                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
                 intent.putExtra("userId", iUserId);
                 startActivity(intent);
             }
-        }, new IBindableUser<User>() {
-            @Override
-            public String getUserId(User iItem) {
-                return iItem.getUid();
-            }
-
-            @Override
-            public String getUserImage(User iItem) {
-                return iItem.getProfilePicture();
-            }
-
-            @Override
-            public String getDisplayName(User iItem) {
-                return iItem.getDisplayName();
-            }
-        }, this,FirebaseFirestore.getInstance().collection("users"), User.class);
+        }, this);
         mUsersRecyclerView.setAdapter(mUserAdapter);
 
         mUserSearchBtn = view.findViewById(R.id.fragment_search_searchBtn);
