@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/secondary_300"
+            android:background="@color/primary_500"
             android:fontFamily="@font/dosis_extrabold"
             android:tag="BY_NAME"
             android:text="By Name"
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/secondary_300"
+            android:background="@color/primary_500"
             android:fontFamily="@font/dosis_extrabold"
             android:tag="BY_GENRE"
             android:text="By Genre"
@@ -70,6 +70,7 @@
             android:id="@+id/games_fragment_searchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/home_search_view"
             android:iconifiedByDefault="false"
             android:queryHint="Ex. Rocket League"
             android:visibility="gone">
@@ -99,7 +100,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="@color/primary_500"
+        android:fontFamily="@font/dosis_extrabold"
         android:text="Search"
+        android:textSize="20sp"
         android:visibility="gone" />
 
     <FrameLayout

@@ -1,6 +1,5 @@
-package com.hit.playpal.game.ui;
+package com.hit.playpal.game.ui.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,19 +21,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.R;
 import com.hit.playpal.entities.games.Game;
 import com.hit.playpal.entities.games.enums.Genre;
 import com.hit.playpal.entities.games.enums.Platform;
-import com.hit.playpal.game.viewmodels.GameViewModel;
-import com.hit.playpal.home.ui.activities.HomeActivity;
+import com.hit.playpal.game.ui.viewmodels.GameViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
@@ -46,8 +41,12 @@ public class GameActivity extends AppCompatActivity {
     private TextView mGameReleaseDate;
     private GameViewModel mGameViewModel;
     private LinearLayout mGameAddToFavoritesLayout;
-    private Button mGameAddToFavorites;
-    private TextView mGameAlreadyInFavorites;
+    private LinearLayout mGameFavoriteStatusChangeLayout;
+    private LinearLayout mGameRemoveFromFavoritesLayout;
+    private LinearLayout mGameLayout;
+    private Button mGameAddToFavoritesBtn;
+    private Button mGameRemoveFromFavoritesBtn;
+    private ProgressBar mGameProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,39 +68,57 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        mGameImage = findViewById(R.id.game_image);
-        mGameName = findViewById(R.id.game_title);
-        mGameRating = findViewById(R.id.game_rating);
-        mGameReleaseDate = findViewById(R.id.game_release_date);
+        mGameImage = findViewById(R.id.game_activity_image);
+        mGameName = findViewById(R.id.game_activity_title);
+        mGameRating = findViewById(R.id.game_activity_rating);
+        mGameLayout = findViewById(R.id.game_activity_gameLayout);
+        mGameAddToFavoritesBtn = findViewById(R.id.game_add_to_favorites);
+        mGameProgressBar = findViewById(R.id.game_activity_progressBar);
+        mGameReleaseDate = findViewById(R.id.game_activity_release_date);
+        mGameRemoveFromFavoritesBtn = findViewById(R.id.game_remove_from_favorites);
         mGameAddToFavoritesLayout = findViewById(R.id.game_add_to_favorites_layout);
-        mGameAddToFavorites = findViewById(R.id.game_add_to_favorites);
-        mGameAlreadyInFavorites = findViewById(R.id.game_is_already_in_favorites);
+        mGameFavoriteStatusChangeLayout = findViewById(R.id.game_load_between_favorite_states);
+        mGameRemoveFromFavoritesLayout = findViewById(R.id.game_remove_from_favorites_layout);
+
+
+
+        mGameAddToFavoritesBtn.setOnClickListener(v -> {
+                    showUpdatingFavoritesState();
+                    mGameViewModel.updateGameFavoriteStatus();
+                });
+        mGameRemoveFromFavoritesBtn.setOnClickListener(v -> {
+                    showUpdatingFavoritesState();
+                    mGameViewModel.updateGameFavoriteStatus();
+                });
+
+
+        mGameProgressBar.setVisibility(View.VISIBLE);
+        mGameLayout.setVisibility(View.GONE);
     }
 
     private void initializeGame()
     {
-        mGameViewModel.fetchGameDetails(mCurrentGameId);
+        mGameViewModel.loadGameAndUserGameFavoriteStatus(mCurrentGameId);
     }
 
     private void initializeViewModel() {
-
         mGameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
-        mGameViewModel.getGame().observe(this, game -> {
-            if (game != null) showGameDetails(mGameViewModel.getGame().getValue());
+        mGameViewModel.getLoadGameDetailsSuccess().observe(this, (String s) -> {
+            showGameDetails(mGameViewModel.getGame().getValue());
+            changeGameFavoriteScreen(mGameViewModel.getIsInFavorites().getValue());
         });
 
-        mGameViewModel.getIsInFavorites().observe(this, isInFavorites -> {
-            if (!isInFavorites) showAddToFavorites();
-            else showAlreadyInFavorites();
+        mGameViewModel.getUpdateFavoriteStatusSuccess().observe(this, (String s) -> {
+            changeGameFavoriteScreen(mGameViewModel.getIsInFavorites().getValue());
         });
 
-        mGameViewModel.getGameDetailsErrorMessage().observe(this, errorMessage -> {
-            if (errorMessage != null) showInitializationErrorMessage(errorMessage);
+        mGameViewModel.getLoadGameDetailsError().observe(this, (String s) -> {
+            showInitializationErrorMessage(s);
         });
 
-        mGameViewModel.getAddToFavoritesErrorMessage().observe(this, errorMessage -> {
-            if (errorMessage != null) showAddToFavoritesErrorMessage(errorMessage);
+        mGameViewModel.getUpdateFavoriteStatusError().observe(this, (String s) -> {
+            showUpdateFavoritesErrorMessage(s);
         });
     }
 
@@ -140,23 +157,46 @@ public class GameActivity extends AppCompatActivity {
             gamePlatformsLayout.addView(platformTextView);
         }
 
+        mGameProgressBar.setVisibility(View.GONE);
+        mGameLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void changeGameFavoriteScreen(boolean iNewStatus)
+    {
+        if(iNewStatus)
+        {
+            showAlreadyInFavorites();
+        }
+        else
+        {
+            showAddToFavorites();
+        }
     }
 
     private void showAlreadyInFavorites() {
         mGameAddToFavoritesLayout.setVisibility(View.GONE);
-        mGameAlreadyInFavorites.setVisibility(View.VISIBLE);
+        mGameFavoriteStatusChangeLayout.setVisibility(View.GONE);
+        mGameRemoveFromFavoritesLayout.setVisibility(View.VISIBLE);
     }
 
     private void showAddToFavorites() {
         mGameAddToFavoritesLayout.setVisibility(View.VISIBLE);
-        mGameAddToFavorites.setOnClickListener(v -> mGameViewModel.addGameToFavorites(mCurrentGameId));
+        mGameFavoriteStatusChangeLayout.setVisibility(View.GONE);
+        mGameRemoveFromFavoritesLayout.setVisibility(View.GONE);
+    }
+
+    private void showUpdatingFavoritesState() {
+        mGameAddToFavoritesLayout.setVisibility(View.GONE);
+        mGameFavoriteStatusChangeLayout.setVisibility(View.VISIBLE);
+        mGameRemoveFromFavoritesLayout.setVisibility(View.GONE);
     }
     private void showInitializationErrorMessage(String iErrorMessage) {
         Toast.makeText(this, iErrorMessage, Toast.LENGTH_LONG).show();
         finish();
     }
-    private void showAddToFavoritesErrorMessage(String iErrorMessage) {
+    private void showUpdateFavoritesErrorMessage(String iErrorMessage) {
         Toast.makeText(this, iErrorMessage, Toast.LENGTH_LONG).show();
+        changeGameFavoriteScreen(mGameViewModel.getIsInFavorites().getValue());
     }
 
 }
