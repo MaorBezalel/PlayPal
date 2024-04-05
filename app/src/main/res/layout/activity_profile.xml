@@ -12,6 +12,34 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textViewProfileTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/primary_500"
+                android:fontFamily="@font/dosis_extrabold"
+                android:gravity="center"
+                android:text="My Friends"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/buttonProfileReturn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@color/primary_500"
+                android:fontFamily="@font/dosis_extrabold"
+                android:text="Return"
+                android:textSize="20sp" />
+
+        </FrameLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -97,7 +125,7 @@
             <TextView
                 android:id="@+id/textViewAboutMe"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="0.1"
                 android:gravity="center_horizontal"
                 android:text="About Me:"
@@ -109,6 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:paddingStart="10dp"
                 android:text="TextView" />
 
         </LinearLayout>
@@ -163,6 +192,27 @@
                 android:text="Add Friend"
                 android:textSize="20dp"
                 android:visibility="gone" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonRemoveFriend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="buttonRemoveFriendFunc"
+                    android:text="Remove Friend"
+                    android:textSize="20dp"
+                    android:visibility="gone" />
+
+                <ProgressBar
+                    android:id="@+id/progressBarRemoveFriend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
+            </FrameLayout>
         </LinearLayout>
 
     </LinearLayout>

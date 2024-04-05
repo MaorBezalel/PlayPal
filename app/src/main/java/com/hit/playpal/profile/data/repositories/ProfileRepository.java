@@ -37,13 +37,18 @@ public class ProfileRepository implements IProfileRepository {
     public Task<String> getStatus(String iUid, String iOtherUserUid){
         return DB.getStatus(iUid, iOtherUserUid);
     }
-@Override
-    public Task<DocumentReference> addPendingFriend(String iUid, Map<String, Object> otherUserData) {
+    @Override
+    public Task<Void> addPendingFriend(String iUid, Map<String, Object> otherUserData) {
         Map<String, Object> data = new HashMap<>();
         data.put("other_user", otherUserData);
         data.put("status", "pending");
 
-        return DB.addPendingFriend(iUid, data);
+        return DB.addPendingFriend(iUid, data).continueWith(task -> null);
+    }
+
+    @Override
+    public Task<Void> removeFriend(String iUid, String otherUserUid) {
+        return DB.deleteRelationshipDocument(iUid, otherUserUid);
     }
 
 }

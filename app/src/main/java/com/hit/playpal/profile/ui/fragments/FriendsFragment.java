@@ -62,6 +62,11 @@ public class FriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        Button buttonReturn = view.findViewById(R.id.buttonFriendsReturn);
+        buttonReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {getActivity().onBackPressed();}
+        });
 
         mProgressBar = view.findViewById(R.id.fragment_friends_progressBar);
         mNoUsersFound = view.findViewById(R.id.fragment_friends_no_friends_found_error);

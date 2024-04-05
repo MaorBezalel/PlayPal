@@ -64,9 +64,7 @@ public class FavoriteGamesFragment extends Fragment {
         Button buttonReturn = view.findViewById(R.id.buttonFavGamesReturn);
         buttonReturn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-            }
+            public void onClick(View v) {getActivity().onBackPressed();}
         });
 
         mCurrentGameFilterOptions = new GameFilterOptions();

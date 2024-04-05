@@ -29,5 +29,7 @@ public interface IProfileRepository {
 
     Task<String> getStatus(String iUid, String iOtherUserUid);
 
-    public Task<DocumentReference> addPendingFriend(String iUid, Map<String, Object> otherUserData);
+    public Task<Void> addPendingFriend(String iUid, Map<String, Object> otherUserData);
+
+    public Task<Void> removeFriend(String iUid, String otherUserUid);
 }

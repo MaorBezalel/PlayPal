@@ -5,14 +5,19 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -57,7 +62,7 @@ public class ProfileFirebaseFirestoreDataSource {
                                 String status = document.getString("status");
                                 return status;
                             } else {
-                                // Handle the case where the document does not exist
+                                // Handle the case where the document/sub collection does not exist
                                 return "noStatus";
                             }
                         } else {
@@ -72,7 +77,25 @@ public class ProfileFirebaseFirestoreDataSource {
         return DB.collection("users").document(iUid).collection("relationships").add(data);
     }
 
-
+    public Task<Void> deleteRelationshipDocument(String iUid, String otherUserUid) {
+        return DB.collection("users").document(iUid).collection("relationships")
+                .whereEqualTo("other_user.uid", otherUserUid).get()
+                .continueWithTask(new Continuation<QuerySnapshot, Task<Void>>() {
+                    @Override
+                    public Task<Void> then(@NonNull Task<QuerySnapshot> task) throws Exception {
+                        if (task.isSuccessful()) {
+                            List<Task<Void>> deleteTasks = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                deleteTasks.add(document.getReference().delete());
+                            }
+                            return Tasks.whenAll(deleteTasks);
+                        } else {
+                            Log.d("Firestore", "Error getting documents: ", task.getException());
+                            throw task.getException();
+                        }
+                    }
+                });
+    }
 
 
 
