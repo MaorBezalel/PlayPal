@@ -8,8 +8,10 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -17,14 +19,21 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.hit.playpal.R;
+import com.hit.playpal.profile.domain.usecases.AddPendingFriendUseCase;
 import com.hit.playpal.profile.domain.usecases.GetProfileAccountInfoUseCase;
+import com.hit.playpal.profile.domain.usecases.GetStatusUseCase;
 import com.hit.playpal.profile.ui.fragments.FavoriteGamesFragment;
 import com.hit.playpal.profile.ui.fragments.FriendsFragment;
 import com.hit.playpal.profile.ui.fragments.RoomsFragment;
 import com.hit.playpal.settings.ui.activities.SettingsActivity;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -33,8 +42,12 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView mImageViewAvatar;
     private TextView mTextViewGetDisplayName;
     private TextView mTextViewGetAboutMe;
+    private GetStatusUseCase mGetStatusUseCase;
+    private String status;
 
     private final String  currentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
+
+    private String Uid;
 
     private FrameLayout mFragmentContainer;
 
@@ -50,7 +63,27 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        String Uid = intent.getStringExtra("userId");
+        Uid = intent.getStringExtra("userId");
+
+        if (Uid == null) {
+            finish();
+            return;
+        }
+
+        if (!currentUser.equals(Uid)) {
+            mGetStatusUseCase = new GetStatusUseCase();
+            mGetStatusUseCase.execute(currentUser, Uid).addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (task.isSuccessful()) {
+                        status = task.getResult();
+                        Log.d("ProfileActivity", "Status: " + status);
+                    } else {
+                        Exception e = task.getException();
+                    }
+                }
+            });
+        }
 
         mTextViewGetUserName = findViewById(R.id.textViewGetUserName);
         mImageViewAvatar = findViewById(R.id.imageViewAvatar);
@@ -63,6 +96,8 @@ public class ProfileActivity extends AppCompatActivity {
         if (!currentUser.equals(Uid)) {
             buttonSettings.setVisibility(View.GONE);
             buttonAddFriend.setVisibility(View.VISIBLE);}
+
+
 
         mProfileAccountInfoUseCase = new GetProfileAccountInfoUseCase();
         mProfileAccountInfoUseCase.execute(Uid).addOnSuccessListener(document -> {
@@ -142,5 +177,21 @@ public class ProfileActivity extends AppCompatActivity {
     public void buttonSettingsFunc(View view) {
         Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    public void AddFriendFunc(View view) {
+        if ("pending".equals(status)) {
+            Toast.makeText(ProfileActivity.this, "Friend request is pending", Toast.LENGTH_SHORT).show();
+        } else if("noStatus".equals(status)){
+            Map<String, Object> otherUserData = new HashMap<>();
+            otherUserData.put("display_name", mTextViewGetDisplayName.getText().toString());
+            otherUserData.put("profile_picture", ""); // implement image giving
+            otherUserData.put("uid", Uid); // Uid is the id of the other user
+
+            AddPendingFriendUseCase addPendingFriendUseCase = new AddPendingFriendUseCase();
+            addPendingFriendUseCase.execute(currentUser,Uid, otherUserData);
+            Toast.makeText(ProfileActivity.this, "Friend request sent!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

@@ -159,9 +159,10 @@
                 android:id="@+id/buttonAddFriend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="AddFriendFunc"
                 android:text="Add Friend"
                 android:textSize="20dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>
