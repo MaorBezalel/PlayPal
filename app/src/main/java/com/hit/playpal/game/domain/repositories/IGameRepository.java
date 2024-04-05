@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface IGameRepository {
     Task<Game> getGameInfo(String iGameId);
-    Task<Void> updateGameToFavorites(String iGameName,String iGameImage, float iGameRating, boolean iNewStatus, User iCurrentlyLoggedUser);
+    Task<Void> updateGameToFavorites(Game iGame, boolean iNewStatus, User iCurrentlyLoggedUser);
     Task<Boolean> getGameFavoriteStatus(String iGameName, User iCurrentlyLoggedUser);
 }

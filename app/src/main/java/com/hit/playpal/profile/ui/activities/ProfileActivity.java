@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.hit.playpal.R;
 import com.hit.playpal.profile.domain.usecases.AddPendingFriendUseCase;
+
+import com.hit.playpal.home.ui.fragments.GamesFragment;
 import com.hit.playpal.profile.domain.usecases.GetProfileAccountInfoUseCase;
 import com.hit.playpal.profile.domain.usecases.GetStatusUseCase;
 import com.hit.playpal.profile.ui.fragments.FavoriteGamesFragment;

@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.entities.games.FavoriteGames;
+import com.hit.playpal.entities.games.Game;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.game.data.utils.exceptions.DatabaseErrorException;
 
@@ -18,10 +19,15 @@ import java.util.List;
 public class FavGameDataSource {
     private final CollectionReference favGameInstance = FirebaseFirestore.getInstance().collection("fav_games");
 
-    public Task<Void> addGameToFavorites(String iGameName,String iGameImage, float iGameRating, User iCurrentlyLoggedUser) {
+    public Task<Void> addGameToFavorites(Game iGame, User iCurrentlyLoggedUser) {
 
         return favGameInstance.
-                add(new FavoriteGames(iGameName,iGameImage,iGameRating,iCurrentlyLoggedUser)).
+                add(new FavoriteGames(
+                        iGame.getGameName(),
+                        iGame.getBackgroundImage(),
+                        iGame.getGameId(),
+                        iGame.getRating(),
+                        iCurrentlyLoggedUser)).
                 continueWithTask(task -> {
             if (task.isSuccessful()) {
                 return Tasks.forResult(null);
@@ -42,7 +48,7 @@ public class FavGameDataSource {
     public Task<QuerySnapshot> getGameFavoriteStatus(String iGameName, User iCurrentlyLoggedUser)
     {
         return favGameInstance.
-                whereEqualTo("game_name", iGameName).
+                whereEqualTo("game.game_name", iGameName).
                 whereEqualTo("user", iCurrentlyLoggedUser).
                 get();
     }
