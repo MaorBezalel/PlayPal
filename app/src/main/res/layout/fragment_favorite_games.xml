@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/dosis_extrabold"
                 android:gravity="center"
-                android:text="My Favorites"
+                android:text="Favorite Games"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="20sp"
