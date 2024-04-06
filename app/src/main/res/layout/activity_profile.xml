@@ -56,6 +56,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
+                android:scaleType="centerInside"
                 app:srcCompat="@drawable/ic_home_nav_myprofile" />
 
             <LinearLayout
@@ -125,8 +126,7 @@
             <TextView
                 android:id="@+id/textViewAboutMe"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.1"
+                android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="About Me:"
                 android:textSize="16sp"
@@ -136,7 +136,6 @@
                 android:id="@+id/textViewGetAboutMe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:paddingStart="10dp"
                 android:text="TextView" />
 

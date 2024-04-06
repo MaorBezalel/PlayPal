@@ -195,7 +195,17 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public void buttonSettingsFunc(View view) {
+        String displayName = mTextViewGetDisplayName.getText().toString();
+        String userName = mTextViewGetUserName.getText().toString();
+        String aboutMe = mTextViewGetAboutMe.getText().toString();
+        String avatarImage = ""; // implement image giving
+
         Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
+        intent.putExtra("displayName", displayName);
+        intent.putExtra("userName", userName);
+        intent.putExtra("aboutMe", aboutMe);
+        intent.putExtra("avatarImage", avatarImage);
+
         startActivity(intent);
     }
 
