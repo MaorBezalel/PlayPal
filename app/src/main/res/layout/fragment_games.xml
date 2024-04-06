@@ -7,6 +7,19 @@
     android:orientation="vertical"
     tools:context=".home.ui.fragments.GamesFragment">
 
+    <TextView
+        android:id="@+id/games_fragment_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@color/primary_500"
+        android:fontFamily="@font/dosis_extrabold"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Game Browser"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +36,7 @@
             android:fontFamily="@font/dosis_extrabold"
             android:tag="ALL"
             android:text="All"
-            android:textSize="13sp" />
+            android:textSize="10sp" />
 
         <Button
             android:id="@+id/games_fragment_searchByNameBtn"
@@ -34,7 +47,7 @@
             android:fontFamily="@font/dosis_extrabold"
             android:tag="BY_NAME"
             android:text="By Name"
-            android:textSize="13sp" />
+            android:textSize="10sp" />
 
         <Button
             android:id="@+id/games_fragment_searchByGenreBtn"
@@ -45,7 +58,7 @@
             android:fontFamily="@font/dosis_extrabold"
             android:tag="BY_GENRE"
             android:text="By Genre"
-            android:textSize="13sp" />
+            android:textSize="10sp" />
 
         <Button
             android:id="@+id/games_fragment_searchByPlatformBtn"
@@ -56,7 +69,7 @@
             android:fontFamily="@font/dosis_extrabold"
             android:tag="BY_PLATFORM"
             android:text="By Platform"
-            android:textSize="13sp" />
+            android:textSize="10sp" />
 
     </LinearLayout>
 

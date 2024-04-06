@@ -78,7 +78,7 @@ public class GameViewModel extends ViewModel {
         UpdateFavoriteGameStatusUseCase updateFavoriteGamesStatus = new UpdateFavoriteGameStatusUseCase();
 
         updateFavoriteGamesStatus
-                .execute(mGame.getValue().getGameName(), !mIsInFavorites.getValue())
+                .execute(mGame.getValue(), !mIsInFavorites.getValue())
 
                 .thenAccept(none -> {
                     mIsInFavorites.setValue(!mIsInFavorites.getValue());

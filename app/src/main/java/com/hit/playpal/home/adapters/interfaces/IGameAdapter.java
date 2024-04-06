@@ -1,4 +1,4 @@
-package com.hit.playpal.home.adapters;
+package com.hit.playpal.home.adapters.interfaces;
 
 import com.hit.playpal.entities.games.Game;
 

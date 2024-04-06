@@ -1,4 +1,4 @@
-package com.hit.playpal.home.adapters;
+package com.hit.playpal.home.adapters.interfaces;
 
 public interface IBindableUser<T> {
     String getUserId(T iItem);

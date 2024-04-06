@@ -19,14 +19,17 @@ import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.R;
+import com.hit.playpal.entities.games.FavoriteGames;
 import com.hit.playpal.entities.games.Game;
 import com.hit.playpal.entities.games.enums.Genre;
 import com.hit.playpal.entities.games.enums.Platform;
 import com.hit.playpal.game.ui.activities.GameActivity;
-import com.hit.playpal.home.adapters.GameAdapter;
-import com.hit.playpal.home.adapters.IBindableGame;
-import com.hit.playpal.home.adapters.IGameAdapter;
-import com.hit.playpal.home.adapters.MultiSelectionAdapter;
+import com.hit.playpal.home.adapters.classes.AllGamesAdapter;
+import com.hit.playpal.home.adapters.classes.GameAdapter;
+import com.hit.playpal.home.adapters.interfaces.IBindableGame;
+import com.hit.playpal.home.adapters.interfaces.IGameAdapter;
+import com.hit.playpal.home.adapters.classes.MultiSelectionAdapter;
+
 import com.hit.playpal.home.domain.util.GameFilterOptions;
 import com.hit.playpal.home.domain.util.GameFilterType;
 
@@ -72,6 +75,7 @@ public class GamesFragment extends Fragment {
     private GameFilterOptions mCurrentGameFilterOptions;
 
 
+
     public GamesFragment() {
 
     }
@@ -90,6 +94,7 @@ public class GamesFragment extends Fragment {
 
         return view;
     }
+
 
 
     private void initializeComponents(View iView) {
@@ -121,12 +126,11 @@ public class GamesFragment extends Fragment {
         mFilterButton.setOnClickListener(this::filterGames);
     }
 
-    private void initializeRecyclerView(View iView)
-    {
+    private void initializeRecyclerView(View iView) {
         mLinearLayoutManager = new LinearLayoutManager(requireContext());
+        mGamesRecyclerView = iView.findViewById(R.id.games_fragment_gameList);
 
-        mGameAdapter = new GameAdapter<Game>(
-                new IGameAdapter() {
+        mGameAdapter = new AllGamesAdapter(new IGameAdapter() {
             @Override
             public void onGameClick(String iGameId) {
                 Intent intent = new Intent(getActivity(), GameActivity.class);
@@ -135,65 +139,48 @@ public class GamesFragment extends Fragment {
 
                 startActivity(intent);
             }
-        }, new IBindableGame<Game>() {
-            @Override
-            public String getTitle(Game iItem) {
-                return iItem.getGameName();
-            }
+        }, this);
 
-            @Override
-            public float getRating(Game iItem) {
-                return iItem.getRating();
-            }
-
-            @Override
-            public String getBackgroundImage(Game iItem) {
-                return iItem.getBackgroundImage();
-            }
-
-            @Override
-            public String getId(Game iItem) {
-                return iItem.getGameId();
-            }
-        },
-                this,
-                Game.class,
-                FirebaseFirestore.getInstance().collection("games"));
-
-        mGamesRecyclerView = iView.findViewById(R.id.games_fragment_gameList);
         mGamesRecyclerView.setLayoutManager(mLinearLayoutManager);
         mGamesRecyclerView.setAdapter(mGameAdapter);
 
         mGameAdapter.addLoadStateListener(loadStates -> {
-            if (loadStates.getRefresh() instanceof LoadState.NotLoading) {
-                if(mGameAdapter.getItemCount() == 0)
-                {
+            if (loadStates.getRefresh() instanceof LoadState.Loading)
+            {
+                mProgressBar.setVisibility(View.VISIBLE);
+
+                mGamesRecyclerView.setVisibility(View.GONE);
+                mNoGamesFoundError.setVisibility(View.GONE);
+                mDbErrorError.setVisibility(View.GONE);
+            }
+            else if (loadStates.getRefresh() instanceof LoadState.Error)
+            {
+                mProgressBar.setVisibility(View.GONE);
+                mGamesRecyclerView.setVisibility(View.GONE);
+                mNoGamesFoundError.setVisibility(View.GONE);
+                mDbErrorError.setVisibility(View.VISIBLE);
+            }
+            else if (loadStates.getRefresh() instanceof LoadState.NotLoading)
+            {
+                if (mGameAdapter.getItemCount() == 0) {
+                    mProgressBar.setVisibility(View.GONE);
                     mGamesRecyclerView.setVisibility(View.GONE);
                     mNoGamesFoundError.setVisibility(View.VISIBLE);
+                    mDbErrorError.setVisibility(View.GONE);
                 }
                 else
                 {
+                    mProgressBar.setVisibility(View.GONE);
                     mGamesRecyclerView.setVisibility(View.VISIBLE);
                     mNoGamesFoundError.setVisibility(View.GONE);
+                    mDbErrorError.setVisibility(View.GONE);
                 }
-                mProgressBar.setVisibility(View.GONE);
-                mDbErrorError.setVisibility(View.GONE);
-            }
-            else if (loadStates.getRefresh() instanceof LoadState.Loading) {
-                mGamesRecyclerView.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
-                mNoGamesFoundError.setVisibility(View.GONE);
-                mDbErrorError.setVisibility(View.GONE);
-            }
-            else if (loadStates.getRefresh() instanceof LoadState.Error) {
-                mGamesRecyclerView.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.GONE);
-                mNoGamesFoundError.setVisibility(View.GONE);
-                mDbErrorError.setVisibility(View.VISIBLE);
             }
             return null;
         });
     }
+
+
 
     private void initializeFilteringOptions(View iView)
     {
@@ -247,6 +234,8 @@ public class GamesFragment extends Fragment {
         mCurrentGameFilterOptions = gameFilterOptions;
 
         mGameAdapter.applyFilters(mCurrentGameFilterOptions, mCurrentGameFilterType);
+
+        mSearchView.clearFocus();
     }
 
     public void changeFilterType(View iView)
