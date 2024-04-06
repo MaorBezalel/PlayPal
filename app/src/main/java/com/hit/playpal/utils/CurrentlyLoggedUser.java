@@ -5,7 +5,7 @@ import com.hit.playpal.entities.users.User;
 public final class CurrentlyLoggedUser {
     private static User sCurrentlyLoggedUser = null;
 
-    private CurrentlyLoggedUser() {}
+    private CurrentlyLoggedUser() {} // static class
 
     public static User getCurrentlyLoggedUser() {
         return sCurrentlyLoggedUser;

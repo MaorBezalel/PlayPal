@@ -88,7 +88,6 @@ public class GameAdapter<T> extends FirestorePagingAdapter<T, GameAdapter.GameVi
 
     @Override
     protected void onBindViewHolder(@NonNull GameViewHolder iGameViewHolder, int i, @NonNull T iItem) {
-
         iGameViewHolder.gameTitle.setText(this.mBindable.getTitle(iItem));
         iGameViewHolder.gameRating.setText(new DecimalFormat("0.00").format(this.mBindable.getRating(iItem)));
         iGameViewHolder.gameRating.setTextColor(getRatingColor(this.mBindable.getRating(iItem)));

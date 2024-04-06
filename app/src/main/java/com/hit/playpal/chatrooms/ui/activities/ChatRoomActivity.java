@@ -16,6 +16,7 @@ import com.hit.playpal.chatrooms.ui.fragments.ChatRoomBodyFragment;
 import com.hit.playpal.chatrooms.ui.viewmodels.ChatRoomViewModel;
 import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.users.User;
+import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.hit.playpal.utils.Out;
 
 public class ChatRoomActivity extends AppCompatActivity {
@@ -52,14 +53,13 @@ public class ChatRoomActivity extends AppCompatActivity {
         Out<ChatRoom> chatRoom = Out.of(ChatRoom.class);
 
         getDataFromIntent(user, chatRoom);
-        //new ChatRoomViewModel(user.get(), chatRoom.get());
         ChatRoomViewModel.Factory factory = new ChatRoomViewModel.Factory(user.get(), chatRoom.get());
         mChatRoomViewModel = new ViewModelProvider(this, factory).get(ChatRoomViewModel.class);
     }
 
     private void getDataFromIntent(@NonNull Out<User> oUser, @NonNull Out<ChatRoom> oChatRoom) {
         Intent intent = getIntent();
-        User parcelableUser = intent.getParcelableExtra("user");
+        User parcelableUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
         ChatRoom parcelableChatRoom = intent.getParcelableExtra("chatRoom");
 
         if (parcelableUser == null || parcelableChatRoom == null) {
