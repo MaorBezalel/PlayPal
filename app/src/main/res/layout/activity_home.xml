@@ -67,6 +67,7 @@
             android:background="@drawable/home_nav_button"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_home_nav_notification" />
+
     </LinearLayout>
 
 </LinearLayout>

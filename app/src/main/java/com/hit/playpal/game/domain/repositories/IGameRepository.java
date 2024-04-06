@@ -5,6 +5,6 @@ import com.hit.playpal.entities.games.Game;
 
 public interface IGameRepository {
     Task<Game> getGameInfo(String iGameId);
-    Task<Void> addGameToFavorites(String iGameName);
-    Task<Boolean> getGameFavoriteStatus(String iGameName);
+    Task<Void> updateGameToFavorites(String iGameName, boolean iNewStatus, User iCurrentlyLoggedUser);
+    Task<Boolean> getGameFavoriteStatus(String iGameName, User iCurrentlyLoggedUser);
 }
