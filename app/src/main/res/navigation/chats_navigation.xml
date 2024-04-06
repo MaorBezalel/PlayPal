@@ -15,7 +15,7 @@
     </fragment>
     <activity
         android:id="@+id/chatActivity"
-        android:name="com.hit.playpal.chatrooms.ui.activities.ChatActivity"
+        android:name="com.hit.playpal.chatrooms.ui.activities.ChatRoomActivity"
         android:label="activity_chat"
-        tools:layout="@layout/activity_chat" />
+        tools:layout="@layout/activity_chat_room" />
 </navigation>

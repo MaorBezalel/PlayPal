@@ -24,7 +24,7 @@
         tools:layout="@layout/activity_profile" />
     <activity
         android:id="@+id/chatActivity2"
-        android:name="com.hit.playpal.chatrooms.ui.activities.ChatActivity"
+        android:name="com.hit.playpal.chatrooms.ui.activities.ChatRoomActivity"
         android:label="activity_chat"
-        tools:layout="@layout/activity_chat" />
+        tools:layout="@layout/activity_chat_room" />
 </navigation>

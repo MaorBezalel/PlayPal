@@ -12,10 +12,10 @@ import com.hit.playpal.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ChatInfoFragment#newInstance} factory method to
+ * Use the {@link GroupChatRoomSettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChatInfoFragment extends Fragment {
+public class GroupChatRoomSettingsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class ChatInfoFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public ChatInfoFragment() {
+    public GroupChatRoomSettingsFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class ChatInfoFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ChatInfoFragment.
+     * @return A new instance of fragment GroupChatRoomSettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ChatInfoFragment newInstance(String param1, String param2) {
-        ChatInfoFragment fragment = new ChatInfoFragment();
+    public static GroupChatRoomSettingsFragment newInstance(String param1, String param2) {
+        GroupChatRoomSettingsFragment fragment = new GroupChatRoomSettingsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class ChatInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat_info, container, false);
+        return inflater.inflate(R.layout.fragment_group_chat_room_settings, container, false);
     }
 }
