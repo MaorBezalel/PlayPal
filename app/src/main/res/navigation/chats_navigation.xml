@@ -6,7 +6,7 @@
     app:startDestination="@id/chatsFragment">
     <fragment
         android:id="@+id/chatsFragment"
-        android:name="com.hit.playpal.home.ui.fragments.ChatsFragment"
+        android:name="com.hit.playpal.home.ui.fragments.chats.ChatsFragment"
         android:label="fragment_chats"
         tools:layout="@layout/fragment_chats" >
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <activity
         android:id="@+id/chatActivity"
-        android:name="com.hit.playpal.chatrooms.ui.activities.ChatActivity"
+        android:name="com.hit.playpal.chatrooms.ui.activities.ChatRoomActivity"
         android:label="activity_chat"
-        tools:layout="@layout/activity_chat" />
+        tools:layout="@layout/activity_chat_room" />
 </navigation>

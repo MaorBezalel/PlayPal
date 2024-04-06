@@ -17,6 +17,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    dataBinding {
+        enable = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -39,9 +43,11 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.ui.auth)
     implementation(libs.firebase.ui.firestore)
-    implementation("androidx.core:core-splashscreen:1.0.0")
-    implementation("com.squareup.picasso:picasso:2.71828")
-    implementation("androidx.paging:paging-runtime:3.2.1")
+    implementation(libs.core.splashscreen)
+    implementation(libs.picasso)
+    implementation(libs.paging.runtime)
+    implementation("androidx.paging:paging-guava:3.2.1")
+    implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     testImplementation(libs.junit)
