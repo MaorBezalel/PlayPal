@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".chatrooms.ui.fragments.ChatRoomBodyFragment">
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_chat_room_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textview_chat_room_name"
+            android:layout_toRightOf="@id/imageview_chat_room_profile_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:text="@string/display_name"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageview_chat_room_profile_picture"
+            android:layout_toRightOf="@id/imagebutton_chat_room_back"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/bg_circle"
+            android:backgroundTint="@color/background"
+            android:padding="4dp"
+            android:src="@drawable/ic_person"
+            app:tint="@color/text" />
+
+        <ImageButton
+            android:id="@+id/imagebutton_chat_room_back"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/background" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_chat_room_messages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/relativelayout_chat_room_message"
+        android:layout_below="@+id/relativelayout_chat_room_toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_chat_room_message"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:padding="8dp">
+
+        <EditText
+            android:id="@+id/edittext_chat_room_message_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toLeftOf="@id/imagebutton_chat_room_send_message"
+            android:background="@drawable/bg_message_text"
+            android:elevation="4dp"
+            android:hint="Write message here"
+            android:padding="10dp"
+            />
+
+        <ImageButton
+            android:id="@+id/imagebutton_chat_room_send_message"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_circle"
+            android:backgroundTint="@color/primary"
+            android:padding="12dp"
+            android:src="@drawable/ic_message_send"
+            android:scaleType="fitCenter"
+            app:tint="@color/background" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

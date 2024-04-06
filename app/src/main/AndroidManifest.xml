@@ -15,9 +15,14 @@
         android:theme="@style/Theme.StartApp"
         tools:targetApi="31">
         <activity
-            android:name=".chatrooms.ui.activities.ChatActivity"
+            android:name=".chatrooms.ui.activities.TestChatRoomActivity"
             android:exported="false"
             android:theme="@style/Theme.PlayPal" />
+        <activity
+            android:name=".chatrooms.ui.activities.ChatRoomActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PlayPal"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".game.ui.activities.GameActivity"
             android:exported="false"
@@ -37,9 +42,10 @@
         <activity
             android:name=".auth.ui.activities.AuthActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
