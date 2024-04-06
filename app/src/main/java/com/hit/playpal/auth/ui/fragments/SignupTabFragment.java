@@ -134,13 +134,12 @@ public class SignupTabFragment extends Fragment {
         boolean isUsernameValid = performUsernameValidation(iUsername);
         boolean isDisplayNameValid = performDisplayNameValidation(iDisplayName);
         boolean isPasswordValid = performPasswordValidation(iPassword);
-        boolean isConfirmPasswordValid = performConfirmPasswordValidation(iPassword, iConfirmPassword);
+        // boolean isConfirmPasswordValid = performConfirmPasswordValidation(iPassword, iConfirmPassword);
 
         return isEmailValid &&
                 isUsernameValid &&
                 isDisplayNameValid &&
-                isPasswordValid &&
-                isConfirmPasswordValid;
+                isPasswordValid;
     }
 
     private boolean performEmailValidation(String iEmail) {
