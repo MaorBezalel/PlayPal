@@ -1,4 +1,4 @@
-package com.hit.playpal.home.adapters;
+package com.hit.playpal.home.adapters.classes;
 
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -15,18 +15,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.hit.playpal.R;
-import com.hit.playpal.entities.games.Game;
+import com.hit.playpal.home.adapters.interfaces.IBindableGame;
+import com.hit.playpal.home.adapters.interfaces.IGameAdapter;
 import com.hit.playpal.home.domain.util.GameFilterOptions;
 import com.hit.playpal.home.domain.util.GameFilterType;
-import com.hit.playpal.home.ui.fragments.GamesFragment;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 
-public class GameAdapter<T> extends FirestorePagingAdapter<T, GameAdapter.GameViewHolder>{
+public abstract class GameAdapter<T> extends FirestorePagingAdapter<T, GameAdapter.GameViewHolder>{
     private static final int PAGE_SIZE = 20;
     private static final int PAGE_PREFETCH_DISTANCE = 5;
     private static final int EXCELLENT_RATING_COLOR = Color.rgb(0, 128, 0);
@@ -34,6 +33,7 @@ public class GameAdapter<T> extends FirestorePagingAdapter<T, GameAdapter.GameVi
     private static final int OKAY_RATING_COLOR = Color.rgb(255, 255, 0);
     private static final int POOR_RATING_COLOR = Color.rgb(255, 165, 0);
     private static final int EXTREMELY_POOR_RATING_COLOR = Color.rgb(255, 0, 0);
+    String mGamePrefixPath;
     private Query mBaseQuery ;
     private static final PagingConfig PAGING_CONFIG = new PagingConfig(PAGE_SIZE, PAGE_PREFETCH_DISTANCE, false);
     private final IGameAdapter mGameAdapter;
@@ -111,7 +111,8 @@ public class GameAdapter<T> extends FirestorePagingAdapter<T, GameAdapter.GameVi
 
 
     public void applyFilters(GameFilterOptions iFilteringOptions, GameFilterType iFilteringType) {
-
+        System.out.println(iFilteringType);
+        System.out.println(mGamePrefixPath + iFilteringOptions.getGameName());
         Query filteredQuery = mBaseQuery;
 
         if (iFilteringOptions != null)
@@ -121,7 +122,7 @@ public class GameAdapter<T> extends FirestorePagingAdapter<T, GameAdapter.GameVi
                 case BY_NAME:
                     filteredQuery = (iFilteringOptions.getGameName() != null) ?
                             filteredQuery.
-                                    orderBy("game_name")
+                                    orderBy( mGamePrefixPath + "game_name")
                                     .startAt(iFilteringOptions.getGameName())
                                     .endAt(iFilteringOptions.getGameName() + "\uf8ff")
                             : filteredQuery;
@@ -129,13 +130,13 @@ public class GameAdapter<T> extends FirestorePagingAdapter<T, GameAdapter.GameVi
                 case BY_GENRE:
                     filteredQuery = (iFilteringOptions.getGenre() != null) ?
                             filteredQuery.
-                                    whereArrayContainsAny("genres", iFilteringOptions.getGenre())
+                                    whereArrayContainsAny(mGamePrefixPath + "genres", iFilteringOptions.getGenre())
                             : filteredQuery;
                     break;
                 case BY_PLATFORM:
                     filteredQuery = (iFilteringOptions.getPlatform() != null) ?
                             filteredQuery.
-                                    whereArrayContainsAny("platforms", iFilteringOptions.getPlatform()) : filteredQuery;
+                                    whereArrayContainsAny( mGamePrefixPath + "platforms", iFilteringOptions.getPlatform()) : filteredQuery;
                     break;
                 case ALL:
                     break;

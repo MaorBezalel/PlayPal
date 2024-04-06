@@ -1,14 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".profile.ui.fragments.FavoriteGamesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        android:visibility="visible"
+        tools:visibility="visible">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary_500">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/dosis_extrabold"
+                android:gravity="center"
+                android:text="Favorite Games"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/buttonFavGamesReturn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@color/primary_500"
+                android:fontFamily="@font/dosis_extrabold"
+                android:text="Return"
+                android:textSize="20sp" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+            <SearchView
+
+                android:id="@+id/fragment_favorite_games_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/home_search_view"
+                android:iconifiedByDefault="false"
+                android:queryBackground="@null"
+                android:queryHint="Ex. Rocket League">
+
+            </SearchView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <Button
+
+                    android:id="@+id/fragment_favorite_games_searchBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/primary_500"
+                    android:fontFamily="@font/dosis_extrabold"
+                    android:text="Search"
+                    android:textSize="20sp" />
+
+                <Button
+
+                    android:id="@+id/fragment_favorite_games_clearBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="0dp"
+                    android:layout_weight="1"
+                    android:background="@color/accent_300"
+                    android:backgroundTint="@null"
+                    android:fontFamily="@font/dosis_extrabold"
+                    android:includeFontPadding="true"
+                    android:padding="0dp"
+                    android:text="Clear"
+                    android:textSize="20sp"
+                    app:backgroundTint="@null"
+                    app:cornerRadius="0dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewFavoriteGames"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/fragment_favorite_games_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="-40dp" />
+
+    <TextView
+        android:id="@+id/fragment_favorite_games_no_fav_games_found_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="-40dp"
+        android:text="No Games Found!"
+        android:textColor="@color/primary_500"
+        android:textSize="28sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/fragment_favorite_games_db_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="-40dp"
+        android:text="Error Occurred, Please Try Again!  "
+        android:textColor="@color/accent_300"
+        android:textSize="24sp"
+        android:visibility="gone"/>
 
 </FrameLayout>

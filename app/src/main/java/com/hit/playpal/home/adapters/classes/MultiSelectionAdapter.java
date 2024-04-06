@@ -1,4 +1,4 @@
-package com.hit.playpal.home.adapters;
+package com.hit.playpal.home.adapters.classes;
 
 import android.content.Context;
 import android.view.LayoutInflater;
