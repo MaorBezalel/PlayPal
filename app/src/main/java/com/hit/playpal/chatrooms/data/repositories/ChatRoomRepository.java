@@ -69,6 +69,6 @@ public class ChatRoomRepository implements IChatRoomRepository {
 
     @Override
     public Task<DocumentSnapshot> getChatRoom(String iChatRoomId) {
-        return DB.getChat(iChatRoomId);
+        return DB.getGroupChatProfile(iChatRoomId);
     }
 }

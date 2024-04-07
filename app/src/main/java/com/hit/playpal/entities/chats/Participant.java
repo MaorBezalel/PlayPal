@@ -1,12 +1,13 @@
 package com.hit.playpal.entities.chats;
 
+import com.google.firebase.firestore.PropertyName;
 import com.hit.playpal.entities.chats.enums.UserChatRole;
 
 public class Participant {
-    private String mUserUid;
-    private String mDisplayName;
-    private String mProfilePicture;
-    private UserChatRole mUserChatRole;
+    @PropertyName("uid") private String mUserUid;
+    @PropertyName("display_name") private String mDisplayName;
+    @PropertyName("profile_image") private String mProfilePicture;
+    @PropertyName("chat_role") private UserChatRole mUserChatRole;
 
     public Participant() {
     }
@@ -18,35 +19,35 @@ public class Participant {
         this.mUserChatRole = iUserChatRole;
     }
 
-    public String getUserUid() {
+    @PropertyName("uid")  public String getUserUid() {
         return mUserUid;
     }
 
-    public void setUserUid(String iUserUid) {
+    @PropertyName("uid")  public void setUserUid(String iUserUid) {
         mUserUid = iUserUid;
     }
 
-    public String getDisplayName() {
+    @PropertyName("display_name") public String getDisplayName() {
         return mDisplayName;
     }
 
-    public void setDisplayName(String iDisplayName) {
+    @PropertyName("display_name") public void setDisplayName(String iDisplayName) {
         mDisplayName = iDisplayName;
     }
 
-    public String getProfilePicture() {
+    @PropertyName("user_profile") public String getProfilePicture() {
         return mProfilePicture;
     }
 
-    public void setProfilePicture(String iProfilePicture) {
+    @PropertyName("user_profile") public void setProfilePicture(String iProfilePicture) {
         mProfilePicture = iProfilePicture;
     }
 
-    public UserChatRole getUserChatRole() {
+    @PropertyName("chat_role")  public UserChatRole getUserChatRole() {
         return mUserChatRole;
     }
 
-    public void setUserChatRole(UserChatRole iUserChatRole) {
+    @PropertyName("chat_role")  public void setUserChatRole(UserChatRole iUserChatRole) {
         mUserChatRole = iUserChatRole;
     }
 }

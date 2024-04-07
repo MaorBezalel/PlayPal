@@ -34,4 +34,8 @@
         android:name="com.hit.playpal.home.ui.fragments.chats.ChatsFragment"
         android:label="fragment_recent_chats"
         tools:layout="@layout/fragment_recent_chats" />
+    <fragment
+        android:id="@+id/chatInfoMemberSearchFragment"
+        android:name="com.hit.playpal.chatrooms.ui.fragments.ChatInfoMemberSearchFragment"
+        android:label="ChatInfoMemberSearchFragment" />
 </navigation>

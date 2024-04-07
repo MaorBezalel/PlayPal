@@ -1,6 +1,5 @@
 package com.hit.playpal.chatrooms.ui.adapters;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +11,21 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hit.playpal.R;
-import com.hit.playpal.entities.users.User;
+import com.hit.playpal.entities.chats.Participant;
+import com.hit.playpal.paginatedsearch.users.adapters.IUserAdapter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UsersInGroupChatAdapter extends RecyclerView.Adapter<UsersInGroupChatAdapter.UserViewHolder>{
-    private List<User> mUserList;
-    private List<User> mCurrentFilteredUserList;
+    private List<Participant> mParticipantsList;
+    private List<Participant> mCurrentFilteredParticipantsList;
+    private final IUserAdapter ON_USER_CLICKED;
 
-    public UsersInGroupChatAdapter(List<User> iUserList)
+    public UsersInGroupChatAdapter(List<Participant> iUserList, IUserAdapter iUserAdapter)
     {
-        mCurrentFilteredUserList = mUserList = iUserList;
+        mCurrentFilteredParticipantsList = mParticipantsList = iUserList;
+        ON_USER_CLICKED = iUserAdapter;
     }
     @NonNull
     @Override
@@ -35,8 +37,9 @@ public class UsersInGroupChatAdapter extends RecyclerView.Adapter<UsersInGroupCh
 
     @Override
     public void onBindViewHolder(@NonNull UsersInGroupChatAdapter.UserViewHolder holder, int position) {
-        User user = mCurrentFilteredUserList.get(position);
+        Participant user = mCurrentFilteredParticipantsList.get(position);
         holder.userDisplayName.setText(user.getDisplayName());
+        holder.userCard.setOnClickListener(v -> ON_USER_CLICKED.onUserClick(user.getUserUid()));
 
         // TODO: find a way to put userimage content inside imageView
         holder.userImage.setImageResource(R.drawable.ic_home_nav_myprofile);
@@ -44,7 +47,7 @@ public class UsersInGroupChatAdapter extends RecyclerView.Adapter<UsersInGroupCh
 
     @Override
     public int getItemCount() {
-        return mCurrentFilteredUserList.size();
+        return mCurrentFilteredParticipantsList.size();
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
@@ -60,21 +63,19 @@ public class UsersInGroupChatAdapter extends RecyclerView.Adapter<UsersInGroupCh
         }
     }
 
-    public void applyFilters(String iUserName)
+    public void applyFilters(String iUserDisplayName)
     {
-        if(iUserName == null || iUserName.isEmpty())
+        if(iUserDisplayName == null || iUserDisplayName.isEmpty())
         {
-            mCurrentFilteredUserList = mUserList;
+            mCurrentFilteredParticipantsList = mParticipantsList;
         }
         else
         {
-            mCurrentFilteredUserList = mUserList.
+            mCurrentFilteredParticipantsList = mParticipantsList.
                     stream().
-                    filter(user -> user.getDisplayName().contains(iUserName)).
+                    filter(user -> user.getDisplayName().contains(iUserDisplayName)).
                     collect(Collectors.toList());
         }
-
-        mUserList = mCurrentFilteredUserList;
 
         notifyDataSetChanged();
     }

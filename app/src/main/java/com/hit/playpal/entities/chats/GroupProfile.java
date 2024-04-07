@@ -1,10 +1,12 @@
 package com.hit.playpal.entities.chats;
 
+import com.google.firebase.firestore.PropertyName;
+
 import java.util.List;
 
 public class GroupProfile {
-    private String mDescription;
-    private List<Participant> mParticipants;
+    @PropertyName("description") private String mDescription;
+   @PropertyName("participants") private List<Participant> mParticipants;
 
     public GroupProfile() {
     }
