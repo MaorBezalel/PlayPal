@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.PropertyName;
 import com.hit.playpal.entities.chats.enums.ChatRoomType;
+import com.hit.playpal.entities.users.User;
 
 import org.jetbrains.annotations.Contract;
 
@@ -29,7 +30,7 @@ public class AllChatRoom implements Parcelable {
 
     @PropertyName("members_uid") protected List<String> mMembersUid;
     @PropertyName("members_uid") public List<String> getMembersUid() { return mMembersUid; }
-    @PropertyName("members_uid") public void setMembersUid(List<String> iMembersUid) { mMembersUid = iMembersUid; }
+    @PropertyName("members_uid") public void setMembersData(List<String> iMembersUid) { mMembersUid = iMembersUid; }
 
     @PropertyName("last_message") protected Message mLastMessage;
     @PropertyName("last_message") public Message getLastMessage() { return mLastMessage; }
@@ -68,7 +69,6 @@ public class AllChatRoom implements Parcelable {
     ) {
         mId = iId;
         mType = iType;
-        mMembersUid = iMembersUid;
         mLastMessage = iLastMessage;
         mOtherMemberData = iOtherMemberData;
         mName = iName;
@@ -80,8 +80,6 @@ public class AllChatRoom implements Parcelable {
         mId = iIn.readString();
         mType = ChatRoomType.valueOf(iIn.readString());
 
-        mMembersUid = new ArrayList<>();
-        iIn.readStringList(mMembersUid);
 
         mLastMessage = iIn.readParcelable(Message.class.getClassLoader());
 
@@ -95,9 +93,9 @@ public class AllChatRoom implements Parcelable {
 
     public ChatRoom convertToChatRoom() {
         if (mType == ChatRoomType.ONE_TO_ONE) {
-            return new OneToOneChatRoom(mId, mMembersUid, mLastMessage, mOtherMemberData);
+            return new OneToOneChatRoom(mId, mLastMessage, mOtherMemberData);
         } else if (mType == ChatRoomType.GROUP) {
-            return new GroupChatRoom(mId, mMembersUid, mLastMessage, mName, mProfilePicture, mGame);
+            return new GroupChatRoom(mId, mLastMessage, mName, mProfilePicture, mGame);
         } else {
             Log.e("AllChatRoom", "Unknown chat room type: " + mType);
             return null;
@@ -108,7 +106,6 @@ public class AllChatRoom implements Parcelable {
     public void writeToParcel(@NonNull Parcel iDest, int iFlags) {
         iDest.writeString(mId);
         iDest.writeString(mType.name());
-        iDest.writeStringList(mMembersUid);
         iDest.writeParcelable(mLastMessage, iFlags);
         iDest.writeMap(mOtherMemberData);
         iDest.writeString(mName);

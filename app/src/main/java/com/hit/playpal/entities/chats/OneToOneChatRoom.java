@@ -19,8 +19,8 @@ public class OneToOneChatRoom extends ChatRoom {
     @PropertyName("other_member_data") public void setOtherMemberBasicData(HashMap<String, OtherMemberData> iOtherMemberData) { mOtherMemberData = iOtherMemberData; }
 
     public OneToOneChatRoom() { }
-    public OneToOneChatRoom(String iChatRoomId, List<String> iMembersUid, Message iLastMessage, HashMap<String, OtherMemberData> iOtherMemberData) {
-        super(iChatRoomId, ChatRoomType.ONE_TO_ONE, iMembersUid, iLastMessage);
+    public OneToOneChatRoom(String iChatRoomId,  Message iLastMessage, HashMap<String, OtherMemberData> iOtherMemberData) {
+       super(iChatRoomId, ChatRoomType.ONE_TO_ONE,  iLastMessage);
         mOtherMemberData = iOtherMemberData;
     }
 

@@ -66,4 +66,9 @@ public class ChatRoomRepository implements IChatRoomRepository {
     public Task<Void> deleteMessage(String iChatRoomId, String iMessageId) {
         return null;
     }
+
+    @Override
+    public Task<DocumentSnapshot> getChatRoom(String iChatRoomId) {
+        return DB.getChat(iChatRoomId);
+    }
 }

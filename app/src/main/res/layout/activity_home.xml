@@ -42,13 +42,21 @@
             app:srcCompat="@drawable/ic_home_nav_game" />
 
         <ImageButton
-            android:id="@+id/searchButton"
+            android:id="@+id/userSearchButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/home_nav_button"
             android:scaleType="centerInside"
-            app:srcCompat="@drawable/ic_home_nav_search" />
+            app:srcCompat="@drawable/ic_home_nav_search_users" />
+
+        <ImageButton
+            android:id="@+id/groupChatSearchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/home_nav_button"
+            app:srcCompat="@drawable/ic_home_nav_search_groupchats" />
 
         <ImageButton
             android:id="@+id/chatsButton"

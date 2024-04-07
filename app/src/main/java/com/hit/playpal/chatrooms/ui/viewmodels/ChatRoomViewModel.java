@@ -115,7 +115,7 @@ public class ChatRoomViewModel extends ViewModel {
         return useCase.execute(chatRoomId, new INewMessageEventListener() {
             @Override
             public void onFetched(ChatRoom iChatRoom) {
-                CHAT_ROOM_LIVE_DATA.postValue(iChatRoom);
+                    CHAT_ROOM_LIVE_DATA.postValue(iChatRoom);
             }
 
             @Override
