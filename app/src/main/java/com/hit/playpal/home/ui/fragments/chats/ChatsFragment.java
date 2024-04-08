@@ -12,15 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.hit.playpal.R;
 import com.hit.playpal.home.adapters.recentchats.ChatsViewPagerAdapter;
 
 public class ChatsFragment extends Fragment {
     private static final String TAG = "ChatsFragment";
-    private SearchView mSearchView;
-    private ViewPager2 mViewPager2;
-    private TabLayout mTabLayout;
+    private SearchView mChatsSearchView;
+    private ViewPager2 mChatsViewPager2;
+    private TabLayout mChatsTabLayout;
+    private FloatingActionButton mAddChatGroupButton;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater iInflater, ViewGroup iContainer, Bundle iSavedInstanceState) {
@@ -28,18 +31,43 @@ public class ChatsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View iView, Bundle iSavedInstanceState) {
+    public void onViewCreated(@NonNull View iView, Bundle iSavedInstanceState) {
         super.onViewCreated(iView, iSavedInstanceState);
 
-        mSearchView = iView.findViewById(R.id.searchview_chats); // WORK IN PROCESS
-        mViewPager2 = iView.findViewById(R.id.viewpager2_chats);
-        mTabLayout = iView.findViewById(R.id.tablayout_chats);
+        initChatsSearchView(iView);
+        initChatsViewPager2(iView);
+        initChatsTabLayout(iView);
+        initAddChatGroupButton(iView);
+    }
 
-        mViewPager2.setAdapter(new ChatsViewPagerAdapter(this));
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+    private void initChatsSearchView(@NonNull View iView) {
+        mChatsSearchView = iView.findViewById(R.id.searchview_chats);
+
+        mChatsSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String iQuery) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String iNewText) {
+                return false;
+            }
+        });
+    }
+
+    private void initChatsViewPager2(@NonNull View iView) {
+        mChatsViewPager2 = iView.findViewById(R.id.viewpager2_chats);
+        mChatsViewPager2.setAdapter(new ChatsViewPagerAdapter(this));
+    }
+
+    private void initChatsTabLayout(@NonNull View iView) {
+        mChatsTabLayout = iView.findViewById(R.id.tablayout_chats);
+
+        mChatsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab iTab) {
-                mViewPager2.setCurrentItem(iTab.getPosition());
+                mChatsViewPager2.setCurrentItem(iTab.getPosition());
             }
 
             @Override
@@ -51,13 +79,22 @@ public class ChatsFragment extends Fragment {
             }
         });
 
-        mViewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        mChatsViewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int iPosition) {
-                mTabLayout.selectTab(mTabLayout.getTabAt(iPosition));
+                mChatsTabLayout.selectTab(mChatsTabLayout.getTabAt(iPosition));
             }
         });
+    }
 
-        Log.d(TAG, "onViewCreated: ChatsFragment created");
+    private void initAddChatGroupButton(@NonNull View iView) {
+        mAddChatGroupButton = iView.findViewById(R.id.fab_chats_add_group_chat);
+        mAddChatGroupButton.setOnClickListener(this::handleAddChatGroupButtonClick);
+    }
+
+    private void handleAddChatGroupButtonClick(View iView) {
+        Log.i(TAG, "handleAddChatGroupButtonClick: Add chat group button clicked");
+        CreateGroupChatRoomDialogFragment dialog = new CreateGroupChatRoomDialogFragment();
+        dialog.show(getChildFragmentManager(), "CreateGroupChatRoomDialogFragment");
     }
 }

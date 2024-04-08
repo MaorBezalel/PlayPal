@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".home.ui.fragments.chats.GroupChatDetailsFormFragment"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_create_group_chat_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textview_create_group_chat_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_centerInParent="true"
+            android:text="Create Group Chat (1/3)"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/imagebutton_create_group_chat_close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_clear"
+            android:contentDescription="exit group chat creation"
+            app:tint="@color/background" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="30dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageview_create_group_chat_group_picture"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_below="@id/relativelayout_create_group_chat_toolbar"
+            android:layout_gravity="center"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+            app:srcCompat="@drawable/ic_group"
+            app:strokeColor="@color/secondary"
+            app:strokeWidth="2dp"
+            app:tint="@color/primary" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textinputlayout_create_group_chat_group_name"
+            style="@style/InputFieldLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageview_create_group_chat_group_picture"
+            android:layout_centerVertical="true"
+            android:hint="Group Chat Name"
+            android:layout_marginTop="20dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="20"
+            app:errorEnabled="true"
+            app:expandedHintEnabled="true"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:startIconTint="@color/accent"
+            app:startIconDrawable="@drawable/ic_group">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textinput_login_email_or_username"
+                android:layout_width="match_parent"
+                android:paddingVertical="25dp"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textinputlayout_create_group_chat_group_description"
+            style="@style/InputFieldLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textinputlayout_create_group_chat_group_name"
+            android:layout_marginTop="20dp"
+            android:hint="Group Chat Description"
+            app:counterEnabled="true"
+            app:counterMaxLength="256"
+            app:errorEnabled="true"
+            app:expandedHintEnabled="true"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:startIconTint="@color/accent"
+            app:startIconDrawable="@drawable/ic_info">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textinput_create_group_chat_group_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="9"
+                android:inputType="textMultiLine" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_create_group_chat_next"
+            style="@style/PrimaryButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/primary"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textStyle="bold"
+            android:layout_marginTop="50dp"
+            android:paddingStart="20dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="15dp"
+            android:text="@string/next"
+            android:textColor="@color/background"
+            android:textSize="26sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

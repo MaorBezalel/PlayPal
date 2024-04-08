@@ -11,8 +11,10 @@ import com.hit.playpal.entities.users.User;
 
 import org.jetbrains.annotations.Contract;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class GroupChatRoom extends ChatRoom {
     @PropertyName("name") private String mName;
@@ -69,6 +71,14 @@ public class GroupChatRoom extends ChatRoom {
             return new GroupChatRoom[iSize];
         }
     };
+
+    public void setInitialMembers(@NonNull Set<User> iSelectedMembers) {
+        mMembersData = new ArrayList<>(iSelectedMembers.size());
+
+        for (User user : iSelectedMembers) {
+            mMembersData.add(user.getUid());
+        }
+    }
 
     public static class Game implements Parcelable {
         @PropertyName("name") private String mName;

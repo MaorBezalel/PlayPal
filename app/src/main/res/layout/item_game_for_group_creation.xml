@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview_create_group_chat_game_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:checkable="true"
+    app:cardCornerRadius="30dp"
+    app:cardElevation="10dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="false"
+    app:strokeColor="@color/black"
+    app:strokeWidth="3dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageview_create_group_chat_game_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/textview_create_group_chat_game_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Game Title"
+            android:textColor="@color/text"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textSize="26sp"
+            android:padding="40dp"
+            android:gravity="center"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>
