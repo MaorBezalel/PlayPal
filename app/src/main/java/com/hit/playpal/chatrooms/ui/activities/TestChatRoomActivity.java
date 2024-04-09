@@ -53,10 +53,6 @@ public class TestChatRoomActivity extends AppCompatActivity {
 
         OneToOneChatRoom chatRoom = new OneToOneChatRoom(
                 "ooeUKMSDITrM1WnOHYKc",
-                new ArrayList<String>() {{
-                    add(user1.getUid());
-                    add(user2.getUid());
-                }},
                 null,
                 new HashMap<String, OneToOneChatRoom.OtherMemberData>() {{
                     put(user1.getUid(), new OneToOneChatRoom.OtherMemberData(user2.getDisplayName(), user2.getProfilePicture()));

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".paginatedsearch.games.fragments.GameSearchFragment">
+
+    <TextView
+        android:id="@+id/games_fragment_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@color/primary_500"
+        android:fontFamily="@font/dosis_extrabold"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Game Browser"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/games_fragment_searchAllBtn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/primary_500"
+            android:fontFamily="@font/dosis_extrabold"
+            android:tag="ALL"
+            android:text="All"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/games_fragment_searchByNameBtn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/primary_500"
+            android:fontFamily="@font/dosis_extrabold"
+            android:tag="BY_NAME"
+            android:text="By Name"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/games_fragment_searchByGenreBtn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/primary_500"
+            android:fontFamily="@font/dosis_extrabold"
+            android:tag="BY_GENRE"
+            android:text="By Genre"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/games_fragment_searchByPlatformBtn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/primary_500"
+            android:fontFamily="@font/dosis_extrabold"
+            android:tag="BY_PLATFORM"
+            android:text="By Platform"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="5dp">
+
+        <SearchView
+            android:id="@+id/games_fragment_searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/home_search_view"
+            android:iconifiedByDefault="false"
+            android:queryHint="Ex. Rocket League"
+            android:queryBackground="@null"
+            android:visibility="gone">
+
+        </SearchView>
+
+        <Spinner
+            android:id="@+id/games_fragment_genreBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:layout_weight="1"
+            android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/games_fragment_platformBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/games_fragment_filterBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@color/primary_500"
+        android:fontFamily="@font/dosis_extrabold"
+        android:text="Search"
+        android:textSize="20sp"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/games_fragment_gameList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <ProgressBar
+            android:id="@+id/games_fragment_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="-40dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/games_fragment_no_games_found_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-40dp"
+            android:fontFamily="@font/dosis_extrabold"
+            android:text="No Games Found!"
+            android:textColor="@color/primary_500"
+            android:textSize="28sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/games_fragment_db_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-40dp"
+            android:text="Error Occurred, Please Try Again!  "
+            android:textColor="@color/accent_300"
+            android:textSize="24sp"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>

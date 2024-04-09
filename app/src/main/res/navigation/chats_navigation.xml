@@ -8,7 +8,7 @@
         android:id="@+id/chatsFragment"
         android:name="com.hit.playpal.home.ui.fragments.chats.ChatsFragment"
         android:label="fragment_chats"
-        tools:layout="@layout/fragment_chats" >
+        tools:layout="@layout/fragment_recent_chats" >
         <action
             android:id="@+id/action_chatsFragment2_to_chatActivity"
             app:destination="@id/chatActivity" />

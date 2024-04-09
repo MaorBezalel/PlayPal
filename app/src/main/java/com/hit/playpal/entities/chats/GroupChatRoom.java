@@ -7,9 +7,11 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.PropertyName;
 import com.hit.playpal.entities.chats.enums.ChatRoomType;
+import com.hit.playpal.entities.users.User;
 
 import org.jetbrains.annotations.Contract;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class GroupChatRoom extends ChatRoom {
@@ -25,9 +27,13 @@ public class GroupChatRoom extends ChatRoom {
     @PropertyName("game") public Game getGame() { return mGame; }
     @PropertyName("game") public void setGame(Game iGame) { mGame = iGame; }
 
+    @PropertyName("members_uid") private List<String> mMembersData;
+    @PropertyName("members_uid") public List<String> getMembersData() { return mMembersData; }
+    @PropertyName("members_uid") public void setMembersData(List<String> iMembersData) { mMembersData = iMembersData; }
+
     public GroupChatRoom() { }
-    public GroupChatRoom(String iChatRoomId, List<String> iMembersUid, Message iLastMessage, String iName, String iProfilePicture, Game iGame) {
-        super(iChatRoomId, ChatRoomType.GROUP, iMembersUid, iLastMessage);
+    public GroupChatRoom(String iChatRoomId, Message iLastMessage, String iName, String iProfilePicture, Game iGame) {
+        super(iChatRoomId, ChatRoomType.GROUP, iLastMessage);
         mName = iName;
         mProfilePicture = iProfilePicture;
         mGame = iGame;
