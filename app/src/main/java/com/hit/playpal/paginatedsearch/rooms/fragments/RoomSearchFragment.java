@@ -77,6 +77,7 @@ public class RoomSearchFragment extends Fragment {
                 mCurrentUserId = getArguments().getString(ARG_USER_ID);
             }
         }
+        else mCurrentRoomSearchType = RoomSearchType.ALL;
 
         initializeUI(view);
         initializeRecyclerView();

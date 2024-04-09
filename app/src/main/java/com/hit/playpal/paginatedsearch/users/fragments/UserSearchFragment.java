@@ -73,6 +73,7 @@ public class UserSearchFragment extends Fragment {
                 mCurrentUserId = getArguments().getString(ARG_USER_ID);
             }
         }
+        else mCurrentUserSearchType = UserSearchType.ALL;
 
         initializeUI(view);
         return view;

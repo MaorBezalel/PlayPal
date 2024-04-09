@@ -100,6 +100,7 @@ public class GameSearchFragment extends Fragment {
                 mCurrentUserId = getArguments().getString(ARG_USER_ID);
             }
         }
+        else mCurrentGameSearchType = GameSearchType.ALL;
 
         initializeComponents(view);
 
