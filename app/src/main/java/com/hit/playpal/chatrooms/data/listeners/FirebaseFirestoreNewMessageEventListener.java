@@ -26,7 +26,7 @@ public class FirebaseFirestoreNewMessageEventListener implements EventListener<D
             return;
         }
 
-        if (iValue != null && iValue.exists() && iValue.getMetadata().hasPendingWrites())
+        if (iValue != null && iValue.exists())
         {
                 ChatRoomType type = ChatRoomType.valueOf(iValue.get("type").toString());
 
