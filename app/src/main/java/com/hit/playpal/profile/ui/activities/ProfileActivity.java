@@ -23,16 +23,18 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.hit.playpal.R;
+import com.hit.playpal.paginatedsearch.games.fragments.GameSearchFragment;
+import com.hit.playpal.paginatedsearch.games.enums.GameSearchType;
+import com.hit.playpal.paginatedsearch.rooms.fragments.RoomSearchFragment;
+import com.hit.playpal.paginatedsearch.rooms.enums.RoomSearchType;
+import com.hit.playpal.paginatedsearch.users.fragments.UserSearchFragment;
+import com.hit.playpal.paginatedsearch.users.enums.UserSearchType;
 import com.hit.playpal.home.ui.activities.HomeActivity;
 import com.hit.playpal.profile.domain.usecases.AddPendingFriendUseCase;
 
-import com.hit.playpal.home.ui.fragments.GamesFragment;
 import com.hit.playpal.profile.domain.usecases.GetProfileAccountInfoUseCase;
 import com.hit.playpal.profile.domain.usecases.GetStatusUseCase;
 import com.hit.playpal.profile.domain.usecases.RemoveFriendUseCase;
-import com.hit.playpal.profile.ui.fragments.FavoriteGamesFragment;
-import com.hit.playpal.profile.ui.fragments.FriendsFragment;
-import com.hit.playpal.profile.ui.fragments.RoomsFragment;
 import com.hit.playpal.settings.ui.activities.SettingsActivity;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.squareup.picasso.Picasso;
@@ -146,7 +148,7 @@ public class ProfileActivity extends AppCompatActivity {
         buttonFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToFragment(FriendsFragment.class, Uid);
+                navigateToFragment(UserSearchFragment.class, Uid, UserSearchType.FRIENDS.toString());
             }
         });
 
@@ -154,7 +156,7 @@ public class ProfileActivity extends AppCompatActivity {
         buttonRooms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToFragment(RoomsFragment.class, Uid);
+                navigateToFragment(RoomSearchFragment.class, Uid, RoomSearchType.JOINED.toString());
             }
         });
 
@@ -162,18 +164,19 @@ public class ProfileActivity extends AppCompatActivity {
         buttonFavGames.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToFragment(FavoriteGamesFragment.class, Uid);
+                navigateToFragment(GameSearchFragment.class, Uid, GameSearchType.FAVORITES.toString());
             }
         });
     }
 
-    private void navigateToFragment(Class<? extends Fragment> fragmentClass, String Uid) {
+    private void navigateToFragment(Class<? extends Fragment> fragmentClass, String Uid, String searchType) {
         mFragmentContainer.setVisibility(View.VISIBLE);
 
         try {
             Fragment fragment = fragmentClass.newInstance();
             Bundle args = new Bundle();
             args.putString("userId", Uid);
+            args.putString("searchType", searchType);
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()

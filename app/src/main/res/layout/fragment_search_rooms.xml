@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical"
+    tools:context=".paginatedsearch.rooms.fragments.RoomSearchFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/group_chats_fragment_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary_500"
+            android:fontFamily="@font/dosis_extrabold"
+            android:gravity="center"
+            android:paddingVertical="5dp"
+            android:text="Group Chats Browser"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/group_chats_fragment_allBtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/primary_500"
+                android:fontFamily="@font/dosis_extrabold"
+                android:tag="NONE"
+                android:text="All"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/group_chats_fragment_byRoomNameBtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/primary_500"
+                android:fontFamily="@font/dosis_extrabold"
+                android:tag="BY_ROOM_NAME"
+                android:text="By Room Name"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/group_chats_fragment_byGameNameBtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/primary_500"
+                android:fontFamily="@font/dosis_extrabold"
+                android:tag="BY_GAME_NAME"
+                android:text="By Game Name"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/group_chats_filter_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <SearchView
+                android:id="@+id/group_chats_fragment_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/home_search_view"
+                android:iconifiedByDefault="false"
+                android:queryBackground="@null"
+                android:queryHint="Search by game name..." />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/group_chats_fragment_searchBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/primary_500"
+                    android:fontFamily="@font/dosis_extrabold"
+                    android:text="Search"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/group_chats_fragment_progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-40dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/group_chats_fragment_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/group_chats_fragment_no_rooms_found_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-40dp"
+            android:fontFamily="@font/dosis_extrabold"
+            android:text="No Rooms Found!"
+            android:textColor="@color/primary_500"
+            android:textSize="28sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/group_chats_fragment_db_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-40dp"
+            android:fontFamily="@font/dosis_extrabold"
+            android:text="Error Occurred, Please Try Again!  "
+            android:textColor="@color/accent_300"
+            android:textSize="24sp"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

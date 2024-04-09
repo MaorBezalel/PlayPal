@@ -18,7 +18,7 @@ import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.chats.GroupChatRoom;
 import com.hit.playpal.entities.chats.OneToOneChatRoom;
 import com.hit.playpal.entities.chats.enums.ChatRoomType;
-import com.hit.playpal.home.adapters.chats.ChatsRecyclerViewAdapter;
+import com.hit.playpal.home.adapters.recentchats.ChatsRecyclerViewAdapter;
 import com.hit.playpal.home.ui.viewmodels.ChatsViewModel;
 
 import javax.annotation.Nullable;
@@ -33,13 +33,20 @@ public class ChatsTabFragment extends Fragment {
 
     @Nullable private ChatRoomType mChatRoomType;
 
+
+        public ChatsTabFragment() {
+
+        }
+
+
+
     public ChatsTabFragment(@Nullable ChatRoomType iChatRoomType) {
         mChatRoomType = iChatRoomType;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater iInflater, ViewGroup iContainer, Bundle iSavedInstanceState) {
-        return iInflater.inflate(R.layout.fragment_chats_tab_recyclerview, iContainer, false);
+        return iInflater.inflate(R.layout.fragment_recent_chats_tab_recyclerview, iContainer, false);
     }
 
     @Override

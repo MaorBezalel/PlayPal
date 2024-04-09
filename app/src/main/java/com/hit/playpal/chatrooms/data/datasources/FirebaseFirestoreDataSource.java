@@ -32,6 +32,15 @@ public class FirebaseFirestoreDataSource {
     public Task<QuerySnapshot> fetchMessages(String iChatRoomId, long iLimit, DocumentReference iAfterThisMessageRef) {
         return generateQueryForGettingMessages(iChatRoomId, iLimit, iAfterThisMessageRef).get();
     }
+
+    public Task<DocumentSnapshot> getGroupChatProfile(String iChatRoomId) {
+        return DB
+                .collection("chat_rooms")
+                .document(iChatRoomId)
+                .collection("group_profile")
+                .document(iChatRoomId)
+                .get();
+    }
     @NonNull
     public Query generateQueryForGettingMessages(String iChatRoomId, long iLimit, DocumentReference iAfterThisMessageRef) {
         Query baseQuery = DB

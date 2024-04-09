@@ -1,6 +1,5 @@
 package com.hit.playpal.home.ui.fragments.chats;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,8 +14,7 @@ import android.widget.SearchView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.hit.playpal.R;
-import com.hit.playpal.chatrooms.ui.activities.TestChatRoomActivity;
-import com.hit.playpal.home.adapters.chats.ChatsViewPagerAdapter;
+import com.hit.playpal.home.adapters.recentchats.ChatsViewPagerAdapter;
 
 public class ChatsFragment extends Fragment {
     private static final String TAG = "ChatsFragment";
@@ -26,7 +24,7 @@ public class ChatsFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater iInflater, ViewGroup iContainer, Bundle iSavedInstanceState) {
-        return iInflater.inflate(R.layout.fragment_chats, iContainer, false);
+        return iInflater.inflate(R.layout.fragment_recent_chats, iContainer, false);
     }
 
     @Override

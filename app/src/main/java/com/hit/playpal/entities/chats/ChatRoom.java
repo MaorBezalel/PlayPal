@@ -31,10 +31,9 @@ public abstract class ChatRoom implements Parcelable {
     @PropertyName("last_message") public void setLastMessage(Message iLastMessage) { mLastMessage = iLastMessage; }
 
     public ChatRoom() { }
-    public ChatRoom(String iId, ChatRoomType iType, List<String> iMembersUid, Message iLastMessage) {
+    public ChatRoom(String iId, ChatRoomType iType, Message iLastMessage) {
         mId = iId;
         mType = iType;
-        mMembersUid = iMembersUid;
         mLastMessage = iLastMessage;
     }
 

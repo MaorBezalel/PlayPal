@@ -3,31 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_navigation"
-    app:startDestination="@id/notifications_fragment">
-
+    app:startDestination="@id/recentChatsFragment">
     <fragment
-        android:id="@+id/notifications_fragment"
+        android:id="@+id/notificationsFragment"
         android:name="com.hit.playpal.home.ui.fragments.NotificationsFragment"
         android:label="fragment_notifications"
         tools:layout="@layout/fragment_notifications" />
     <fragment
-        android:id="@+id/chats_fragment"
-        android:name="com.hit.playpal.home.ui.fragments.chats.ChatsFragment"
-        android:label="fragment_chats"
-        tools:layout="@layout/fragment_chats" />
+        android:id="@+id/gameSearchFragment"
+        android:name="com.hit.playpal.paginatedsearch.games.fragments.GameSearchFragment"
+        android:label="fragment_search_games"
+        tools:layout="@layout/fragment_search_games" />
     <fragment
-        android:id="@+id/games_fragment"
-        android:name="com.hit.playpal.home.ui.fragments.GamesFragment"
-        android:label="fragment_games"
-        tools:layout="@layout/fragment_games" />
+        android:id="@+id/roomSearchFragment"
+        android:name="com.hit.playpal.paginatedsearch.rooms.fragments.RoomSearchFragment"
+        android:label="fragment_search_rooms"
+        tools:layout="@layout/fragment_search_rooms" />
     <fragment
-        android:id="@+id/search_fragment"
-        android:name="com.hit.playpal.home.ui.fragments.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        android:id="@+id/userSearchFragment"
+        android:name="com.hit.playpal.paginatedsearch.users.fragments.UserSearchFragment"
+        android:label="fragment_search_users"
+        tools:layout="@layout/fragment_search_users" />
     <activity
-        android:id="@+id/profile_activity"
+        android:id="@+id/profileActivity"
         android:name="com.hit.playpal.profile.ui.activities.ProfileActivity"
         android:label="activity_profile"
         tools:layout="@layout/activity_profile" />
+    <fragment
+        android:id="@+id/recentChatsFragment"
+        android:name="com.hit.playpal.home.ui.fragments.chats.ChatsFragment"
+        android:label="fragment_recent_chats"
+        tools:layout="@layout/fragment_recent_chats" />
+    <fragment
+        android:id="@+id/chatInfoMemberSearchFragment"
+        android:name="com.hit.playpal.chatrooms.ui.fragments.ChatInfoMemberSearchFragment"
+        android:label="ChatInfoMemberSearchFragment" />
 </navigation>
