@@ -190,6 +190,22 @@
         android:layout_weight="0.5"
         android:orientation="vertical">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/buttonLogOut"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/profile_buttons_design"
+            android:onClick="logOutFunc"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="Log Out" />
     </LinearLayout>
 
 </LinearLayout>

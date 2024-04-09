@@ -31,7 +31,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.R;
+import com.hit.playpal.auth.ui.activities.AuthActivity;
 import com.hit.playpal.auth.ui.validations.AuthValidations;
 import com.hit.playpal.profile.ui.activities.ProfileActivity;
 import com.hit.playpal.settings.domain.usecases.account.CheckIfUserNameIsUniqueUseCase;
@@ -59,6 +62,9 @@ public class SettingsActivity extends AppCompatActivity {
     private Uri selectedImageUri;
     private boolean isImageChanged;
     private String originalUserName;
+    private FirebaseFirestore DB;
+    private FirebaseAuth mAuth;
+    private Button buttonLogOut;
 
 
     @Override
@@ -85,6 +91,9 @@ public class SettingsActivity extends AppCompatActivity {
         editTextSetUserName = findViewById(R.id.editTextSetUserName);
         editTextSetAboutMe = findViewById(R.id.editTextSetAboutMe);
         imageSetViewAvatar = findViewById(R.id.imageSetViewAvatar);
+        buttonLogOut = findViewById(R.id.buttonLogOut);
+        DB = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         editTextSetDisplayName.setText(displayName);
         editTextSetUserName.setText(userName);
@@ -283,4 +292,10 @@ public class SettingsActivity extends AppCompatActivity {
         return null;
     }
 
+    public void logOutFunc(View view) {
+        mAuth.signOut();
+        Intent intent = new Intent(SettingsActivity.this, AuthActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
