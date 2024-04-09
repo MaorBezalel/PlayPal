@@ -1,9 +1,8 @@
-package com.hit.playpal.settings.domain.usecases.account;
+package com.hit.playpal.settings.domain.usecases;
 
 import android.net.Uri;
 
 import com.google.android.gms.tasks.Task;
-import com.hit.playpal.profile.data.repositories.ProfileRepository;
 import com.hit.playpal.settings.data.repositories.UpdateUserProfileRepository;
 
 public class UpdateUserProfileUseCase {

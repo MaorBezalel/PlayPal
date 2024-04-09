@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.core.splashscreen)
     implementation(libs.picasso)
     implementation(libs.paging.runtime)
-    implementation("androidx.paging:paging-guava:3.2.1")
+    implementation(libs.paging.guava)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)

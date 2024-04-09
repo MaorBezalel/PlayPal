@@ -4,20 +4,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,15 +26,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.R;
 import com.hit.playpal.auth.ui.activities.AuthActivity;
-import com.hit.playpal.auth.ui.validations.AuthValidations;
 import com.hit.playpal.profile.ui.activities.ProfileActivity;
-import com.hit.playpal.settings.domain.usecases.account.CheckIfUserNameIsUniqueUseCase;
-import com.hit.playpal.settings.domain.usecases.account.UpdateUserProfileUseCase;
+import com.hit.playpal.settings.domain.usecases.CheckIfUserNameIsUniqueUseCase;
+import com.hit.playpal.settings.domain.usecases.UpdateUserProfileUseCase;
 import com.hit.playpal.settings.ui.utilities.SettingsValidations;
 import com.hit.playpal.settings.ui.utilities.UserPermissions;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
@@ -53,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText editTextSetDisplayName;
     private EditText editTextSetUserName;
     private EditText editTextSetAboutMe;
-    private ImageView imageSetViewAvatar;
+    private ShapeableImageView imageSetViewAvatar;
     private Button buttonSettingsReturn;
     private Button buttonSaveSettings;
 

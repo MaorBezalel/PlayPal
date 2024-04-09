@@ -82,18 +82,19 @@
             android:layout_marginStart="5dp"
             android:layout_weight="1">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageSetViewAvatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                 app:srcCompat="@drawable/ic_home_nav_myprofile" />
 
             <ImageView
                 android:id="@+id/imageEditIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|top"
+                android:layout_gravity="top|end"
                 android:padding="10dp"
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/edit_icon" />

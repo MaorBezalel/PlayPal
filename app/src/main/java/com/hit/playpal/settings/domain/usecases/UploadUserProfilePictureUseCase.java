@@ -1,4 +1,4 @@
-package com.hit.playpal.settings.domain.usecases.account;
+package com.hit.playpal.settings.domain.usecases;
 
 import android.net.Uri;
 

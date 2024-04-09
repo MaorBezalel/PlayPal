@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.hit.playpal.R;
 import com.hit.playpal.paginatedsearch.games.fragments.GameSearchFragment;
 import com.hit.playpal.paginatedsearch.games.enums.GameSearchType;
@@ -47,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private GetProfileAccountInfoUseCase mProfileAccountInfoUseCase;
     private TextView mTextViewGetUserName;
-    private ImageView mImageViewAvatar;
+    private ShapeableImageView mImageViewAvatar;
     private TextView mTextViewGetDisplayName;
     private TextView mTextViewGetAboutMe;
     private GetStatusUseCase mGetStatusUseCase;

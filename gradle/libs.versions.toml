@@ -36,6 +36,7 @@ firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", versio
 firebase-ui-firestore = { group = "com.firebaseui", name = "firebase-ui-firestore", version.ref = "firebaseUi" }
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
+paging-guava = { module = "androidx.paging:paging-guava", version.ref = "pagingRuntime" }
 paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }

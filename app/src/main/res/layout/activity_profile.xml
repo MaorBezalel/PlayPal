@@ -51,13 +51,14 @@
             android:background="@drawable/profile_border"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageViewAvatar"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="5dp"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                 app:srcCompat="@drawable/ic_home_nav_myprofile" />
 
             <LinearLayout
