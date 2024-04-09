@@ -14,39 +14,46 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.hit.playpal.R;
+import com.hit.playpal.chatrooms.domain.listeners.INewMessageRegistrationListener;
 import com.hit.playpal.chatrooms.ui.adapters.MessageAdapter;
-import com.hit.playpal.chatrooms.ui.adapters.MessageFirestoreAdapter;
 import com.hit.playpal.chatrooms.ui.viewmodels.ChatRoomViewModel;
 import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.chats.GroupChatRoom;
 import com.hit.playpal.entities.chats.Message;
 import com.hit.playpal.entities.chats.OneToOneChatRoom;
 import com.hit.playpal.entities.users.User;
+import com.hit.playpal.utils.CurrentlyLoggedUser;
+import com.hit.playpal.utils.EndlessRecyclerViewScrollListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ChatRoomBodyFragment extends Fragment {
     private static final String TAG = "ChatRoomBodyFragment";
-    private final int PAGE_SIZE = 20;
+    private final int PAGE_SIZE = 10;
 
     private ChatRoomViewModel mChatRoomViewModel;
 
     private TextView mChatRoomNameTextView;
-    private ImageView mChatRoomImageImageView;
+    private ShapeableImageView mChatRoomImageImageView;
     private ImageButton mChatRoomBackButton;
     private RecyclerView mChatRoomMessagesRecyclerView;
     private EditText mChatRoomMessageInputEditText;
     private ImageButton mChatRoomSendMessageButton;
 
+    private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
+    private int mInitializeListenerCounter = 0;
+
+
     private MessageAdapter mMessageAdapter;
-    private MessageFirestoreAdapter mMessageFirestoreAdapter;
+
+    private INewMessageRegistrationListener mNewMessageRegistrationListener;
+
 
     private AtomicInteger mCount = new AtomicInteger(0);
 
@@ -86,39 +93,41 @@ public class ChatRoomBodyFragment extends Fragment {
     }
 
     private void observeViewModel() {
-        //observePaginatedMessages();
-        observeWhenMessageSent();
+        observePaginatedMessages();
+        observeWhenThisUserMessageSent();
         observeWhenNewMessageReceived();
     }
 
     private void observePaginatedMessages() {
-//        mChatRoomViewModel.fetchMessages(PAGE_SIZE).observe(getViewLifecycleOwner(), messages -> {
-//            Log.d(TAG, "observePaginatedMessages: has new data: " + messages);
-//            mMessageAdapter.submitData(getViewLifecycleOwner().getLifecycle(), messages);
-//        });
+        mChatRoomViewModel.getFetchMessagesSuccess().observe(getViewLifecycleOwner(), message -> {
+            List<Message> messages = mChatRoomViewModel.getNewMessages().getValue();
+            mMessageAdapter.addNewMessages(messages);
+        });
 
-        mChatRoomViewModel.fetchMessages2(PAGE_SIZE).observe(getViewLifecycleOwner(), messages -> {
-            Log.d(TAG, "observePaginatedMessages: has new data: " + messages);
-            mMessageAdapter.submitData(getViewLifecycleOwner().getLifecycle(), messages);
+        mChatRoomViewModel.getFetchMessagesError().observe(getViewLifecycleOwner(), message -> {
+            mChatRoomMessagesRecyclerView.removeOnScrollListener(mEndlessRecyclerViewScrollListener);
         });
     }
 
-    private void observeWhenMessageSent() {
-        mChatRoomViewModel.onMessageSent().observe(getViewLifecycleOwner(), aVoid -> {
-            mChatRoomMessageInputEditText.setText(""); // clear the message input
+    private void observeWhenThisUserMessageSent() {
+        mChatRoomViewModel.onMessageSent().observe(getViewLifecycleOwner(), message -> {
+            mChatRoomMessageInputEditText.setText("");
+            mChatRoomMessagesRecyclerView.scrollToPosition(0);
+            mMessageAdapter.addNewMessage(message);
         });
     }
 
     private void observeWhenNewMessageReceived() {
         mChatRoomViewModel.getChatRoomLiveData().observe(getViewLifecycleOwner(), chatRoom -> {
-            Toast.makeText(getContext(), "New message received", Toast.LENGTH_SHORT).show();
-
-            if (mCount.get() != 2) {
-                mCount.set(mCount.get() + 1);
-            } else {
-                mMessageFirestoreAdapter.refresh();
-                mChatRoomMessagesRecyclerView.scrollToPosition(0);
+            if(mInitializeListenerCounter < 2)
+            {
+                mInitializeListenerCounter++;
+                return;
             }
+          if(!chatRoom.getLastMessage().getSender().getUid().equals(CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid()))
+          {
+              mMessageAdapter.addNewMessage(chatRoom.getLastMessage());
+          }
         });
     }
 
@@ -162,19 +171,22 @@ public class ChatRoomBodyFragment extends Fragment {
 
     private void initChatRoomMessagesRecyclerView(@NonNull View iView) {
         mChatRoomMessagesRecyclerView = iView.findViewById(R.id.recyclerview_chat_room_messages);
-
-        // Set MessageFirestoreAdapter
         mMessageAdapter = new MessageAdapter();
-        mMessageFirestoreAdapter = new MessageFirestoreAdapter(mChatRoomViewModel.getChatRoomLiveData().getValue().getId(), this);
-        mChatRoomMessagesRecyclerView.setAdapter(mMessageFirestoreAdapter);
-
-        // Set LinearLayoutManager
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setReverseLayout(true);
+        mChatRoomMessagesRecyclerView.setAdapter(mMessageAdapter);
         mChatRoomMessagesRecyclerView.setLayoutManager(linearLayoutManager);
 
-        // Begin at the bottom of the RecyclerView
-        mChatRoomMessagesRecyclerView.scrollToPosition(mMessageFirestoreAdapter.getItemCount() - 1);
+        mEndlessRecyclerViewScrollListener =new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                mChatRoomViewModel.fetchMessages(PAGE_SIZE);
+            }
+        };
+        mChatRoomMessagesRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+
+        mChatRoomViewModel.fetchMessages(PAGE_SIZE);
+        mNewMessageRegistrationListener = mChatRoomViewModel.listenToLatestMessages();
     }
 
     private void initChatRoomMessageInput(@NonNull View iView) {
@@ -194,5 +206,12 @@ public class ChatRoomBodyFragment extends Fragment {
                 mChatRoomViewModel.sendMessage(message);
             }
         });
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        mNewMessageRegistrationListener.remove();
+        super.onDestroy();
     }
 }

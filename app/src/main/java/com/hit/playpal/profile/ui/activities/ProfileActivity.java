@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -59,6 +60,8 @@ public class ProfileActivity extends AppCompatActivity {
     private FrameLayout mFragmentContainer;
     Button buttonAddFriend;
     Button buttonRemoveFriend;
+
+    private OnBackPressedCallback mOnBackPressedCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,11 +118,25 @@ public class ProfileActivity extends AppCompatActivity {
         buttonReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
+                finish();
             }
         });
+
+        mOnBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (mFragmentContainer.getVisibility() == View.VISIBLE)
+                {
+                    mFragmentContainer.setVisibility(View.GONE);
+                }
+                else
+                {
+                    finish();
+                }
+            }
+        };
+
+        this.getOnBackPressedDispatcher().addCallback(this, mOnBackPressedCallback);
 
         mProfileAccountInfoUseCase = new GetProfileAccountInfoUseCase();
         mProfileAccountInfoUseCase.execute(Uid).addOnSuccessListener(document -> {
@@ -187,14 +204,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (mFragmentContainer.getVisibility() == View.VISIBLE) {
-            mFragmentContainer.setVisibility(View.GONE);
-        } else {
-            super.onBackPressed();
-        }
-    }
+
 
 
     public void buttonSettingsFunc(View view) {

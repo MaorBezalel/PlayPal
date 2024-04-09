@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hit.playpal.R;
-import com.hit.playpal.home.adapters.users.AllUsersAdapter;
+import com.hit.playpal.home.ui.adapters.users.AllUsersAdapter;
 import com.hit.playpal.profile.adapters.FriendsOfUserAdapter;
 import com.hit.playpal.profile.ui.activities.ProfileActivity;
 import com.hit.playpal.paginatedsearch.users.enums.UserSearchType;
@@ -73,6 +73,7 @@ public class UserSearchFragment extends Fragment {
                 mCurrentUserId = getArguments().getString(ARG_USER_ID);
             }
         }
+        else mCurrentUserSearchType = UserSearchType.ALL;
 
         initializeUI(view);
         return view;

@@ -4,10 +4,10 @@ import com.hit.playpal.chatrooms.domain.listeners.INewMessageEventListener;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageRegistrationListener;
 import com.hit.playpal.chatrooms.domain.repositories.IChatRoomRepository;
 
-public class FetchLatestMessageUseCase {
+public class ListenToLatestMessageUseCase {
     private final IChatRoomRepository REPOSITORY;
 
-    public FetchLatestMessageUseCase(IChatRoomRepository iRepository) {
+    public ListenToLatestMessageUseCase(IChatRoomRepository iRepository) {
         REPOSITORY = iRepository;
     }
 

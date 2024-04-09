@@ -18,7 +18,7 @@ import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.chats.GroupChatRoom;
 import com.hit.playpal.entities.chats.OneToOneChatRoom;
 import com.hit.playpal.entities.chats.enums.ChatRoomType;
-import com.hit.playpal.home.adapters.recentchats.ChatsRecyclerViewAdapter;
+import com.hit.playpal.home.ui.adapters.recentchats.ChatsRecyclerViewAdapter;
 import com.hit.playpal.home.ui.viewmodels.ChatsViewModel;
 
 import javax.annotation.Nullable;

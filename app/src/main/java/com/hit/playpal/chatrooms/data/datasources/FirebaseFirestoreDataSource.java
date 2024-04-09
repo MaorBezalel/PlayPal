@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageEventListener;
@@ -29,10 +30,6 @@ public class FirebaseFirestoreDataSource {
                     .addSnapshotListener(new FirebaseFirestoreNewMessageEventListener(iEventListener))
         );
     }
-    public Task<QuerySnapshot> fetchMessages(String iChatRoomId, long iLimit, DocumentReference iAfterThisMessageRef) {
-        return generateQueryForGettingMessages(iChatRoomId, iLimit, iAfterThisMessageRef).get();
-    }
-
     public Task<DocumentSnapshot> getGroupChatProfile(String iChatRoomId) {
         return DB
                 .collection("chat_rooms")
@@ -41,22 +38,6 @@ public class FirebaseFirestoreDataSource {
                 .document(iChatRoomId)
                 .get();
     }
-    @NonNull
-    public Query generateQueryForGettingMessages(String iChatRoomId, long iLimit, DocumentReference iAfterThisMessageRef) {
-        Query baseQuery = DB
-                .collection("chat_rooms")
-                .document(iChatRoomId)
-                .collection("messages")
-                .orderBy("sent_at", Query.Direction.DESCENDING)
-                .limit(iLimit);
-
-        Log.d("FirebaseFirestoreDataSource", "`generateQueryForGettingMessages` has been called with iChatRoomId = " + iChatRoomId + ", iLimit = " + iLimit + ", iAfterThisMessageRef = " + iAfterThisMessageRef);
-
-        return iAfterThisMessageRef == null
-                ? baseQuery
-                : baseQuery.startAfter(iAfterThisMessageRef);
-    }
-
     public Task<DocumentReference> writeMessage(String iChatRoomId, Message iMessage) {
         return DB
                 .collection("chat_rooms")
@@ -70,6 +51,25 @@ public class FirebaseFirestoreDataSource {
                 .collection("chat_rooms")
                 .document(iChatRoomId)
                 .update("last_message", iMessage);
+    }
+
+
+    public Task<QuerySnapshot> loadMessages(String iChatRoomId, long iLimit, DocumentSnapshot iAfterThisMessageRef) {
+        return (iAfterThisMessageRef == null) ? DB
+                .collection("chat_rooms")
+                .document(iChatRoomId)
+                .collection("messages")
+                .orderBy("sent_at", Query.Direction.DESCENDING)
+                .limit(iLimit)
+                .get() :
+                DB
+                        .collection("chat_rooms")
+                        .document(iChatRoomId)
+                        .collection("messages")
+                        .orderBy("sent_at", Query.Direction.DESCENDING)
+                        .startAfter(iAfterThisMessageRef)
+                        .limit(iLimit)
+                        .get();
     }
 
 }

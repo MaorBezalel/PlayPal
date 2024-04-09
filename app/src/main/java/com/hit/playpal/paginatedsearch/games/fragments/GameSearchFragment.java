@@ -20,8 +20,8 @@ import com.hit.playpal.R;
 import com.hit.playpal.entities.games.enums.Genre;
 import com.hit.playpal.entities.games.enums.Platform;
 import com.hit.playpal.game.ui.activities.GameActivity;
-import com.hit.playpal.home.adapters.MultiSelectionAdapter;
-import com.hit.playpal.home.adapters.games.AllGamesAdapter;
+import com.hit.playpal.home.ui.adapters.games.MultiSelectionAdapter;
+import com.hit.playpal.home.ui.adapters.games.AllGamesAdapter;
 import com.hit.playpal.profile.adapters.GameFavoriteByUserAdapter;
 import com.hit.playpal.paginatedsearch.games.utils.GameFilterOptions;
 import com.hit.playpal.paginatedsearch.games.enums.GameFilterType;
@@ -100,6 +100,7 @@ public class GameSearchFragment extends Fragment {
                 mCurrentUserId = getArguments().getString(ARG_USER_ID);
             }
         }
+        else mCurrentGameSearchType = GameSearchType.ALL;
 
         initializeComponents(view);
 

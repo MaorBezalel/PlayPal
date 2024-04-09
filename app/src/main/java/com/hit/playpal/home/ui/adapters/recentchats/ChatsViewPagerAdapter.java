@@ -1,4 +1,4 @@
-package com.hit.playpal.home.adapters.recentchats;
+package com.hit.playpal.home.ui.adapters.recentchats;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

@@ -27,31 +27,9 @@ import java.util.List;
 import kotlinx.coroutines.flow.Flow;
 
 public interface IChatRoomRepository {
-//    ChatRoom getChatRoomInfo(String iChatRoomId);
-
     INewMessageRegistrationListener listenForTheLatestMessage(String iChatRoomId, INewMessageEventListener iEventListener);
-    Flow<PagingData<Message>> fetchMessages(String iChatRoomId, int iPageSize);
-    Pager<DocumentReference, Message> getPagerToFetchMessages(String iChatRoomId, int iPageSize);
     Task<DocumentReference> sendMessage(String iChatRoomId, Message iMessage);
     Task<Void> updateLastMessage(String iChatRoomId, Message iMessage);
-    Task<Void> deleteMessage(String iChatRoomId, String iMessageId);
     Task<DocumentSnapshot> getChatRoom(String iChatRoomId);
-
-//    List<User> getMembersOfGroupChatRoom(String iChatRoomId, int iPage);
-//    void sendGroupInvitationTo(String iChatRoomId, String iUsernameToInvite);
-//    void kickMemberFromGroupChatRoom(String iChatRoomId, String iUsernameToRemove);
-//
-//    void sendRequestToOwnerToJoinGroupChatRoom(String iChatRoomId, String iUsernameOfTheOwner);
-//
-//    void findSpecificTextMessage(String iChatRoomId, String iTextMessage, int iPage);
-//    void getAllMediaMessages(String iChatRoomId, int iPage);
-//
-//    void updateRoleOfMember(String iChatRoomId, String iUsername, UserChatRole iRole); // including co-owner (require member to be moderator!)
-//
-//    HashMap<JoiningPolicy, Boolean> getChatGroupJoiningPolicy(String iChatRoomId);
-//    void updateChatGroupJoiningPolicy(String iChatRoomId, HashMap<JoiningPolicy, Boolean> iJoiningPolicy);
-//
-//    HashMap<AppearancePolicy, Boolean> getChatGroupAppearancePolicy(String iChatRoomId);
-//    void updateChatGroupAppearancePolicy(String iChatRoomId, HashMap<AppearancePolicy, Boolean> iAppearancePolicy);
-
+    Task<QuerySnapshot> getMessagesInPage(String iChatRoomId, long iPageSize, DocumentSnapshot iAfterThisMessageRef);
 }
