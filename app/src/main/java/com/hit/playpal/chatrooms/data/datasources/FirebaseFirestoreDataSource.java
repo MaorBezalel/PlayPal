@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageEventListener;
@@ -70,6 +71,25 @@ public class FirebaseFirestoreDataSource {
                 .collection("chat_rooms")
                 .document(iChatRoomId)
                 .update("last_message", iMessage);
+    }
+
+
+    public Task<QuerySnapshot> loadMessages(String iChatRoomId, long iLimit, DocumentSnapshot iAfterThisMessageRef) {
+        return (iAfterThisMessageRef == null) ? DB
+                .collection("chat_rooms")
+                .document(iChatRoomId)
+                .collection("messages")
+                .orderBy("sent_at", Query.Direction.DESCENDING)
+                .limit(iLimit)
+                .get() :
+                DB
+                        .collection("chat_rooms")
+                        .document(iChatRoomId)
+                        .collection("messages")
+                        .orderBy("sent_at", Query.Direction.DESCENDING)
+                        .startAfter(iAfterThisMessageRef)
+                        .limit(iLimit)
+                        .get();
     }
 
 }

@@ -37,6 +37,8 @@ public interface IChatRoomRepository {
     Task<Void> deleteMessage(String iChatRoomId, String iMessageId);
     Task<DocumentSnapshot> getChatRoom(String iChatRoomId);
 
+    Task<QuerySnapshot> getMessagesInPage(String iChatRoomId, long iPageSize, DocumentSnapshot iAfterThisMessageRef);
+
 //    List<User> getMembersOfGroupChatRoom(String iChatRoomId, int iPage);
 //    void sendGroupInvitationTo(String iChatRoomId, String iUsernameToInvite);
 //    void kickMemberFromGroupChatRoom(String iChatRoomId, String iUsernameToRemove);

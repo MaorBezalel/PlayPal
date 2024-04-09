@@ -35,7 +35,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mChatRoomViewModel.removeNewMessageListener();
+        //mChatRoomViewModel.removeNewMessageListener();
     }
 
     protected void defaultOnCreate() {

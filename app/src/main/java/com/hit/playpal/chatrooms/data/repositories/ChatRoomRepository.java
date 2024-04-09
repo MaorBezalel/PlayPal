@@ -71,4 +71,9 @@ public class ChatRoomRepository implements IChatRoomRepository {
     public Task<DocumentSnapshot> getChatRoom(String iChatRoomId) {
         return DB.getGroupChatProfile(iChatRoomId);
     }
+
+    @Override
+    public Task<QuerySnapshot> getMessagesInPage(String iChatRoomId, long iPageSize, DocumentSnapshot iAfterThisMessageRef) {
+        return DB.loadMessages(iChatRoomId, iPageSize, iAfterThisMessageRef);
+    }
 }
