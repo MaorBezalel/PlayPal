@@ -1,6 +1,5 @@
-package com.hit.playpal.chatrooms.domain.usecases.chatbody2;
+package com.hit.playpal.chatrooms.domain.usecases.chatbody;
 
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.chatrooms.domain.repositories.IChatRoomRepository;
@@ -30,6 +29,7 @@ public class FetchMessagesUseCase2 {
                 if(querySnapshot != null && !querySnapshot.isEmpty())
                 {
                     oNewLatestDocument.set(querySnapshot.getDocuments().get(querySnapshot.size() - 1));
+
                     future.complete(querySnapshot.toObjects(Message.class));
                 }
                 else

@@ -1,4 +1,4 @@
-package com.hit.playpal.home.adapters.recentchats;
+package com.hit.playpal.home.ui.adapters.recentchats;
 
 import com.hit.playpal.entities.chats.ChatRoom;
 

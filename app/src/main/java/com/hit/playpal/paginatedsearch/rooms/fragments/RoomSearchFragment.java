@@ -1,5 +1,6 @@
 package com.hit.playpal.paginatedsearch.rooms.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hit.playpal.R;
+import com.hit.playpal.chatrooms.ui.fragments.ChatRoomProfileFragment;
 import com.hit.playpal.entities.chats.AllChatRoom;
-import com.hit.playpal.home.adapters.groupchats.AllGroupChatsAdapter;
+import com.hit.playpal.home.ui.adapters.groupchats.AllGroupChatsAdapter;
 import com.hit.playpal.profile.adapters.RoomsOfUserAdapter;
 import com.hit.playpal.paginatedsearch.rooms.enums.RoomFilterType;
 import com.hit.playpal.paginatedsearch.rooms.enums.RoomSearchType;
@@ -111,12 +113,11 @@ public class RoomSearchFragment extends Fragment {
         {
             case ALL:
                 mGroupChatAdapter = new AllGroupChatsAdapter(new IRoomAdapter<AllChatRoom>() {
-                    // TODO: implement onRoomClick after chat profile is created
                     @Override
                     public void onRoomClick(String roomId) {
-                        // Intent intent = new Intent(getContext(), ChatInfoProfile.class);
-                        // intent.putExtra(ARG_ROOM_ID, roomId);
-                        // startActivity(intent);
+                        Intent intent = new Intent(getContext(), ChatRoomProfileFragment.class);
+                        intent.putExtra(ARG_ROOM_ID, roomId);
+                        startActivity(intent);
                     }
                 }, this);
 

@@ -30,10 +30,6 @@ public class FirebaseFirestoreDataSource {
                     .addSnapshotListener(new FirebaseFirestoreNewMessageEventListener(iEventListener))
         );
     }
-    public Task<QuerySnapshot> fetchMessages(String iChatRoomId, long iLimit, DocumentReference iAfterThisMessageRef) {
-        return generateQueryForGettingMessages(iChatRoomId, iLimit, iAfterThisMessageRef).get();
-    }
-
     public Task<DocumentSnapshot> getGroupChatProfile(String iChatRoomId) {
         return DB
                 .collection("chat_rooms")
@@ -42,22 +38,6 @@ public class FirebaseFirestoreDataSource {
                 .document(iChatRoomId)
                 .get();
     }
-    @NonNull
-    public Query generateQueryForGettingMessages(String iChatRoomId, long iLimit, DocumentReference iAfterThisMessageRef) {
-        Query baseQuery = DB
-                .collection("chat_rooms")
-                .document(iChatRoomId)
-                .collection("messages")
-                .orderBy("sent_at", Query.Direction.DESCENDING)
-                .limit(iLimit);
-
-        Log.d("FirebaseFirestoreDataSource", "`generateQueryForGettingMessages` has been called with iChatRoomId = " + iChatRoomId + ", iLimit = " + iLimit + ", iAfterThisMessageRef = " + iAfterThisMessageRef);
-
-        return iAfterThisMessageRef == null
-                ? baseQuery
-                : baseQuery.startAfter(iAfterThisMessageRef);
-    }
-
     public Task<DocumentReference> writeMessage(String iChatRoomId, Message iMessage) {
         return DB
                 .collection("chat_rooms")

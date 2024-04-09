@@ -33,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
-
     private String mCurrentGameId;
     private ImageView mGameImage;
     private TextView mGameName;

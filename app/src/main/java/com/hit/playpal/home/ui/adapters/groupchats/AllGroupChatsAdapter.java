@@ -1,4 +1,4 @@
-package com.hit.playpal.home.adapters.groupchats;
+package com.hit.playpal.home.ui.adapters.groupchats;
 
 import androidx.lifecycle.LifecycleOwner;
 

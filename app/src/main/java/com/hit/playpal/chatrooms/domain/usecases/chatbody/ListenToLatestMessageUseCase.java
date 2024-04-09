@@ -1,4 +1,4 @@
-package com.hit.playpal.chatrooms.domain.usecases.chatbody2;
+package com.hit.playpal.chatrooms.domain.usecases.chatbody;
 
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageEventListener;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageRegistrationListener;

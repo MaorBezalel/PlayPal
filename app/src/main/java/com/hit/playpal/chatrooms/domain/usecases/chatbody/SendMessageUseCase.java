@@ -1,4 +1,4 @@
-package com.hit.playpal.chatrooms.domain.usecases.chatbody2;
+package com.hit.playpal.chatrooms.domain.usecases.chatbody;
 
 import com.hit.playpal.chatrooms.domain.repositories.IChatRoomRepository;
 import com.hit.playpal.chatrooms.domain.utils.enums.ChatBodyFailure;

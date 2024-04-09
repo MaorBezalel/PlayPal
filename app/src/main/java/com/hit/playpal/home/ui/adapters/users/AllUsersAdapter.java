@@ -1,4 +1,4 @@
-package com.hit.playpal.home.adapters.users;
+package com.hit.playpal.home.ui.adapters.users;
 
 import androidx.lifecycle.LifecycleOwner;
 

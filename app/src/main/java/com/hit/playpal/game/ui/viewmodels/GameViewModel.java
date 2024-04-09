@@ -18,8 +18,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class GameViewModel extends ViewModel {
     private MutableLiveData<Game> mGame;
     private MutableLiveData<Boolean> mIsInFavorites;
-
-
     private MutableLiveData<String> mLoadGameDetailsSuccess;
     private MutableLiveData<String> mLoadGameDetailsError;
 

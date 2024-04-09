@@ -13,10 +13,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.hit.playpal.chatrooms.data.repositories.ChatRoomRepository;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageEventListener;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageRegistrationListener;
-import com.hit.playpal.chatrooms.domain.usecases.chatbody2.ListenToLatestMessageUseCase;
-import com.hit.playpal.chatrooms.domain.usecases.chatbody2.SendMessageUseCase;
+import com.hit.playpal.chatrooms.domain.usecases.chatbody.ListenToLatestMessageUseCase;
+import com.hit.playpal.chatrooms.domain.usecases.chatbody.SendMessageUseCase;
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.UpdateChatRoomLastMessageUseCase;
-import com.hit.playpal.chatrooms.domain.usecases.chatbody2.FetchMessagesUseCase2;
+import com.hit.playpal.chatrooms.domain.usecases.chatbody.FetchMessagesUseCase2;
 import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.chats.Message;
 import com.hit.playpal.entities.users.User;
@@ -33,6 +33,24 @@ public class ChatRoomViewModel extends ViewModel {
     private final User USER;
     public User getUser() {
         return USER;
+    }
+
+    private DocumentSnapshot mLatestMessageRef = null;
+    private MutableLiveData<List<Message>> mNewMessages;
+    private MutableLiveData<String> mFetchMessagesSuccess;
+    private MutableLiveData<String> mFetchMessagesError;
+
+    public LiveData<List<Message>> getNewMessages()
+    {
+        return mNewMessages;
+    }
+    public LiveData<String> getFetchMessagesSuccess()
+    {
+        return mFetchMessagesSuccess;
+    }
+    public LiveData<String> getFetchMessagesError()
+    {
+        return mFetchMessagesError;
     }
 
     private final MutableLiveData<ChatRoom> CHAT_ROOM_LIVE_DATA;
@@ -106,24 +124,7 @@ public class ChatRoomViewModel extends ViewModel {
         });
     }
 
-    private DocumentSnapshot mLatestMessageRef = null;
-    private MutableLiveData<List<Message>> mNewMessages;
-    private MutableLiveData<String> mFetchMessagesSuccess;
-    private MutableLiveData<String> mFetchMessagesError;
-
-    public LiveData<List<Message>> getNewMessages()
-    {
-        return mNewMessages;
-    }
-    public LiveData<String> getFetchMessagesSuccess()
-    {
-        return mFetchMessagesSuccess;
-    }
-    public LiveData<String> getFetchMessagesError()
-    {
-        return mFetchMessagesError;
-    }
-    public void fetchMessages3(long iPageSize)
+    public void fetchMessages(long iPageSize)
     {
         FetchMessagesUseCase2 fetchMessagesUseCase2 = new FetchMessagesUseCase2(new ChatRoomRepository());
         Out<DocumentSnapshot> mNewlyLatestMessageRef = new Out<>(null);
@@ -141,8 +142,6 @@ public class ChatRoomViewModel extends ViewModel {
                     }
                 });
         }
-
-
 
     public static class Factory implements ViewModelProvider.Factory {
         private final User USER;

@@ -15,7 +15,6 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.chatrooms.data.datasources.FirebaseFirestoreDataSource;
-import com.hit.playpal.chatrooms.data.pagingsources.MessagePagingSource;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageEventListener;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageRegistrationListener;
 import com.hit.playpal.chatrooms.domain.repositories.IChatRoomRepository;
@@ -35,24 +34,6 @@ public class ChatRoomRepository implements IChatRoomRepository {
     }
 
     @Override
-    public Flow<PagingData<Message>> fetchMessages(String iChatRoomId, int iPageSize) {
-        Pager<DocumentReference, Message> pager = new Pager<>(
-                new PagingConfig(iPageSize, iPageSize, true, iPageSize),
-                () -> new MessagePagingSource(DB, iChatRoomId, iPageSize)
-        );
-
-        return pager.getFlow();
-    }
-
-    @Override
-    public Pager<DocumentReference, Message> getPagerToFetchMessages(String iChatRoomId, int iPageSize) {
-        return new Pager<DocumentReference, Message>(
-                new PagingConfig(iPageSize, iPageSize, true, iPageSize),
-                () -> new MessagePagingSource(DB, iChatRoomId, iPageSize)
-        );
-    }
-
-    @Override
     public Task<DocumentReference> sendMessage(String iChatRoomId, Message iMessage) {
         return DB.writeMessage(iChatRoomId, iMessage);
     }
@@ -60,11 +41,6 @@ public class ChatRoomRepository implements IChatRoomRepository {
     @Override
     public Task<Void> updateLastMessage(String iChatRoomId, Message iMessage) {
         return DB.updateLastMessage(iChatRoomId, iMessage);
-    }
-
-    @Override
-    public Task<Void> deleteMessage(String iChatRoomId, String iMessageId) {
-        return null;
     }
 
     @Override

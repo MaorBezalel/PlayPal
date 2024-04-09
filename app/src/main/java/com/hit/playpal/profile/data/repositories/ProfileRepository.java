@@ -21,11 +21,6 @@ public class ProfileRepository implements IProfileRepository {
         return DB.getUserByUid(iUid);
     }
 
-    @Override
-    public Task<DocumentSnapshot> getUserPrivateByUid(String iUid) {
-        return DB.getUserPrivateByUid(iUid);
-    }
-
 
 
     @Override

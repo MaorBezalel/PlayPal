@@ -1,9 +1,8 @@
-package com.hit.playpal.home.adapters.recentchats;
+package com.hit.playpal.home.ui.adapters.recentchats;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.firestore.Query;
 import com.hit.playpal.R;
 import com.hit.playpal.entities.chats.AllChatRoom;
@@ -70,7 +70,7 @@ public class ChatsRecyclerViewAdapter extends FirestorePagingAdapter<AllChatRoom
 
     public static class ChatsViewHolder extends RecyclerView.ViewHolder {
         public final MaterialCardView CHAT_ROOM_CARD;
-        public final ImageView CHAT_ROOM_IMAGE;
+        public final ShapeableImageView CHAT_ROOM_IMAGE;
         public final TextView CHAT_ROOM_NAME;
         public final TextView CHAT_ROOM_LAST_MESSAGE_TIME;
         public final TextView CHAT_ROOM_LAST_MESSAGE_CONTENT;
