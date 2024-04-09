@@ -2,16 +2,21 @@ package com.hit.playpal.settings.ui.activities;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,28 +24,41 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.hit.playpal.R;
-import com.hit.playpal.home.ui.activities.HomeActivity;
+import com.hit.playpal.auth.ui.validations.AuthValidations;
 import com.hit.playpal.profile.ui.activities.ProfileActivity;
+import com.hit.playpal.settings.domain.usecases.account.CheckIfUserNameIsUniqueUseCase;
+import com.hit.playpal.settings.domain.usecases.account.UpdateUserProfileUseCase;
+import com.hit.playpal.settings.ui.utilities.SettingsValidations;
 import com.hit.playpal.settings.ui.utilities.UserPermissions;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
+import com.hit.playpal.utils.Out;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private final String  currentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
-    private TextView textViewSetDisplayName;
-    private TextView textViewSetUserName;
-    private TextView textViewSetAboutMe;
+    private EditText editTextSetDisplayName;
+    private EditText editTextSetUserName;
+    private EditText editTextSetAboutMe;
     private ImageView imageSetViewAvatar;
     private Button buttonSettingsReturn;
+    private Button buttonSaveSettings;
+
+    private ProgressBar progressBarSavingSettings;
     private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri selectedImageUri;
+    private boolean isImageChanged;
+    private String originalUserName;
 
 
     @Override
@@ -61,18 +79,42 @@ public class SettingsActivity extends AppCompatActivity {
         String avatarImage = intent.getStringExtra("avatarImage");
 
         buttonSettingsReturn = findViewById(R.id.buttonSettingsReturn);
-        textViewSetDisplayName = findViewById(R.id.textViewSetDisplayName);
-        textViewSetUserName = findViewById(R.id.textViewSetUserName);
-        textViewSetAboutMe = findViewById(R.id.textViewSetAboutMe);
+        buttonSaveSettings = findViewById(R.id.buttonSaveSettings);
+        progressBarSavingSettings = findViewById(R.id.progressBarSavingSettings);
+        editTextSetDisplayName = findViewById(R.id.editTextSetDisplayName);
+        editTextSetUserName = findViewById(R.id.editTextSetUserName);
+        editTextSetAboutMe = findViewById(R.id.editTextSetAboutMe);
         imageSetViewAvatar = findViewById(R.id.imageSetViewAvatar);
 
-        textViewSetDisplayName.setText(displayName);
-        textViewSetUserName.setText(userName);
-        textViewSetAboutMe.setText(aboutMe);
-        assert avatarImage != null;
-        if (!avatarImage.isEmpty()) {
-            imageSetViewAvatar.setImageResource(Integer.parseInt(avatarImage));
+        editTextSetDisplayName.setText(displayName);
+        editTextSetUserName.setText(userName);
+        editTextSetAboutMe.setText(aboutMe);
+        originalUserName = editTextSetUserName.getText().toString().trim();
+        if (avatarImage != null && !avatarImage.isEmpty()) {
+            Picasso.get().load(avatarImage).into(imageSetViewAvatar);
+            // Convert the URL to a Uri and assign it to selectedImageUri
+            selectedImageUri = Uri.parse(avatarImage);
         }
+
+        // Create a TextWatcher
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed here
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // No action needed here
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                buttonSaveSettings.setVisibility(View.VISIBLE);
+            }
+        };
+
+        editTextSetDisplayName.addTextChangedListener(textWatcher);
+        editTextSetUserName.addTextChangedListener(textWatcher);
+        editTextSetAboutMe.addTextChangedListener(textWatcher);
 
         buttonSettingsReturn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,15 +137,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
-
-
-
-
-
     }
 
     @Override
@@ -131,26 +164,123 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri selectedImageUri = data.getData();
+            Uri newImageUri = data.getData();
+            String filePath = getRealPathFromURI(newImageUri);
+            Out<String> invalidationReason = Out.of(String.class);
+            if (!SettingsValidations.isAvatarImageValid(filePath, invalidationReason)) {
+                Snackbar.make(findViewById(android.R.id.content), invalidationReason.get(), Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-
-                // Get the edit icon drawable
-                Drawable editIcon = ContextCompat.getDrawable(this, R.drawable.edit);
-
-                // Create a new LayerDrawable with the new bitmap and the edit icon
-                Drawable[] layers = new Drawable[2];
-                layers[0] = drawable;
-                layers[1] = editIcon;
-                LayerDrawable layerDrawable = new LayerDrawable(layers);
-
-                // Set the new LayerDrawable to the ImageView
-                imageSetViewAvatar.setImageDrawable(layerDrawable);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), newImageUri);
+                // Set the Bitmap directly to the ImageView
+                imageSetViewAvatar.setImageBitmap(bitmap);
+                // Only update selectedImageUri if everything was successful
+                selectedImageUri = newImageUri;
+                 isImageChanged = true;
+                buttonSaveSettings.setVisibility(View.VISIBLE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else if (resultCode == RESULT_CANCELED) {
+            // Handle the case where the user cancelled the image selection
+            Toast.makeText(this, "Image selection cancelled", Toast.LENGTH_SHORT).show();
         }
+    }
+    public void saveSettings(View view) {
+        String userName = editTextSetUserName.getText().toString().trim();
+        String displayName = editTextSetDisplayName.getText().toString().trim();
+        String aboutMe = editTextSetAboutMe.getText().toString().trim();
+        Uri imageUri = isImageChanged ? selectedImageUri : null;
+
+        if (performInputValidation(userName, displayName, aboutMe)) {
+            if (!userName.equals(originalUserName)) {
+                // The username has been changed, check its uniqueness
+                CheckIfUserNameIsUniqueUseCase checkIfUserNameIsUniqueUseCase = new CheckIfUserNameIsUniqueUseCase();
+                checkIfUserNameIsUniqueUseCase.isUsernameValidAndUnique(userName).addOnCompleteListener(new OnCompleteListener<Boolean>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Boolean> task) {
+                        if (task.isSuccessful()) {
+                            updateProfile(userName, displayName, aboutMe, imageUri);
+                        } else {
+                            // Handle the error
+                            Log.e("ProfileActivity", "Failed to validate username", task.getException());
+                            editTextSetUserName.setError(task.getException().getMessage());
+                        }
+                    }
+                });
+            } else {
+                // The username hasn't been changed, no need to check its uniqueness
+                updateProfile(userName, displayName, aboutMe, imageUri);
+            }
+        }
+    }
+
+    private void updateProfile(String userName, String displayName, String aboutMe, Uri imageUri) {
+        progressBarSavingSettings.setVisibility(View.VISIBLE);
+        buttonSaveSettings.setVisibility(View.GONE);
+        UpdateUserProfileUseCase updateUserProfileUseCase = new UpdateUserProfileUseCase();
+        updateUserProfileUseCase.execute(currentUser, userName, displayName, aboutMe, imageUri).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                progressBarSavingSettings.setVisibility(View.GONE);
+
+                if (task.isSuccessful()) {
+                    Toast.makeText(SettingsActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SettingsActivity.this, ProfileActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    // Handle the error
+                    Log.e("SettingsActivity", "Failed to update profile", task.getException());
+                    buttonSaveSettings.setVisibility(View.VISIBLE);
+                    Toast.makeText(SettingsActivity.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
+    private boolean performInputValidation(String iUsername, String iDisplayName,String iAboutMe) {
+        boolean isValid = true;
+        Out<String> invalidationReason = Out.of(String.class);
+
+        if (!SettingsValidations.isUsernameValid(iUsername, invalidationReason)) {
+            editTextSetUserName.setError(invalidationReason.get());
+            isValid = false;
+        } else {
+            editTextSetUserName.setError(null);
+        }
+
+        if (!SettingsValidations.isDisplayNameValid(iDisplayName, invalidationReason)) {
+            editTextSetDisplayName.setError(invalidationReason.get());
+            isValid = false;
+        } else {
+            editTextSetDisplayName.setError(null);
+        }
+
+        if (!SettingsValidations.isAboutMeValid(iAboutMe, invalidationReason)) {
+            editTextSetAboutMe.setError(invalidationReason.get());
+            isValid = false;
+        } else {
+            editTextSetAboutMe.setError(null);
+        }
+
+        return isValid;
+    }
+
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor != null) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            cursor.close();
+            return path;
+        }
+        return null;
     }
 
 }
