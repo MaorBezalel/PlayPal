@@ -48,6 +48,7 @@ public class ChatRoomBodyFragment extends Fragment {
     private ImageButton mChatRoomSendMessageButton;
 
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
+    private int mInitializeListenerCounter = 0;
 
     //private MessageAdapter mMessageAdapter;
     //private MessageFirestoreAdapter mMessageFirestoreAdapter;
@@ -131,8 +132,11 @@ public class ChatRoomBodyFragment extends Fragment {
 
     private void observeWhenNewMessageReceived() {
         mChatRoomViewModel.getChatRoomLiveData().observe(getViewLifecycleOwner(), chatRoom -> {
-            Toast.makeText(getContext(), "New message received", Toast.LENGTH_SHORT).show();
-
+            if(mInitializeListenerCounter < 2)
+            {
+                mInitializeListenerCounter++;
+                return;
+            }
           if(!chatRoom.getLastMessage().getSender().getUid().equals(CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid()))
           {
               mMessageCustomAdapter.addNewMessage(chatRoom.getLastMessage());
@@ -215,5 +219,12 @@ public class ChatRoomBodyFragment extends Fragment {
                 mChatRoomViewModel.sendMessage(message);
             }
         });
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        mNewMessageRegistrationListener.remove();
+        super.onDestroy();
     }
 }
