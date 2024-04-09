@@ -52,6 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView mTextViewGetAboutMe;
     private GetStatusUseCase mGetStatusUseCase;
     private String status;
+    private String avatarUrl;
 
     private final String  currentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
 
@@ -144,7 +145,7 @@ public class ProfileActivity extends AppCompatActivity {
                 String username = document.getString("username");
                 String displayName = document.getString("display_name");
                 String aboutMe = document.getString("about_me");
-                String avatarUrl = document.getString("profile_picture");
+                avatarUrl = document.getString("profile_picture");
 
                 mTextViewGetUserName.setText(username);
                 mTextViewGetDisplayName.setText(displayName);
@@ -208,7 +209,16 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public void buttonSettingsFunc(View view) {
+        String displayName = mTextViewGetDisplayName.getText().toString();
+        String userName = mTextViewGetUserName.getText().toString();
+        String aboutMe = mTextViewGetAboutMe.getText().toString();
+
         Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
+        intent.putExtra("displayName", displayName);
+        intent.putExtra("userName", userName);
+        intent.putExtra("aboutMe", aboutMe);
+        intent.putExtra("avatarImage", avatarUrl);
+
         startActivity(intent);
     }
 
@@ -220,8 +230,8 @@ public class ProfileActivity extends AppCompatActivity {
             buttonAddFriend.setClickable(true);
         } else if("noStatus".equals(status)){
             Map<String, Object> otherUserData = new HashMap<>();
-            otherUserData.put("display_name", mTextViewGetDisplayName.getText().toString());
-            otherUserData.put("profile_picture", ""); // implement image giving
+            otherUserData.put("display_name", mTextViewGetDisplayName.getText().toString()); // displayName is the display name of the other user
+            otherUserData.put("profile_picture", avatarUrl); // avatarUrl is the URL of the other user's avatar
             otherUserData.put("uid", Uid); // Uid is the id of the other user
 
             AddPendingFriendUseCase addPendingFriendUseCase = new AddPendingFriendUseCase();
@@ -243,14 +253,14 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void buttonRemoveFriendFunc(View view) {
-        ProgressBar progressBar = findViewById(R.id.progressBarRemoveFriend);
-        progressBar.setVisibility(View.VISIBLE);
+        ProgressBar progressBarRemoveFriend = findViewById(R.id.progressBarRemoveFriend);
+        progressBarRemoveFriend.setVisibility(View.VISIBLE);
         buttonRemoveFriend.setVisibility(View.GONE);
-        RemoveFriendUseCase RemoveFriendUseCase = new RemoveFriendUseCase();
-        RemoveFriendUseCase.execute(currentUser,Uid).addOnCompleteListener(new OnCompleteListener<Void>() {
+        RemoveFriendUseCase removeFriendUseCase = new RemoveFriendUseCase();
+        removeFriendUseCase.execute(currentUser,Uid).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                progressBar.setVisibility(View.GONE);
+                progressBarRemoveFriend.setVisibility(View.GONE);
                 buttonAddFriend.setVisibility(View.VISIBLE);
 
                 if (task.isSuccessful()) {

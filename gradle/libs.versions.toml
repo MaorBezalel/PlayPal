@@ -17,6 +17,7 @@ navigationFragment = "2.7.7"
 navigationUi = "2.7.7"
 pagingRuntime = "3.2.1"
 picasso = "2.71828"
+firebaseStorage = "20.3.0"
 
 [libraries]
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
@@ -37,6 +38,7 @@ navigation-fragment = { group = "androidx.navigation", name = "navigation-fragme
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

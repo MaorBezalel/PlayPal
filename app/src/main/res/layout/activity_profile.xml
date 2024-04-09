@@ -43,7 +43,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="0.1"
             android:background="@drawable/profile_border"
@@ -51,27 +53,24 @@
 
             <ImageView
                 android:id="@+id/imageViewAvatar"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="20dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_circle"
+                android:layout_marginStart="5dp"
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/ic_home_nav_myprofile" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_marginStart="5dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textViewUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:layout_marginTop="30dp"
                     android:text="User Name:"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -80,8 +79,7 @@
                     android:id="@+id/textViewDisplayName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:layout_marginTop="30dp"
                     android:text="Display Name:"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -89,17 +87,15 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textViewGetUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:layout_marginTop="30dp"
                     android:text="TextView"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -108,8 +104,7 @@
                     android:id="@+id/textViewGetDisplayName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:layout_marginTop="30dp"
                     android:text="TextView"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -120,6 +115,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="0.5"
             android:background="@drawable/profile_border"
             android:orientation="vertical">
@@ -127,8 +124,7 @@
             <TextView
                 android:id="@+id/textViewAboutMe"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.1"
+                android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="About Me:"
                 android:textSize="16sp"
@@ -138,7 +134,6 @@
                 android:id="@+id/textViewGetAboutMe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:paddingStart="10dp"
                 android:text="TextView" />
 
@@ -153,43 +148,63 @@
 
             <Button
                 android:id="@+id/buttonFriends"
-                android:layout_width="match_parent"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/profile_buttons_design"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:onClick="FriendsButtonFunc"
                 android:text="Friends"
                 android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonRooms"
-                android:layout_width="match_parent"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/profile_buttons_design"
                 android:onClick="roomsButtonFunc"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:text="Rooms"
                 android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonFavGames"
-                android:layout_width="match_parent"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/profile_buttons_design"
                 android:onClick="favGamesButtonFunc"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:text="Favorite Games"
                 android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonSettings"
-                android:layout_width="match_parent"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/profile_buttons_design"
                 android:onClick="buttonSettingsFunc"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:text="Settings"
                 android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonAddFriend"
-                android:layout_width="match_parent"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:background="@drawable/profile_buttons_design"
                 android:onClick="AddFriendFunc"
                 android:text="Add Friend"
                 android:textSize="20dp"
@@ -201,8 +216,12 @@
 
                 <Button
                     android:id="@+id/buttonRemoveFriend"
-                    android:layout_width="match_parent"
+                    android:layout_width="350dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/profile_buttons_design"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
                     android:onClick="buttonRemoveFriendFunc"
                     android:text="Remove Friend"
                     android:textSize="20dp"
