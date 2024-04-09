@@ -52,6 +52,7 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:text="Save Changes"
+            android:textSize="20sp"
             android:visibility="gone" />
 
         <ProgressBar
@@ -205,6 +206,7 @@
             android:onClick="logOutFunc"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
+            android:textSize="20sp"
             android:text="Log Out" />
     </LinearLayout>
 
