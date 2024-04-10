@@ -157,9 +157,13 @@ public class ChatRoomBodyFragment extends Fragment {
             imageUrl = ((OneToOneChatRoom) chatRoom).getOtherUserProfilePicture(thisUserUid);
         }
 
-        Picasso.get()
-                .load(imageUrl)
-                .into(mChatRoomImageImageView);
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            mChatRoomImageImageView.setImageResource(R.drawable.ic_home_nav_search_groupchats);
+        } else {
+            Picasso.get()
+                    .load(imageUrl)
+                    .into(mChatRoomImageImageView);
+        }
     }
 
     private void initChatRoomBackButton(@NonNull View iView) {

@@ -1,15 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:padding="20dp"
     tools:context=".chatrooms.ui.fragments.ChatRoomProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="CHAT"
-        android:textSize="48sp" />
+    <ImageButton
+        android:id="@+id/imagebutton_chat_room_back"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_centerVertical="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_arrow_back"
+        app:tint="@color/primary" />
 
-</FrameLayout>
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageview_chat_room_profile_chat_room_picture"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_circle"
+        android:padding="4dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_home_nav_search_groupchats"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+        app:strokeColor="@color/secondary"
+        app:strokeWidth="2dp" />
+
+    <TextView
+        android:id="@+id/textview_chat_room_profile_chat_room_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:text="Shrek's donkey fans"
+        android:fontFamily="@font/bebas_neue"
+        android:textColor="@color/primary"
+        android:textSize="42sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textview_chat_room_profile_chat_room_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:paddingHorizontal="2dp"
+        android:fontFamily="@font/comfortaa_bold"
+        android:gravity="top|center"
+        android:lines="8"
+        android:text="This is a chat room for fans of Shrek's donkey"
+        android:textAlignment="gravity"
+        android:textColor="@color/primary"
+        android:textSize="20sp" />
+
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardview_chat_room_profile_chat_room_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        app:strokeColor="@color/black"
+        app:strokeWidth="3dp">
+
+        <RelativeLayout
+            android:layout_width="300dp"
+            android:layout_height="75dp">
+
+            <ImageView
+                android:id="@+id/imageview_create_group_chat_game_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/textview_create_group_chat_game_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/bebas_neue"
+                android:gravity="center"
+                android:text="Game Title"
+                android:textColor="@color/secondary"
+                android:textSize="26sp" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <Button
+        android:id="@+id/button_chat_room_profile_chat_room_join"
+        android:layout_width="250dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:background="@color/primary"
+        android:fontFamily="@font/bebas_neue"
+        android:text="Join Chat Room"
+        android:textColor="@color/white"
+        android:textSize="26sp" />
+
+</LinearLayout>
