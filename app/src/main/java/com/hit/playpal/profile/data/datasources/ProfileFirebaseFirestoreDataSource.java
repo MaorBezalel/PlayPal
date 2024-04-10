@@ -5,13 +5,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -37,18 +35,6 @@ public class ProfileFirebaseFirestoreDataSource {
         return DB.collection("users").document(iUid).collection("private").document("data").get();
     }
 
-
-
-    public Task<QuerySnapshot> getUserFriends(String iUid, DocumentSnapshot lastVisible, int limit) {
-        Query query = DB.collection("users").document(iUid).collection("relationships")
-                .whereEqualTo("status", "friends");
-
-        if (lastVisible != null) {
-            query = query.startAfter(lastVisible);
-        }
-        query = query.limit(limit);
-        return query.get();
-    }
 
     public Task<String> getStatus(String iUid, String iOtherUserUid) {
         return DB.collection("users").document(iUid).collection("relationships")

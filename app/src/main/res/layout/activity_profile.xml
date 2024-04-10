@@ -155,6 +155,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dosis_extrabold"
                 android:paddingStart="16dp"
+                android:textStyle="bold"
                 android:text="TextView" />
 
         </LinearLayout>

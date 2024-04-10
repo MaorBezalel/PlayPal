@@ -1,5 +1,6 @@
 package com.hit.playpal.settings.ui.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -29,6 +30,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.R;
 import com.hit.playpal.auth.ui.activities.AuthActivity;
@@ -234,9 +236,16 @@ public class SettingsActivity extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
                     Toast.makeText(SettingsActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-/*                    Intent intent = new Intent(SettingsActivity.this, ProfileActivity.class);
-                    startActivity(intent);
-                    finish();*/
+
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("username", userName);
+                    resultIntent.putExtra("display_name", displayName);
+                    resultIntent.putExtra("about_me", aboutMe);
+                    if (imageUri != null) {
+                        resultIntent.putExtra("profile_picture", imageUri.toString());
+                    }
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
                 } else {
                     // Handle the error
                     Log.e("SettingsActivity", "Failed to update profile", task.getException());
@@ -294,5 +303,37 @@ public class SettingsActivity extends AppCompatActivity {
         Intent intent = new Intent(SettingsActivity.this, AuthActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Only fetch the latest user details from the database if the image has not been changed
+        if (!isImageChanged) {
+            String currentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
+            FirebaseFirestore DB = FirebaseFirestore.getInstance();
+            DB.collection("users").document(currentUser).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            // Update the UI with the latest user details
+                            String updatedAvatarImage = document.getString("profile_picture");
+                            if (updatedAvatarImage != null && !updatedAvatarImage.isEmpty()) {
+                                Picasso.get().load(updatedAvatarImage).into(imageSetViewAvatar);
+                                // Convert the URL to a Uri and assign it to selectedImageUri
+                                selectedImageUri = Uri.parse(updatedAvatarImage);
+                            }
+                        } else {
+                            Log.d("SettingsActivity", "No such user");
+                        }
+                    } else {
+                        Log.d("SettingsActivity", "Failed to fetch user details", task.getException());
+                    }
+                }
+            });
+        }
     }
 }

@@ -2,7 +2,6 @@ package com.hit.playpal.profile.data.repositories;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.profile.data.datasources.ProfileFirebaseFirestoreDataSource;
 import com.hit.playpal.profile.domain.repositories.IProfileRepository;
 
@@ -18,11 +17,6 @@ public class ProfileRepository implements IProfileRepository {
         return DB.getUserByUid(iUid);
     }
 
-
-    @Override
-    public Task<QuerySnapshot> getUserFriendsByDisplayName(String iUid, DocumentSnapshot lastVisible, int limit) {
-        return DB.getUserFriends(iUid, lastVisible, limit);
-    }
 
     @Override
     public Task<String> getStatus(String iUid, String iOtherUserUid) {
