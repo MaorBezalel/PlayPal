@@ -40,7 +40,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         holder.MESSAGE_TIME.setText(DateUtils.getRelativeTimeDisplay(message.getSentAt().getTime()));
         holder.MESSAGE_BODY.setText(message.getContent().getData());
 
-        Picasso.get().load(message.getSender().getProfilePicture()).into(holder.MESSAGE_SENDER_PROFILE_PICTURE);
+        if (message.getSender().getProfilePicture() == null || message.getSender().getProfilePicture().isEmpty()) {
+            holder.MESSAGE_SENDER_PROFILE_PICTURE.setImageResource(R.drawable.ic_home_nav_search_groupchats);
+        } else {
+            Picasso.get().load(message.getSender().getProfilePicture()).into(holder.MESSAGE_SENDER_PROFILE_PICTURE);
+        }
     }
 
     @Override
