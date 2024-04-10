@@ -57,10 +57,26 @@ public class RoomAdapter<T> extends FirestorePagingAdapter<T, RoomAdapter.RoomVi
     protected void onBindViewHolder(@NonNull RoomViewHolder iRoomViewHolder, int i, @NonNull T iItem) {
             iRoomViewHolder.ROOM_NAME.setText(mBindableRoom.getRoomName(iItem));
             iRoomViewHolder.MEMBERS_COUNT.setText(mBindableRoom.getMembersCount(iItem) + " Members");
-            Picasso.get().load(mBindableRoom.getGameImage(iItem)).into(iRoomViewHolder.GAME_IMAGE);
 
-            // TODO: find a way to put room image content inside imageView
-            Picasso.get().load(mBindableRoom.getRoomImage(iItem)).into(iRoomViewHolder.ROOM_IMAGE);
+            if(mBindableRoom.getGameImage(iItem) != null && !mBindableRoom.getGameImage(iItem).isEmpty())
+        {
+            Picasso.get().load(mBindableRoom.getGameImage(iItem)).into(iRoomViewHolder.GAME_IMAGE);
+        }
+        else
+        {
+            Picasso.get().load(R.drawable.ic_home_nav_game).into(iRoomViewHolder.GAME_IMAGE);
+        }
+
+
+            if(mBindableRoom.getRoomImage(iItem) != null && !mBindableRoom.getRoomImage(iItem).isEmpty())
+            {
+                Picasso.get().load(mBindableRoom.getRoomImage(iItem)).into(iRoomViewHolder.ROOM_IMAGE);
+            }
+            else
+            {
+                Picasso.get().load(R.drawable.ic_home_nav_search_groupchats).into(iRoomViewHolder.ROOM_IMAGE);
+            }
+
 
             iRoomViewHolder.ROOM_CARD.setOnClickListener(v -> {
                 mRoomAdapter.onRoomClick(mBindableRoom.getRoomId(iItem));

@@ -91,13 +91,13 @@ public abstract class GameAdapter<T> extends FirestorePagingAdapter<T, GameAdapt
         iGameViewHolder.gameRating.setText(new DecimalFormat("0.00").format(this.mBindable.getRating(iItem)));
         iGameViewHolder.gameRating.setTextColor(getRatingColor(this.mBindable.getRating(iItem)));
 
-        if (this.mBindable.getBackgroundImage(iItem) != null)
+        if (this.mBindable.getBackgroundImage(iItem) != null && !this.mBindable.getBackgroundImage(iItem).isEmpty())
         {
             Picasso.get().load(this.mBindable.getBackgroundImage(iItem)).into(iGameViewHolder.gameImage);
         }
         else
         {
-            iGameViewHolder.gameImage.setImageResource(R.drawable.ic_unknown_game_image);
+            iGameViewHolder.gameImage.setImageResource(R.drawable.ic_home_nav_game);
 
         }
 
