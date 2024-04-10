@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/background"
+    android:orientation="vertical"
     tools:context=".home.ui.fragments.chats.ChatsFragment">
 
     <SearchView
         android:id="@+id/searchview_chats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
         android:layout_marginStart="60dp"
         android:layout_marginEnd="60dp"
         android:background="@color/secondary_50"
-        android:queryHint="Search for chats... (WORK IN PROGRESS)"
-        />
+        android:queryHint="Search for chats... (WORK IN PROGRESS)" />
 
     <LinearLayout
+        android:id="@+id/linearlayout_chats"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_below="@id/searchview_chats">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tablayout_chats"
@@ -65,4 +67,23 @@
 
     </LinearLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/linearlayout_chats_fab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_chats_add_group_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add_group_chat"
+            app:backgroundTint="@color/primary"
+            app:tint="@color/secondary"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

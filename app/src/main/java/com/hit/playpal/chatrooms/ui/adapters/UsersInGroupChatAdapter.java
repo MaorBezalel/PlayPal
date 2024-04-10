@@ -11,7 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hit.playpal.R;
-import com.hit.playpal.entities.chats.Participant;
+import com.hit.playpal.entities.chats.GroupProfile;
 import com.hit.playpal.paginatedsearch.users.adapters.IUserAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UsersInGroupChatAdapter extends RecyclerView.Adapter<UsersInGroupChatAdapter.UserViewHolder>{
-    private List<Participant> mParticipantsList;
-    private List<Participant> mCurrentFilteredParticipantsList;
+    private List<GroupProfile.Participant> mParticipantsList;
+    private List<GroupProfile.Participant> mCurrentFilteredParticipantsList;
     private final IUserAdapter ON_USER_CLICKED;
 
-    public UsersInGroupChatAdapter(List<Participant> iUserList, IUserAdapter iUserAdapter)
+    public UsersInGroupChatAdapter(List<GroupProfile.Participant> iUserList, IUserAdapter iUserAdapter)
     {
         mCurrentFilteredParticipantsList = mParticipantsList = iUserList;
         ON_USER_CLICKED = iUserAdapter;
@@ -38,7 +38,7 @@ public class UsersInGroupChatAdapter extends RecyclerView.Adapter<UsersInGroupCh
 
     @Override
     public void onBindViewHolder(@NonNull UsersInGroupChatAdapter.UserViewHolder holder, int position) {
-        Participant user = mCurrentFilteredParticipantsList.get(position);
+        GroupProfile.Participant user = mCurrentFilteredParticipantsList.get(position);
         holder.userDisplayName.setText(user.getDisplayName());
         holder.userCard.setOnClickListener(v -> ON_USER_CLICKED.onUserClick(user.getUserUid()));
 

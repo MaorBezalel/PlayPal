@@ -14,6 +14,8 @@
     <string name="forgot_password_description">Provide your account\'s email for which you want to reset your password!</string>
     <string name="reset_password">Reset Password</string>
     <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="create_group_chat_button_text">Create</string>
 
     <string-array name="game_platforms">
         <item name="PC">PC</item>

@@ -67,7 +67,11 @@ public class Message implements Parcelable {
         iDest.writeString(mChatRoomId);
         iDest.writeParcelable(mSender, iFlags);
         iDest.writeParcelable(mContent, iFlags);
-        iDest.writeLong(mSentAt.getTime());
+        if (mSentAt != null) {
+            iDest.writeLong(mSentAt.getTime());
+        } else {
+            iDest.writeLong(0);
+        }
     }
 
     @Override

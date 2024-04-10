@@ -33,12 +33,7 @@ public class ChatsTabFragment extends Fragment {
 
     @Nullable private ChatRoomType mChatRoomType;
 
-
-        public ChatsTabFragment() {
-
-        }
-
-
+    public ChatsTabFragment() { }
 
     public ChatsTabFragment(@Nullable ChatRoomType iChatRoomType) {
         mChatRoomType = iChatRoomType;
