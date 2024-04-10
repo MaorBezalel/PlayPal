@@ -69,7 +69,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="10dp"
         android:layout_weight="0.1"
@@ -89,7 +88,9 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-                app:srcCompat="@drawable/ic_home_nav_myprofile" />
+                app:srcCompat="@drawable/ic_home_nav_myprofile"
+                app:strokeColor="@color/primary_500"
+                app:strokeWidth="2dp"/>
 
             <ImageView
                 android:id="@+id/imageEditIcon"
