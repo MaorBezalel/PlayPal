@@ -1,16 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_notifications"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".home.ui.fragments.NotificationsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/fragment_notifications_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@color/primary_500"
+        android:fontFamily="@font/dosis_extrabold"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Latest Notifications"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="NOTIFICATIONS"
-        android:textSize="24sp" />
+        android:layout_margin="10dp">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/fragment_notifications_db_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-40dp"
+            android:fontFamily="@font/dosis_extrabold"
+            android:text="Error Occurred, Please Try Again!  "
+            android:textColor="@color/accent_300"
+            android:textSize="24sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/fragment_notifications_not_found_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-40dp"
+            android:fontFamily="@font/dosis_extrabold"
+            android:text="No Notifications Found!"
+            android:textColor="@color/primary_500"
+            android:textSize="28sp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/fragment_notifications_progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-40dp"
+            android:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_notifications_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

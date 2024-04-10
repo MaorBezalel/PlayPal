@@ -158,6 +158,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="-40dp"
+            android:fontFamily="@font/dosis_extrabold"
             android:text="Error Occurred, Please Try Again!  "
             android:textColor="@color/accent_300"
             android:textSize="24sp"
