@@ -10,10 +10,10 @@ import com.hit.playpal.utils.Out;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class FetchMessagesUseCase2 {
+public class FetchMessagesUseCase {
     private final IChatRoomRepository REPOSITORY;
 
-    public FetchMessagesUseCase2(IChatRoomRepository iRepository) {
+    public FetchMessagesUseCase(IChatRoomRepository iRepository) {
         REPOSITORY = iRepository;
     }
 

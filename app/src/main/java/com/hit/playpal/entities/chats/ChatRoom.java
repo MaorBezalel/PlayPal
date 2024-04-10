@@ -30,7 +30,10 @@ public abstract class ChatRoom implements Parcelable {
     @PropertyName("last_message") public Message getLastMessage() { return mLastMessage; }
     @PropertyName("last_message") public void setLastMessage(Message iLastMessage) { mLastMessage = iLastMessage; }
 
-    public ChatRoom() { }
+    public ChatRoom() {
+        mMembersUid = new ArrayList<>();
+        mLastMessage = new Message();
+    }
     public ChatRoom(String iId, ChatRoomType iType, Message iLastMessage) {
         mId = iId;
         mType = iType;
@@ -53,7 +56,7 @@ public abstract class ChatRoom implements Parcelable {
         iDest.writeString(mType.name());
         Log.d("ChatRoom", "writeToParcel: mMembersUid = " + mMembersUid);
         iDest.writeStringList(mMembersUid);
-        iDest.writeParcelable(mLastMessage, iFlags); // TODO: might need to check if mLastMessage is null before writing it
+        iDest.writeParcelable(mLastMessage, iFlags);
     }
 
     @Override

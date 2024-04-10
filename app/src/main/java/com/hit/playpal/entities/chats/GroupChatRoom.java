@@ -1,5 +1,6 @@
 package com.hit.playpal.entities.chats;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,8 +12,10 @@ import com.hit.playpal.entities.users.User;
 
 import org.jetbrains.annotations.Contract;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class GroupChatRoom extends ChatRoom {
     @PropertyName("name") private String mName;
@@ -27,11 +30,10 @@ public class GroupChatRoom extends ChatRoom {
     @PropertyName("game") public Game getGame() { return mGame; }
     @PropertyName("game") public void setGame(Game iGame) { mGame = iGame; }
 
-    @PropertyName("members_uid") private List<String> mMembersData;
-    @PropertyName("members_uid") public List<String> getMembersData() { return mMembersData; }
-    @PropertyName("members_uid") public void setMembersData(List<String> iMembersData) { mMembersData = iMembersData; }
-
-    public GroupChatRoom() { }
+    public GroupChatRoom() {
+        super();
+        mType = ChatRoomType.GROUP;
+    }
     public GroupChatRoom(String iChatRoomId, Message iLastMessage, String iName, String iProfilePicture, Game iGame) {
         super(iChatRoomId, ChatRoomType.GROUP, iLastMessage);
         mName = iName;
@@ -70,7 +72,18 @@ public class GroupChatRoom extends ChatRoom {
         }
     };
 
+    public void setInitialMembers(@NonNull User iOwner, @NonNull Set<User> iRegularMembers) {
+        mMembersUid = new ArrayList<>(iRegularMembers.size() + 1);
+
+        mMembersUid.add(iOwner.getUid());
+        iRegularMembers.forEach(user -> mMembersUid.add(user.getUid()));
+    }
+
     public static class Game implements Parcelable {
+        @PropertyName("id") private String mGameId;
+        @PropertyName("id") public String getGameId() { return mGameId; }
+        @PropertyName("id") public void setGameId(String iGameId) { mGameId = iGameId; }
+
         @PropertyName("name") private String mName;
         @PropertyName("name") public String getName() { return mName; }
         @PropertyName("name") public void setName(String iName) { mName = iName; }
@@ -80,18 +93,21 @@ public class GroupChatRoom extends ChatRoom {
         @PropertyName("background_image") public void setBackgroundImage(String iBackgroundImage) { mBackgroundImage = iBackgroundImage; }
 
         public Game() { }
-        public Game(String iName, String iBackgroundImage) {
+        public Game(String iId, String iName, String iBackgroundImage) {
+            mGameId = iId;
             mName = iName;
             mBackgroundImage = iBackgroundImage;
         }
 
         protected Game(@NonNull Parcel iIn) {
+            mGameId = iIn.readString();
             mName = iIn.readString();
             mBackgroundImage = iIn.readString();
         }
 
         @Override
         public void writeToParcel(@NonNull Parcel iDest, int iFlags) {
+            iDest.writeString(mGameId);
             iDest.writeString(mName);
             iDest.writeString(mBackgroundImage);
         }

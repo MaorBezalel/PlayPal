@@ -28,7 +28,7 @@ import com.squareup.picasso.Picasso;
 import java.util.function.BiFunction;
 
 public class ChatsRecyclerViewAdapter extends FirestorePagingAdapter<AllChatRoom, ChatsRecyclerViewAdapter.ChatsViewHolder>  {
-    private static final String TAG = "ChatsAdapter";
+    private static final String TAG = "ChatsRecyclerViewAdapter";
 
     public static final int PAGE_SIZE = 20;
     public static final int PAGE_PREFETCH_DISTANCE = 5;
@@ -124,25 +124,35 @@ public class ChatsRecyclerViewAdapter extends FirestorePagingAdapter<AllChatRoom
     }
 
     private void determineAndSetChatRoomLastMessageTime(@NonNull ChatsViewHolder iHolder, @NonNull ChatRoom iChatRoom) {
-        long lastMessageTimestamp = iChatRoom.getLastMessage().getSentAt().getTime();
-        String lastMessageTime = DateUtils.getRelativeTimeDisplay(lastMessageTimestamp);
+        String lastMessageTime = null;
+
+        if (iChatRoom.getLastMessage().getSentAt() == null) {
+           lastMessageTime = "No messages yet";
+        } else {
+            long lastMessageTimestamp = iChatRoom.getLastMessage().getSentAt().getTime();
+            lastMessageTime = DateUtils.getRelativeTimeDisplay(lastMessageTimestamp);
+        }
 
         iHolder.CHAT_ROOM_LAST_MESSAGE_TIME.setText(lastMessageTime);
     }
 
     private void determineAndSetChatRoomLastMessageContent(@NonNull ChatsViewHolder iHolder, @NonNull ChatRoom iChatRoom) {
-        BiFunction<String, String, String> lastMessageContentFormatter = (iSenderDisplayName, iContent) -> iSenderDisplayName + ": " + iContent;
-        String thisUserUid = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
-        String lastMessageContent = iChatRoom.getLastMessage().getContent().getData(); // for now, we assume that the content is a text message
-        String lastMessageSenderUid = iChatRoom.getLastMessage().getSender().getUid();
-        String lastMessageSenderDisplayName = null;
-
-        if (thisUserUid.equals(lastMessageSenderUid)) {
-            lastMessageSenderDisplayName = "You";
+        if (iChatRoom.getLastMessage().getContent() == null) {
+            iHolder.CHAT_ROOM_LAST_MESSAGE_CONTENT.setText("No messages yet");
         } else {
-            lastMessageSenderDisplayName = iChatRoom.getLastMessage().getSender().getDisplayName();
-        }
+            BiFunction<String, String, String> lastMessageContentFormatter = (iSenderDisplayName, iContent) -> iSenderDisplayName + ": " + iContent;
+            String thisUserUid = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
+            String lastMessageContent = iChatRoom.getLastMessage().getContent().getData(); // for now, we assume that the content is a text message
+            String lastMessageSenderUid = iChatRoom.getLastMessage().getSender().getUid();
+            String lastMessageSenderDisplayName = null;
 
-        iHolder.CHAT_ROOM_LAST_MESSAGE_CONTENT.setText(lastMessageContentFormatter.apply(lastMessageSenderDisplayName, lastMessageContent));
+            if (thisUserUid.equals(lastMessageSenderUid)) {
+                lastMessageSenderDisplayName = "You";
+            } else {
+                lastMessageSenderDisplayName = iChatRoom.getLastMessage().getSender().getDisplayName();
+            }
+
+            iHolder.CHAT_ROOM_LAST_MESSAGE_CONTENT.setText(lastMessageContentFormatter.apply(lastMessageSenderDisplayName, lastMessageContent));
+        }
     }
 }

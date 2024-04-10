@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview_create_group_chat_initial_member"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:checkable="true"
+    app:cardCornerRadius="30dp"
+    app:cardElevation="10dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="false"
+    app:strokeColor="@color/black"
+    app:strokeWidth="3dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="115dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageview_create_group_chat_initial_member_profile_picture"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_person"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/textview_create_group_chat_initial_member_username"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/imageview_create_group_chat_initial_member_profile_picture"
+            android:text="@string/username"
+            android:background="@color/background_200"
+            android:textColor="@color/text"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textSize="14sp"
+            android:padding="40dp"
+            android:gravity="center"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>
