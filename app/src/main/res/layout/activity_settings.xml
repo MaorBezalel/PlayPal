@@ -149,6 +149,7 @@
                 android:text="TextView"
                 android:fontFamily="@font/dosis_extrabold"
                 android:textSize="16sp"
+                android:theme="@style/MyEditTextTheme"
                 android:textStyle="bold" />
 
             <EditText
@@ -160,6 +161,7 @@
                 android:ems="9"
                 android:maxLength="20"
                 android:textColor="@color/white"
+                android:theme="@style/MyEditTextTheme"
                 android:text="TextView"
                 android:textSize="16sp"
                 android:textStyle="bold" />
