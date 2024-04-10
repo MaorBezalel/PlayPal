@@ -5,17 +5,16 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,18 +35,6 @@ public class ProfileFirebaseFirestoreDataSource {
         return DB.collection("users").document(iUid).collection("private").document("data").get();
     }
 
-
-
-    public Task<QuerySnapshot> getUserFriends(String iUid, DocumentSnapshot lastVisible, int limit) {
-        Query query = DB.collection("users").document(iUid).collection("relationships")
-                .whereEqualTo("status", "friends");
-
-        if (lastVisible != null) {
-            query = query.startAfter(lastVisible);
-        }
-        query = query.limit(limit);
-        return query.get();
-    }
 
     public Task<String> getStatus(String iUid, String iOtherUserUid) {
         return DB.collection("users").document(iUid).collection("relationships")
@@ -75,6 +62,17 @@ public class ProfileFirebaseFirestoreDataSource {
 
     public Task<DocumentReference> addPendingFriend(String iUid, Map<String, Object> data) {
         return DB.collection("users").document(iUid).collection("relationships").add(data);
+    }
+
+    public Task<DocumentReference> sendFriendRequest(String iReceiverUid, String iSenderUid, String iSenderDisplayName, String iSenderProfileImage) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("type", "FRIEND_REQUEST");
+        data.put("happened_at", Date.from(new Date().toInstant()));
+        data.put("sender_uid", iSenderUid);
+        data.put("sender_display_name", iSenderDisplayName);
+        data.put("sender_profile_image", iSenderProfileImage);
+
+        return DB.collection("users").document(iReceiverUid).collection("notifications").add(data);
     }
 
     public Task<Void> deleteRelationshipDocument(String iUid, String otherUserUid) {

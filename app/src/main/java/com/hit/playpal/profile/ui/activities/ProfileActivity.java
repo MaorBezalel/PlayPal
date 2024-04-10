@@ -1,18 +1,20 @@
 package com.hit.playpal.profile.ui.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -31,7 +33,6 @@ import com.hit.playpal.paginatedsearch.rooms.fragments.RoomSearchFragment;
 import com.hit.playpal.paginatedsearch.rooms.enums.RoomSearchType;
 import com.hit.playpal.paginatedsearch.users.fragments.UserSearchFragment;
 import com.hit.playpal.paginatedsearch.users.enums.UserSearchType;
-import com.hit.playpal.home.ui.activities.HomeActivity;
 import com.hit.playpal.profile.domain.usecases.AddPendingFriendUseCase;
 
 import com.hit.playpal.profile.domain.usecases.GetProfileAccountInfoUseCase;
@@ -62,7 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FrameLayout mFragmentContainer;
     Button buttonAddFriend;
     Button buttonRemoveFriend;
-
+    private ActivityResultLauncher<Intent> settingsResultLauncher;
     private OnBackPressedCallback mOnBackPressedCallback;
 
     @Override
@@ -76,6 +77,9 @@ public class ProfileActivity extends AppCompatActivity {
             return insets;
         });
 
+
+
+
         Intent intent = getIntent();
         Uid = intent.getStringExtra("userId");
 
@@ -87,6 +91,29 @@ public class ProfileActivity extends AppCompatActivity {
         mImageViewAvatar = findViewById(R.id.imageViewAvatar);
         mTextViewGetDisplayName = findViewById(R.id.textViewGetDisplayName);
         mTextViewGetAboutMe = findViewById(R.id.textViewGetAboutMe);
+
+        settingsResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            String updatedUserName = data.getStringExtra("username");
+                            String updatedDisplayName = data.getStringExtra("display_name");
+                            String updatedAboutMe = data.getStringExtra("about_me");
+                            String updatedAvatarImage = data.getStringExtra("profile_picture");
+
+                            mTextViewGetUserName.setText(updatedUserName);
+                            mTextViewGetDisplayName.setText(updatedDisplayName);
+                            mTextViewGetAboutMe.setText(updatedAboutMe);
+                            if (updatedAvatarImage != null && !updatedAvatarImage.equals("null") && !updatedAvatarImage.isEmpty()) {
+                                Picasso.get().load(updatedAvatarImage).into(mImageViewAvatar);
+                            }
+                        }
+                    }
+                }
+        );
+
         mFragmentContainer = findViewById(R.id.fragment_container);
         Button buttonReturn = findViewById(R.id.buttonProfileReturn);
         Button buttonSettings = findViewById(R.id.buttonSettings);
@@ -220,7 +247,7 @@ public class ProfileActivity extends AppCompatActivity {
         intent.putExtra("aboutMe", aboutMe);
         intent.putExtra("avatarImage", avatarUrl);
 
-        startActivity(intent);
+        settingsResultLauncher.launch(intent);
     }
 
     public void AddFriendFunc(View view) {

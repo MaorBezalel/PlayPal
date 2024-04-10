@@ -2,9 +2,7 @@ package com.hit.playpal.profile.domain.usecases;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -17,9 +15,12 @@ public class AddPendingFriendUseCase {
     private ProfileRepository mProfileRepository;
     private GetProfileAccountInfoUseCase mGetProfileAccountInfoUseCase;
 
+    private SendFriendRequestUseCase mSendFriendRequestUseCase;
+
     public AddPendingFriendUseCase() {
         this.mProfileRepository = new ProfileRepository();
         this.mGetProfileAccountInfoUseCase = new GetProfileAccountInfoUseCase();
+        this.mSendFriendRequestUseCase = new SendFriendRequestUseCase(mProfileRepository);
     }
 
     public Task<Void> execute(String currentUser,String Uid, Map<String, Object> otherUserData) {
@@ -35,9 +36,10 @@ public class AddPendingFriendUseCase {
                     currentUserData.put("profile_picture", profilePicture);
                     currentUserData.put("uid", currentUser);
 
+                    Task<Void> task0 = mSendFriendRequestUseCase.sendFriendRequest(Uid, currentUser, displayName, profilePicture);
                     Task<Void> task1 = mProfileRepository.addPendingFriend(Uid, currentUserData);
                     Task<Void> task2 = mProfileRepository.addPendingFriend(currentUser, otherUserData);
-                    return Tasks.whenAllSuccess(task1, task2).continueWith(taskInner -> null);
+                    return Tasks.whenAllSuccess(task0,task1, task2).continueWith(taskInner -> null);
                 } else {
                     Log.d("AddFriendUseCase", "No such user");
                     return Tasks.forException(new Exception("No such user"));

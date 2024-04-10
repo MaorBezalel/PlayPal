@@ -2,10 +2,9 @@ package com.hit.playpal.profile.domain.usecases;
 
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.hit.playpal.profile.data.repositories.ProfileRepository;
-import androidx.annotation.NonNull;
+
 
 public class GetStatusUseCase {
     private ProfileRepository mProfileRepository;

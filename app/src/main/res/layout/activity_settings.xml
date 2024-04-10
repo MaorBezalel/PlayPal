@@ -51,6 +51,7 @@
             android:onClick="saveSettings"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
+            android:fontFamily="@font/dosis_extrabold"
             android:text="Save Changes"
             android:textSize="20sp"
             android:visibility="gone" />
@@ -104,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
+            android:background="@color/primary_500"
             android:orientation="vertical">
 
             <TextView
@@ -112,6 +114,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="User Name:"
+                android:textColor="@color/white"
+                android:fontFamily="@font/dosis_extrabold"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -121,6 +125,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="Display Name:"
+                android:textColor="@color/white"
+                android:fontFamily="@font/dosis_extrabold"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -129,6 +135,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="@color/primary_500"
             android:orientation="vertical">
 
             <EditText
@@ -138,7 +145,9 @@
                 android:layout_marginTop="20dp"
                 android:ems="9"
                 android:maxLength="20"
+                android:textColor="@color/white"
                 android:text="TextView"
+                android:fontFamily="@font/dosis_extrabold"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -147,8 +156,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:fontFamily="@font/dosis_extrabold"
                 android:ems="9"
                 android:maxLength="20"
+                android:textColor="@color/white"
                 android:text="TextView"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -172,7 +183,10 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="About Me:"
-            android:textSize="16sp"
+            android:background="@color/primary_500"
+            android:fontFamily="@font/dosis_extrabold"
+            android:textColor="@color/white"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <EditText
@@ -181,6 +195,7 @@
             android:layout_height="wrap_content"
             android:maxLength="300"
             android:paddingStart="10dp"
+            android:fontFamily="@font/dosis_extrabold"
             android:textSize="16sp"
             android:text="TextView" />
 
@@ -207,6 +222,7 @@
             android:onClick="logOutFunc"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
+            android:fontFamily="@font/dosis_extrabold"
             android:textSize="20sp"
             android:text="Log Out" />
     </LinearLayout>
