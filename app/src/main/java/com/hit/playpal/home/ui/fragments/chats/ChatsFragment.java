@@ -15,7 +15,7 @@ import android.widget.SearchView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.hit.playpal.R;
-import com.hit.playpal.home.adapters.recentchats.ChatsViewPagerAdapter;
+import com.hit.playpal.home.ui.adapters.recentchats.ChatsViewPagerAdapter;
 
 public class ChatsFragment extends Fragment {
     private static final String TAG = "ChatsFragment";

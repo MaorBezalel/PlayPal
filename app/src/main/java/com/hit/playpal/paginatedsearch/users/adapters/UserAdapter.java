@@ -17,6 +17,7 @@ import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.Query;
 import com.hit.playpal.R;
 import com.hit.playpal.paginatedsearch.users.utils.IBindableUser;
+import com.squareup.picasso.Picasso;
 
 public class UserAdapter<T> extends FirestorePagingAdapter<T, UserAdapter.UserViewHolder> {
     private static final int PAGE_SIZE = 20;
@@ -53,8 +54,12 @@ public class UserAdapter<T> extends FirestorePagingAdapter<T, UserAdapter.UserVi
     @NonNull
     @Override
     protected void onBindViewHolder(@NonNull UserViewHolder iUserViewHolder, int i, @NonNull T iItem) {
-        // TODO: find a way to put userimage content inside imageView
-        iUserViewHolder.userImage.setImageResource(R.drawable.ic_home_nav_myprofile);
+        String userImageUrl = mBindableUser.getUserImage(iItem);
+        if (userImageUrl == null || userImageUrl.isEmpty()) {
+            iUserViewHolder.userImage.setImageResource(R.drawable.ic_home_nav_myprofile);
+        } else {
+            Picasso.get().load(userImageUrl).into(iUserViewHolder.userImage);
+        }
         iUserViewHolder.userDisplayName.setText(mBindableUser.getDisplayName(iItem));
 
         iUserViewHolder.userCard.setOnClickListener(v -> {

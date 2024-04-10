@@ -12,24 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface IProfileRepository {
-/*    User getProfileAccountInfo(String iUsername); // display name, profile picture, about me, username
-    List<User> getFriendsOfUser(String iUsername, int iPage);
-    List<User> getFriendsOfUserByDisplayName(String iUsername, String iSearchedDisplayName, int iPage);
-    List<GroupChatRoom> getGroupChatsOfUser(String iUsername, int iPage);
-    List<GroupChatRoom> getGroupChatsOfUserByGroupChatName(String iUsername, String iSearchedGroupChatName, int iPage);
-    List<Game> getFavoriteGamesOfUser(String iUsername, int iPage);
-    List<Game> getFavoriteGamesOfUserByGameName(String iUsername, String iSearchedFavoriteGameName, int iPage);*/
-
     Task<DocumentSnapshot> getUserByUid(String iUid);
-    Task<DocumentSnapshot> getUserPrivateByUid(String iUid);
-
-    //Task<QuerySnapshot>getRoomsByParticipantUid(String uid, DocumentSnapshot lastVisible, int limit);
-
     Task<QuerySnapshot> getUserFriendsByDisplayName(String iUid, DocumentSnapshot lastVisible, int limit);
-
     Task<String> getStatus(String iUid, String iOtherUserUid);
-
-    public Task<Void> addPendingFriend(String iUid, Map<String, Object> otherUserData);
-
-    public Task<Void> removeFriend(String iUid, String otherUserUid);
+    Task<Void> addPendingFriend(String iUid, Map<String, Object> otherUserData);
+    Task<Void> removeFriend(String iUid, String otherUserUid);
 }

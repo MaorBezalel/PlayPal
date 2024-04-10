@@ -26,19 +26,20 @@ public class FirebaseFirestoreNewMessageEventListener implements EventListener<D
             return;
         }
 
-        if (iValue != null && iValue.exists()) {
-            ChatRoomType type = ChatRoomType.valueOf(iValue.get("type").toString());
+        if (iValue != null && iValue.exists())
+        {
+                ChatRoomType type = ChatRoomType.valueOf(iValue.get("type").toString());
 
-            switch (type) {
-                case ONE_TO_ONE:
-                    LISTENER.onFetched(iValue.toObject(OneToOneChatRoom.class));
-                    break;
-                case GROUP:
-                    LISTENER.onFetched(iValue.toObject(GroupChatRoom.class));
-                    break;
-                default:
-                    throw new IllegalArgumentException(TAG + ": Unsupported chat room type: " + type);
-            }
+                switch (type) {
+                    case ONE_TO_ONE:
+                        LISTENER.onFetched(iValue.toObject(OneToOneChatRoom.class));
+                        break;
+                    case GROUP:
+                        LISTENER.onFetched(iValue.toObject(GroupChatRoom.class));
+                        break;
+                    default:
+                        throw new IllegalArgumentException(TAG + ": Unsupported chat room type: " + type);
+                }
         }
     }
 }
