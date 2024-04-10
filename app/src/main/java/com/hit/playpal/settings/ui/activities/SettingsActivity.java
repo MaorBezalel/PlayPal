@@ -127,6 +127,7 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent intent = new Intent(SettingsActivity.this, ProfileActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -233,9 +234,9 @@ public class SettingsActivity extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
                     Toast.makeText(SettingsActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SettingsActivity.this, ProfileActivity.class);
+/*                    Intent intent = new Intent(SettingsActivity.this, ProfileActivity.class);
                     startActivity(intent);
-                    finish();
+                    finish();*/
                 } else {
                     // Handle the error
                     Log.e("SettingsActivity", "Failed to update profile", task.getException());

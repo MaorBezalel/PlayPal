@@ -1,15 +1,12 @@
 package com.hit.playpal.profile.data.repositories;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.profile.data.datasources.ProfileFirebaseFirestoreDataSource;
 import com.hit.playpal.profile.domain.repositories.IProfileRepository;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ProfileRepository implements IProfileRepository {
@@ -22,16 +19,16 @@ public class ProfileRepository implements IProfileRepository {
     }
 
 
-
     @Override
     public Task<QuerySnapshot> getUserFriendsByDisplayName(String iUid, DocumentSnapshot lastVisible, int limit) {
         return DB.getUserFriends(iUid, lastVisible, limit);
     }
 
     @Override
-    public Task<String> getStatus(String iUid, String iOtherUserUid){
+    public Task<String> getStatus(String iUid, String iOtherUserUid) {
         return DB.getStatus(iUid, iOtherUserUid);
     }
+
     @Override
     public Task<Void> addPendingFriend(String iUid, Map<String, Object> otherUserData) {
         Map<String, Object> data = new HashMap<>();
@@ -44,6 +41,11 @@ public class ProfileRepository implements IProfileRepository {
     @Override
     public Task<Void> removeFriend(String iUid, String otherUserUid) {
         return DB.deleteRelationshipDocument(iUid, otherUserUid);
+    }
+
+    @Override
+    public Task<Void> sendFriendRequest(String iReceiverId, String iSenderUid, String iSenderDisplayName, String iSenderProfileImage) {
+        return DB.sendFriendRequest( iReceiverId,  iSenderUid,  iSenderDisplayName,  iSenderProfileImage).continueWith(task -> null);
     }
 
 }
