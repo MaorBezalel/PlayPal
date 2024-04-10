@@ -97,4 +97,8 @@ public class ChatsFragment extends Fragment {
         CreateGroupChatRoomDialogFragment dialog = new CreateGroupChatRoomDialogFragment();
         dialog.show(getChildFragmentManager(), "CreateGroupChatRoomDialogFragment");
     }
+
+    private void handleSuccessfulGroupChatRoomCreation() {
+        // I need to refresh the recycler views in the AllChatsFragment and the GroupChatsFragment that are displayed by the ViewPager2
+    }
 }

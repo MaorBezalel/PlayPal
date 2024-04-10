@@ -3,10 +3,7 @@ package com.hit.playpal.chatrooms.domain.usecases.chatinfopage;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.hit.playpal.chatrooms.domain.repositories.IChatRoomRepository;
 import com.hit.playpal.chatrooms.domain.utils.exceptions.RoomNotFound;
-import com.hit.playpal.entities.chats.GroupChatRoom;
 import com.hit.playpal.entities.chats.GroupProfile;
-import com.hit.playpal.entities.chats.Participant;
-import com.hit.playpal.entities.users.User;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -18,8 +15,8 @@ public class GetMembersOfGroupChatUseCase {
         REPOSITORY = iRepository;
     }
 
-    public CompletableFuture<List<Participant>> execute(String iChatRoomId) {
-            CompletableFuture<List<Participant>> future = new CompletableFuture<>();
+    public CompletableFuture<List<GroupProfile.Participant>> execute(String iChatRoomId) {
+            CompletableFuture<List<GroupProfile.Participant>> future = new CompletableFuture<>();
 
             REPOSITORY.getChatRoom(iChatRoomId)
                     .addOnCompleteListener(task -> {

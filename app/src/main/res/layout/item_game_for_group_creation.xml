@@ -7,35 +7,35 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="20dp"
     android:checkable="true"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="30dp"
     app:cardElevation="10dp"
-    app:cardBackgroundColor="@color/white"
-    app:cardUseCompatPadding="true"
     app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
     app:strokeColor="@color/black"
     app:strokeWidth="3dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="153dp">
 
         <ImageView
             android:id="@+id/imageview_create_group_chat_game_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/textview_create_group_chat_game_title"
-            android:layout_width="match_parent"
+            android:layout_width="371dp"
             android:layout_height="wrap_content"
-            android:text="Game Title"
-            android:textColor="@color/text"
-            android:fontFamily="@font/comfortaa_bold"
-            android:textSize="26sp"
-            android:padding="40dp"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/bebas_neue"
             android:gravity="center"
-            android:layout_centerInParent="true" />
+            android:padding="40dp"
+            android:text="Game Title"
+            android:textColor="@color/secondary"
+            android:textSize="26sp" />
 
     </RelativeLayout>
 

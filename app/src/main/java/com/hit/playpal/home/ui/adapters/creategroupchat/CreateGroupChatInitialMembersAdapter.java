@@ -1,4 +1,4 @@
-package com.hit.playpal.home.adapters.creategroupchat;
+package com.hit.playpal.home.ui.adapters.creategroupchat;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +18,10 @@ import com.hit.playpal.R;
 import com.hit.playpal.entities.users.User;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class InitialMembersAdapter extends FirestorePagingAdapter<User, InitialMembersAdapter.InitialMembersViewHolder> {
+public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter<User, CreateGroupChatInitialMembersAdapter.InitialMembersViewHolder> {
     private static final String TAG = "InitialMembersAdapter";
     private static final int PAGE_SIZE = 20;
     private static final int PAGE_PREFETCH_DISTANCE = 5;
@@ -39,7 +37,7 @@ public class InitialMembersAdapter extends FirestorePagingAdapter<User, InitialM
 
     private static final PagingConfig PAGING_CONFIG = new PagingConfig(PAGE_SIZE, PAGE_PREFETCH_DISTANCE, false);
 
-    public InitialMembersAdapter(Query iQuery, LifecycleOwner iOwner) {
+    public CreateGroupChatInitialMembersAdapter(Query iQuery, LifecycleOwner iOwner) {
         super(new FirestorePagingOptions.Builder<User>()
                 .setLifecycleOwner(iOwner)
                 .setQuery(iQuery, PAGING_CONFIG, User.class)
@@ -67,7 +65,13 @@ public class InitialMembersAdapter extends FirestorePagingAdapter<User, InitialM
     @Override
     protected void onBindViewHolder(@NonNull InitialMembersViewHolder iHolder, int iPosition, @NonNull User iCurrentUser) {
         iHolder.USERNAME_TEXT_VIEW.setText(iCurrentUser.getUsername());
-        Picasso.get().load(iCurrentUser.getProfilePicture()).into(iHolder.PROFILE_PICTURE_VIEW);
+
+        if (iCurrentUser.getProfilePicture() == null || iCurrentUser.getProfilePicture().isEmpty()) {
+            Picasso.get().load(R.drawable.ic_home_nav_myprofile).into(iHolder.PROFILE_PICTURE_VIEW);
+            iHolder.PROFILE_PICTURE_VIEW.setScaleType(ImageView.ScaleType.FIT_XY);
+        } else {
+            Picasso.get().load(iCurrentUser.getProfilePicture()).into(iHolder.PROFILE_PICTURE_VIEW);
+        }
 
         iHolder.CARD_VIEW.setOnClickListener(v -> {
             if (mSelectedCardViews.contains(iHolder.CARD_VIEW)) {

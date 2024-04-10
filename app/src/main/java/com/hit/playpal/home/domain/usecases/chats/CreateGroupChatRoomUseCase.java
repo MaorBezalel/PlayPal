@@ -1,6 +1,9 @@
 package com.hit.playpal.home.domain.usecases.chats;
 
-import com.hit.playpal.entities.chats.ChatRoom;
+import android.util.Log;
+
+import com.hit.playpal.entities.chats.GroupChatRoom;
+import com.hit.playpal.entities.chats.GroupProfile;
 import com.hit.playpal.home.data.repositories.CreateGroupChatRoomRepository;
 import com.hit.playpal.home.domain.enums.CreateGroupChatRoomFailure;
 import com.hit.playpal.home.domain.repositories.ICreateGroupChatRoomRepository;
@@ -15,21 +18,23 @@ public class CreateGroupChatRoomUseCase {
         REPOSITORY = iRepository;
     }
 
-    public CompletableFuture<UseCaseResult<Void, CreateGroupChatRoomFailure>> execute(ChatRoom iChatRoom) {
-        CompletableFuture<UseCaseResult<Void, CreateGroupChatRoomFailure>> future = new CompletableFuture<>();
+    public CompletableFuture<UseCaseResult<String, CreateGroupChatRoomFailure>> execute(GroupChatRoom iGroupChatRoom) {
+        CompletableFuture<UseCaseResult<String, CreateGroupChatRoomFailure>> future = new CompletableFuture<>();
 
-        REPOSITORY.createGroupChatRoom(iChatRoom).addOnCompleteListener(task -> {
+        REPOSITORY.createGroupChatRoom(iGroupChatRoom).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                future.complete(UseCaseResult.forSuccessWithoutResult());
+                Log.i("CreateGroupChatRoomUseCase", "Group chat room created successfully");
+                future.complete(UseCaseResult.forSuccess(task.getResult().getId()));
             } else {
-                future.complete(UseCaseResult.forFailure(CreateGroupChatRoomFailure.UNKNOWN_ERROR));
+                Log.e("CreateGroupChatRoomUseCase", "Group chat room creation failed", task.getException());
+                future.complete(UseCaseResult.forFailure(CreateGroupChatRoomFailure.GROUP_CHAT_ROOM_CREATION_FAILED));
             }
         });
 
         return future;
     }
 
-    public static CompletableFuture<UseCaseResult<Void, CreateGroupChatRoomFailure>> invoke(ChatRoom iChatRoom) {
-        return new CreateGroupChatRoomUseCase(new CreateGroupChatRoomRepository()).execute(iChatRoom);
+    public static CompletableFuture<UseCaseResult<String, CreateGroupChatRoomFailure>> invoke(GroupChatRoom iGroupChatRoom) {
+        return new CreateGroupChatRoomUseCase(new CreateGroupChatRoomRepository()).execute(iGroupChatRoom);
     }
 }

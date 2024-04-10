@@ -1,4 +1,4 @@
-package com.hit.playpal.home.adapters.creategroupchat;
+package com.hit.playpal.home.ui.adapters.creategroupchat;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +16,9 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.firestore.Query;
 import com.hit.playpal.R;
 import com.hit.playpal.entities.games.Game;
-import com.hit.playpal.home.domain.usecases.games.GenerateQueryForAllGamesUseCase;
 import com.squareup.picasso.Picasso;
 
-public class GamesAdapter extends FirestorePagingAdapter<Game, GamesAdapter.GameViewHolder> {
+public class CreateGroupChatGamesAdapter extends FirestorePagingAdapter<Game, CreateGroupChatGamesAdapter.GameViewHolder> {
     private static final int PAGE_SIZE = 20;
     private static final int PAGE_PREFETCH_DISTANCE = 5;
     private static final PagingConfig PAGING_CONFIG = new PagingConfig(PAGE_SIZE, PAGE_PREFETCH_DISTANCE, false);
@@ -31,7 +30,7 @@ public class GamesAdapter extends FirestorePagingAdapter<Game, GamesAdapter.Game
         return mSelectedGame;
     }
 
-    public GamesAdapter(Query iQuery, LifecycleOwner iOwner) {
+    public CreateGroupChatGamesAdapter(Query iQuery, LifecycleOwner iOwner) {
         super(new FirestorePagingOptions.Builder<Game>()
                 .setLifecycleOwner(iOwner)
                 .setQuery(iQuery, PAGING_CONFIG, Game.class)
@@ -65,7 +64,10 @@ public class GamesAdapter extends FirestorePagingAdapter<Game, GamesAdapter.Game
                 mSelectedCardView = null;
             } else {
                 iHolder.CARD_VIEW.setChecked(true);
-                mSelectedCardView.setChecked(false);
+
+                if (mSelectedCardView != null) {
+                    mSelectedCardView.setChecked(false);
+                }
 
                 mSelectedCardView = iHolder.CARD_VIEW;
                 mSelectedGame = iCurrentGame;

@@ -1,4 +1,4 @@
-package com.hit.playpal.home.domain.usecases;
+package com.hit.playpal.home.domain.usecases.users;
 
 import com.google.firebase.firestore.Query;
 import com.hit.playpal.home.data.repositories.CreateGroupChatRoomRepository;

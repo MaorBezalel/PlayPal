@@ -61,7 +61,6 @@ public class CreateGroupChatRoomDialogFragment extends DialogFragment {
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.linearlayout_create_group_chat_room_dialog, groupChatDetailsFormFragment)
                 .commit();
-
     }
 
 }

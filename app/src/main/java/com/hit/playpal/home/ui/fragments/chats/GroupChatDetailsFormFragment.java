@@ -31,6 +31,7 @@ public class GroupChatDetailsFormFragment extends Fragment {
     private TextInputLayout mGroupChatRoomName;
     private TextInputLayout mGroupChatRoomDescription;
     private MaterialButton mNextButton;
+    private Uri mGroupChatRoomImageUri;
 
     private final ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -38,8 +39,8 @@ public class GroupChatDetailsFormFragment extends Fragment {
                     // There are no request codes
                     Intent data = result.getData();
                     if (data != null) {
-                        Uri selectedImage = data.getData();
-                        mGroupChatRoomImage.setImageURI(selectedImage);
+                        mGroupChatRoomImageUri = data.getData();
+                        mGroupChatRoomImage.setImageURI(mGroupChatRoomImageUri);
                     }
                 }
             });
@@ -105,12 +106,17 @@ public class GroupChatDetailsFormFragment extends Fragment {
         String groupChatRoomDescription = mGroupChatRoomDescription.getEditText().getText().toString();
 
         if (isGroupChatRoomNameValid() && isGroupChatRoomDescriptionValid()) {
-            mFragmentParent.getViewModel().GROUP_CHAT_ROOM_TO_CREATE.setName(groupChatRoomName);
+            // Store the group chat room details in the view model
+            mFragmentParent.getViewModel().setGroupChatRoomDetails(mGroupChatRoomImageUri, groupChatRoomName, groupChatRoomDescription);
 
-            // TODO: Need to find a way to set the description (currently not part of the firestore document)
-            //FRAGMENT_PARENT.getViewModel().GROUP_CHAT_ROOM_TO_CREATE.setDescription(groupChatRoomDescription);
+            // Create a new instance of GroupChatGameFormFragment
+            GroupChatGameFormFragment groupChatGameFormFragment = new GroupChatGameFormFragment();
 
-
+            // Replace the current fragment with the new instance
+            mFragmentParent.getChildFragmentManager().beginTransaction()
+                    .replace(R.id.linearlayout_create_group_chat_room_dialog, groupChatGameFormFragment)
+                    .addToBackStack(null) // add transaction to back stack to enable going back
+                    .commit();
 
         } else {
             Toast.makeText(getContext(), "Please address the errors in the form before proceeding...", Toast.LENGTH_SHORT).show();

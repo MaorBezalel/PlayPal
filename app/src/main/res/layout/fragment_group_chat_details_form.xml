@@ -51,13 +51,12 @@
             android:id="@+id/imageview_create_group_chat_group_picture"
             android:layout_width="125dp"
             android:layout_height="125dp"
-            android:layout_below="@id/relativelayout_create_group_chat_toolbar"
             android:layout_gravity="center"
+            android:src="@drawable/ic_home_nav_search_groupchats"
+            android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-            app:srcCompat="@drawable/ic_group"
             app:strokeColor="@color/secondary"
-            app:strokeWidth="2dp"
-            app:tint="@color/primary" />
+            app:strokeWidth="2dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textinputlayout_create_group_chat_group_name"

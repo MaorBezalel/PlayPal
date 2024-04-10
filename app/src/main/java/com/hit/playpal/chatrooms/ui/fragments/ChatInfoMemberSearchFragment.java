@@ -19,8 +19,7 @@ import android.widget.TextView;
 import com.hit.playpal.R;
 import com.hit.playpal.chatrooms.ui.adapters.UsersInGroupChatAdapter;
 import com.hit.playpal.chatrooms.ui.viewmodels.ChatInfoViewModel;
-import com.hit.playpal.entities.chats.Participant;
-import com.hit.playpal.entities.users.User;
+import com.hit.playpal.entities.chats.GroupProfile;
 import com.hit.playpal.paginatedsearch.users.adapters.IUserAdapter;
 import com.hit.playpal.profile.ui.activities.ProfileActivity;
 
@@ -95,7 +94,7 @@ public class ChatInfoMemberSearchFragment extends Fragment {
         initializeButtonEvents();
     }
 
-    private void initializeRecyclerView(List<Participant> iUsersList)
+    private void initializeRecyclerView(List<GroupProfile.Participant> iUsersList)
     {
         mUsersInGroupChatAdapter = new UsersInGroupChatAdapter(iUsersList, new IUserAdapter() {
             @Override

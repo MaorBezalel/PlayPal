@@ -1,19 +1,17 @@
 package com.hit.playpal.chatrooms.ui.viewmodels;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.hit.playpal.chatrooms.data.repositories.ChatRoomRepository;
 import com.hit.playpal.chatrooms.domain.usecases.chatinfopage.GetMembersOfGroupChatUseCase;
-import com.hit.playpal.entities.chats.Participant;
-import com.hit.playpal.entities.users.User;
+import com.hit.playpal.entities.chats.GroupProfile;
 
 import java.util.List;
 
 public class ChatInfoViewModel  extends ViewModel
 {
-    private MutableLiveData<List<Participant>> mMembersList;
+    private MutableLiveData<List<GroupProfile.Participant>> mMembersList;
     private MutableLiveData<String> mGetMemberListSuccess;
     private MutableLiveData<String> mGetMemberListError;
 
@@ -42,7 +40,7 @@ public class ChatInfoViewModel  extends ViewModel
                 });
     }
 
-    public MutableLiveData<List<Participant>> getMembersList()
+    public MutableLiveData<List<GroupProfile.Participant>> getMembersList()
     {
         return mMembersList;
     }

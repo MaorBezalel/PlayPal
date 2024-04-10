@@ -16,7 +16,7 @@ import com.hit.playpal.chatrooms.domain.listeners.INewMessageRegistrationListene
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.ListenToLatestMessageUseCase;
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.SendMessageUseCase;
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.UpdateChatRoomLastMessageUseCase;
-import com.hit.playpal.chatrooms.domain.usecases.chatbody.FetchMessagesUseCase2;
+import com.hit.playpal.chatrooms.domain.usecases.chatbody.FetchMessagesUseCase;
 import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.chats.Message;
 import com.hit.playpal.entities.users.User;
@@ -126,9 +126,9 @@ public class ChatRoomViewModel extends ViewModel {
 
     public void fetchMessages(long iPageSize)
     {
-        FetchMessagesUseCase2 fetchMessagesUseCase2 = new FetchMessagesUseCase2(new ChatRoomRepository());
+        FetchMessagesUseCase fetchMessagesUseCase = new FetchMessagesUseCase(new ChatRoomRepository());
         Out<DocumentSnapshot> mNewlyLatestMessageRef = new Out<>(null);
-        fetchMessagesUseCase2.execute(CHAT_ROOM_LIVE_DATA.getValue().getId(), iPageSize, mLatestMessageRef, mNewlyLatestMessageRef)
+        fetchMessagesUseCase.execute(CHAT_ROOM_LIVE_DATA.getValue().getId(), iPageSize, mLatestMessageRef, mNewlyLatestMessageRef)
                 .whenComplete((messages, exception) -> {
                     if (exception == null)
                     {
