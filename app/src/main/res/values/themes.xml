@@ -47,10 +47,5 @@
         <item name="android:textColorHint">#A5A5A5</item>
     </style>
 
-    <style name="MyEditTextTheme" parent="ThemeOverlay.AppCompat.Light">
-        <item name="colorControlNormal">@color/white</item>
-        <item name="colorControlActivated">@color/white</item>
-    </style>
-
     <style name="Theme.PlayPal" parent="Base.Theme.PlayPal" />
 </resources>

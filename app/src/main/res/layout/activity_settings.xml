@@ -79,8 +79,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:layout_weight="1">
+            android:layout_marginStart="5dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageSetViewAvatar"
@@ -90,7 +89,7 @@
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                 app:srcCompat="@drawable/ic_home_nav_myprofile"
                 app:strokeColor="@color/primary_500"
-                app:strokeWidth="2dp"/>
+                app:strokeWidth="2dp" />
 
             <ImageView
                 android:id="@+id/imageEditIcon"
@@ -103,69 +102,82 @@
         </FrameLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
-            android:background="@color/primary_500"
+            android:background="@drawable/profile_border2"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewUserNameSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="User Name:"
-                android:textColor="@color/white"
-                android:fontFamily="@font/dosis_extrabold"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textViewDisplayNameSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Display Name:"
-                android:textColor="@color/white"
-                android:fontFamily="@font/dosis_extrabold"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@color/primary_500"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/editTextSetUserName"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:ems="9"
-                android:maxLength="20"
-                android:textColor="@color/white"
-                android:text="TextView"
-                android:fontFamily="@font/dosis_extrabold"
-                android:textSize="16sp"
-                android:theme="@style/MyEditTextTheme"
-                android:textStyle="bold" />
+                android:layout_height="71dp"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/editTextSetDisplayName"
+                <TextView
+                    android:id="@+id/textViewUserNameSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dosis_extrabold"
+                    android:paddingStart="100dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginTop="3dp"
+                    android:text="User Name:"
+                    android:background="@drawable/profile_border4"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextSetUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:ems="11"
+                    android:fontFamily="@font/dosis_extrabold"
+                    android:maxLength="20"
+                    android:text="TextView"
+                    android:drawableRight="@drawable/edit_icon"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/dosis_extrabold"
-                android:ems="9"
-                android:maxLength="20"
-                android:textColor="@color/white"
-                android:theme="@style/MyEditTextTheme"
-                android:text="TextView"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewDisplayNameSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:paddingStart="85dp"
+                    android:background="@color/primary_500"
+                    android:fontFamily="@font/dosis_extrabold"
+                    android:text="Display Name:"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+
+
+                <EditText
+                    android:id="@+id/editTextSetDisplayName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="11"
+                    android:fontFamily="@font/dosis_extrabold"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:drawableRight="@drawable/edit_icon"
+                    android:maxLength="20"
+                    android:text="TextView"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
@@ -173,7 +185,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.4"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
@@ -186,8 +198,13 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="About Me:"
-            android:background="@color/primary_500"
+            android:background="@drawable/profile_border3"
+            android:paddingStart="40dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
             android:fontFamily="@font/dosis_extrabold"
+            android:drawableRight="@drawable/edit_icon"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
