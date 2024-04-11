@@ -64,68 +64,77 @@
                 app:strokeWidth="2dp"/>
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:background="@color/primary_500"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textViewUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dosis_extrabold"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="3dp"
-                    android:text="User Name:"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textViewDisplayName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:fontFamily="@font/dosis_extrabold"
-                    android:text="Display Name:"
-                    android:layout_marginStart="3dp"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/primary_500"
-
+                android:background="@drawable/profile_border2"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textViewGetUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="TextView"
-                    android:textColor="@color/white"
-                    android:layout_marginStart="3dp"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/dosis_extrabold"
-                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="71dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textViewGetDisplayName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dosis_extrabold"
-                    android:layout_marginTop="30dp"
-                    android:text="TextView"
-                    android:textColor="@color/white"
-                    android:layout_marginStart="3dp"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/textViewUserName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/profile_border4"
+                        android:fontFamily="@font/dosis_extrabold"
+                        android:paddingStart="100dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginTop="3dp"
+                        android:text="User Name:"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewGetUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dosis_extrabold"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:text="TextView"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewDisplayName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary_500"
+                        android:fontFamily="@font/dosis_extrabold"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:paddingStart="85dp"
+                        android:text="Display Name:"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/textViewGetDisplayName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dosis_extrabold"
+                        android:text="TextView"
+                        android:layout_gravity="center"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -145,7 +154,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:fontFamily="@font/dosis_extrabold"
-                android:background="@color/primary_500"
+                android:background="@drawable/profile_border3"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
                 android:textColor="@color/white"
                 android:text="About Me:"
                 android:textSize="20sp"
@@ -157,6 +169,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dosis_extrabold"
                 android:paddingStart="16dp"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:text="TextView" />
 
@@ -217,6 +230,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/profile_buttons_design"
+                android:fontFamily="@font/dosis_extrabold"
                 android:onClick="buttonSettingsFunc"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
