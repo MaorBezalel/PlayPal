@@ -2,7 +2,8 @@
 <resources>
     <color name="splash_screen">#543885</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="green">#FFA2DCA0</color>
 
     <!--   Text Colors    -->
     <color name="text">#120227</color> <!-- default text color -->
