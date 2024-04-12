@@ -26,6 +26,10 @@ public class GroupChatRoom extends ChatRoom {
     @PropertyName("profile_picture") public String getProfilePicture() { return mProfilePicture; }
     @PropertyName("profile_picture") public void setProfilePicture(String iProfilePicture) { mProfilePicture = iProfilePicture; }
 
+    @PropertyName("description") private String mDescription;
+    @PropertyName("description") public String getDescription() { return mDescription; }
+    @PropertyName("description") public void setDescription(String iDescription) { mDescription = iDescription; }
+
     @PropertyName("game") private Game mGame;
     @PropertyName("game") public Game getGame() { return mGame; }
     @PropertyName("game") public void setGame(Game iGame) { mGame = iGame; }
@@ -34,10 +38,11 @@ public class GroupChatRoom extends ChatRoom {
         super();
         mType = ChatRoomType.GROUP;
     }
-    public GroupChatRoom(String iChatRoomId, List<String> iMembersUid, Message iLastMessage, String iName, String iProfilePicture, Game iGame) {
+    public GroupChatRoom(String iChatRoomId, List<String> iMembersUid, Message iLastMessage, String iName, String iProfilePicture, String iDescription, Game iGame) {
         super(iChatRoomId, ChatRoomType.GROUP, iMembersUid, iLastMessage);
         mName = iName;
         mProfilePicture = iProfilePicture;
+        mDescription = iDescription;
         mGame = iGame;
     }
 
@@ -45,6 +50,7 @@ public class GroupChatRoom extends ChatRoom {
         super(iIn);
         mName = iIn.readString();
         mProfilePicture = iIn.readString();
+        mDescription = iIn.readString();
         mGame = iIn.readParcelable(Game.class.getClassLoader());
     }
 
@@ -53,6 +59,7 @@ public class GroupChatRoom extends ChatRoom {
         super.writeToParcel(iDest, iFlags);
         iDest.writeString(mName);
         iDest.writeString(mProfilePicture);
+        iDest.writeString(mDescription);
         iDest.writeParcelable(mGame, iFlags);
     }
 

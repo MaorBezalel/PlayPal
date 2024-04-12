@@ -103,10 +103,12 @@ public class ChatRoomProfileFragment extends Fragment {
 
     private void initChatRoomDescriptionTextView(@NonNull View iView) {
         mChatRoomDescriptionTextView = iView.findViewById(R.id.textview_chat_room_profile_chat_room_description);
-        // TODO: Need to get access to the group chat room description
 
-        // for now, we will set a default description
-        mChatRoomDescriptionTextView.setText("This is a group chat room for gamers who love to play together.");
+        if (mGroupChatRoom.getDescription() != null && !mGroupChatRoom.getDescription().isEmpty()) {
+            mChatRoomDescriptionTextView.setText(mGroupChatRoom.getDescription());
+        } else {
+            mChatRoomDescriptionTextView.setText("");
+        }
     }
 
     private void initChatRoomGameCardView(@NonNull View iView) {
@@ -153,7 +155,8 @@ public class ChatRoomProfileFragment extends Fragment {
 
         // check if user is already a member of the group chat room
         if (mGroupChatRoom.getMembersUid().contains(mCurrentUser.getUid())) {
-            mChatRoomJoinButton.setEnabled(false); // TODO: improve this
+            mChatRoomJoinButton.setEnabled(false);
+            mChatRoomJoinButton.setText("Already a member");
         }
 
         // Listeners
@@ -167,6 +170,7 @@ public class ChatRoomProfileFragment extends Fragment {
             mChatRoomJoinProgressBar.setVisibility(View.INVISIBLE);
             mChatRoomJoinButton.setVisibility(View.VISIBLE);
             mChatRoomJoinButton.setEnabled(false);
+            mChatRoomJoinButton.setText("Already a member");
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         });
 

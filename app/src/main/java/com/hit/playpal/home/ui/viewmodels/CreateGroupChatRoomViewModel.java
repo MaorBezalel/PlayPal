@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.firestore.Query;
@@ -19,6 +20,7 @@ import com.hit.playpal.home.domain.usecases.chats.UploadGroupChatRoomProfileImag
 import com.hit.playpal.home.domain.usecases.users.GenerateQueryForAllUsersUseCase;
 import com.hit.playpal.home.domain.usecases.games.GenerateQueryForAllGamesUseCase;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
+import com.hit.playpal.utils.Out;
 import com.hit.playpal.utils.UseCaseResult;
 
 import java.util.Set;
@@ -53,9 +55,8 @@ public class CreateGroupChatRoomViewModel extends ViewModel {
 
     public void setGroupChatRoomDetails(Uri iGroupPictureUri, String iGroupName, String iGroupDescription) {
         mGroupChatRoom.setName(iGroupName);
+        mGroupChatRoom.setDescription(iGroupDescription);
         mGroupProfile.setDescription(iGroupDescription);
-
-        // for now, we are not storing the image in the database
         mGroupPictureUri = iGroupPictureUri;
         mGroupChatRoom.setProfilePicture("");
     }

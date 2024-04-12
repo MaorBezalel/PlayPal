@@ -6,31 +6,35 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
+    android:padding="5dp"
     tools:context=".home.ui.fragments.chats.ChatsFragment">
 
-    <SearchView
-        android:id="@+id/searchview_chats"
+    <TextView
+        android:id="@+id/textview_chats_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="60dp"
-        android:background="@color/secondary_50"
-        android:queryHint="Search for chats... (WORK IN PROGRESS)" />
+        android:background="@color/primary_500"
+        android:padding="5dp"
+        android:gravity="center"
+        android:text="User's Chats Browser"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/dosis_extrabold" />
+
 
     <LinearLayout
         android:id="@+id/linearlayout_chats"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_below="@id/searchview_chats">
+        android:layout_below="@id/textview_chats_toolbar">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tablayout_chats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background"
+            android:background="@color/background_100"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             app:tabIndicatorColor="@color/secondary"

@@ -52,6 +52,10 @@ public class AllChatRoom implements Parcelable {
     @PropertyName("profile_picture") public String getProfilePicture() { return mProfilePicture; }
     @PropertyName("profile_picture") public void setProfilePicture(String iProfilePicture) { mProfilePicture = iProfilePicture; }
 
+    @PropertyName("description") private String mDescription;
+    @PropertyName("description") public String getDescription() { return mDescription; }
+    @PropertyName("description") public void setDescription(String iDescription) { mDescription = iDescription; }
+
     @PropertyName("game") private GroupChatRoom.Game mGame;
     @PropertyName("game") public GroupChatRoom.Game getGame() { return mGame; }
     @PropertyName("game") public void setGame(GroupChatRoom.Game iGame) { mGame = iGame; }
@@ -65,6 +69,7 @@ public class AllChatRoom implements Parcelable {
             HashMap<String, OneToOneChatRoom.OtherMemberData> iOtherMemberData,
             String iName,
             String iProfilePicture,
+            String iDescription,
             GroupChatRoom.Game iGame
     ) {
         mId = iId;
@@ -74,21 +79,24 @@ public class AllChatRoom implements Parcelable {
         mOtherMemberData = iOtherMemberData;
         mName = iName;
         mProfilePicture = iProfilePicture;
+        mDescription = iDescription;
         mGame = iGame;
     }
 
     protected AllChatRoom(@NonNull Parcel iIn) {
         mId = iIn.readString();
         mType = ChatRoomType.valueOf(iIn.readString());
-
-
         mLastMessage = iIn.readParcelable(Message.class.getClassLoader());
+
+        mMembersUid = new ArrayList<>();
+        iIn.readStringList(mMembersUid);
 
         mOtherMemberData = new HashMap<>();
         iIn.readMap(mOtherMemberData, OneToOneChatRoom.OtherMemberData.class.getClassLoader());
 
         mName = iIn.readString();
         mProfilePicture = iIn.readString();
+        mDescription = iIn.readString();
         mGame = iIn.readParcelable(GroupChatRoom.Game.class.getClassLoader());
     }
 
@@ -96,7 +104,7 @@ public class AllChatRoom implements Parcelable {
         if (mType == ChatRoomType.ONE_TO_ONE) {
             return new OneToOneChatRoom(mId, mMembersUid, mLastMessage, mOtherMemberData);
         } else if (mType == ChatRoomType.GROUP) {
-            return new GroupChatRoom(mId, mMembersUid, mLastMessage, mName, mProfilePicture, mGame);
+            return new GroupChatRoom(mId, mMembersUid, mLastMessage, mName, mProfilePicture, mDescription, mGame);
         } else {
             Log.e("AllChatRoom", "Unknown chat room type: " + mType);
             return null;
@@ -112,6 +120,7 @@ public class AllChatRoom implements Parcelable {
         iDest.writeMap(mOtherMemberData);
         iDest.writeString(mName);
         iDest.writeString(mProfilePicture);
+        iDest.writeString(mDescription);
         iDest.writeParcelable(mGame, iFlags);
     }
 
