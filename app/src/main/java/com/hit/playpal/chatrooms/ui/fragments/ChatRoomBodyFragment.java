@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.imageview.ShapeableImageView;
@@ -31,14 +33,16 @@ import com.hit.playpal.utils.EndlessRecyclerViewScrollListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ChatRoomBodyFragment extends Fragment {
     private static final String TAG = "ChatRoomBodyFragment";
-    private final int PAGE_SIZE = 10;
+    private final int PAGE_SIZE = 20;
 
     private ChatRoomViewModel mChatRoomViewModel;
 
+    private RelativeLayout mChatRoomNameAndImageContainer;
     private TextView mChatRoomNameTextView;
     private ShapeableImageView mChatRoomImageImageView;
     private ImageButton mChatRoomBackButton;
@@ -51,8 +55,11 @@ public class ChatRoomBodyFragment extends Fragment {
 
 
     private MessageAdapter mMessageAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
 
     private INewMessageRegistrationListener mNewMessageRegistrationListener;
+
+    private ProgressBar mMessagesProgressBarLoading;
 
 
     private AtomicInteger mCount = new AtomicInteger(0);
@@ -68,10 +75,10 @@ public class ChatRoomBodyFragment extends Fragment {
         getViewModelFromActivity();
         initViews(iView);
         observeViewModel();
-        Log.d(TAG, "onViewCreated: RecyclerView count: " + mChatRoomMessagesRecyclerView.getChildCount() + ", Adapter count: " + mMessageAdapter.getItemCount());
     }
 
     private void initViews(@NonNull View iView) {
+        initChatRoomNameAndImageContainer(iView);
         initChatRoomNameView(iView);
         initChatRoomProfilePictureView(iView);
         initChatRoomBackButton(iView);
@@ -99,12 +106,30 @@ public class ChatRoomBodyFragment extends Fragment {
     }
 
     private void observePaginatedMessages() {
+        AtomicBoolean firstTime = new AtomicBoolean(true);
+
+        mMessagesProgressBarLoading = getView().findViewById(R.id.progressbar_chat_room_messages_loading);
+        mMessagesProgressBarLoading.setVisibility(View.VISIBLE);
+        mChatRoomMessagesRecyclerView.setVisibility(View.INVISIBLE);
+
         mChatRoomViewModel.getFetchMessagesSuccess().observe(getViewLifecycleOwner(), message -> {
+            if (firstTime.get()) {
+                mMessagesProgressBarLoading.setVisibility(View.INVISIBLE);
+                mChatRoomMessagesRecyclerView.setVisibility(View.VISIBLE);
+                firstTime.set(false);
+            }
+
             List<Message> messages = mChatRoomViewModel.getNewMessages().getValue();
             mMessageAdapter.addNewMessages(messages);
         });
 
         mChatRoomViewModel.getFetchMessagesError().observe(getViewLifecycleOwner(), message -> {
+            if (firstTime.get()) {
+                mMessagesProgressBarLoading.setVisibility(View.INVISIBLE);
+                mChatRoomMessagesRecyclerView.setVisibility(View.VISIBLE);
+                firstTime.set(false);
+            }
+
             mChatRoomMessagesRecyclerView.removeOnScrollListener(mEndlessRecyclerViewScrollListener);
         });
     }
@@ -119,16 +144,33 @@ public class ChatRoomBodyFragment extends Fragment {
 
     private void observeWhenNewMessageReceived() {
         mChatRoomViewModel.getChatRoomLiveData().observe(getViewLifecycleOwner(), chatRoom -> {
-            if(mInitializeListenerCounter < 2)
-            {
+            if(mInitializeListenerCounter < 2) {
                 mInitializeListenerCounter++;
                 return;
             }
-          if(!chatRoom.getLastMessage().getSender().getUid().equals(CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid()))
-          {
-              mMessageAdapter.addNewMessage(chatRoom.getLastMessage());
-          }
+
+            if (chatRoom.getLastMessage().getSender() == null) {
+                return;
+            }
+
+            if (!chatRoom.getLastMessage().getSender().getUid().equals(CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid())) {
+                  mMessageAdapter.addNewMessage(chatRoom.getLastMessage());
+            }
         });
+    }
+
+    private void initChatRoomNameAndImageContainer(@NonNull View iView) {
+        if (mChatRoomViewModel.getChatRoomLiveData().getValue() instanceof GroupChatRoom) {
+            mChatRoomNameAndImageContainer = iView.findViewById(R.id.relativelayout_chat_room_name_and_profile_picture);
+            mChatRoomNameAndImageContainer.setOnClickListener(v -> {
+                ChatRoomProfileFragment chatRoomProfileFragment = new ChatRoomProfileFragment();
+
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.main, chatRoomProfileFragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
     }
 
     private void initChatRoomNameView(@NonNull View iView) {
@@ -168,28 +210,45 @@ public class ChatRoomBodyFragment extends Fragment {
 
     private void initChatRoomBackButton(@NonNull View iView) {
         mChatRoomBackButton = iView.findViewById(R.id.imagebutton_chat_room_back);
-        mChatRoomBackButton.setOnClickListener(v -> {
-            getParentFragmentManager().popBackStack();
-        });
+        mChatRoomBackButton.setOnClickListener(v -> requireActivity().finish());
     }
 
     private void initChatRoomMessagesRecyclerView(@NonNull View iView) {
         mChatRoomMessagesRecyclerView = iView.findViewById(R.id.recyclerview_chat_room_messages);
-        mMessageAdapter = new MessageAdapter();
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setReverseLayout(true);
-        mChatRoomMessagesRecyclerView.setAdapter(mMessageAdapter);
-        mChatRoomMessagesRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mEndlessRecyclerViewScrollListener =new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+        initAdapter();
+        initLayoutManager();
+        initScrollListener();
+        fetchInitialMessages();
+        listenToLatestMessages();
+    }
+
+    private void initAdapter() {
+        mMessageAdapter = new MessageAdapter();
+        mChatRoomMessagesRecyclerView.setAdapter(mMessageAdapter);
+    }
+
+    private void initLayoutManager() {
+        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mLinearLayoutManager.setReverseLayout(true);
+        mChatRoomMessagesRecyclerView.setLayoutManager(mLinearLayoutManager);
+    }
+
+    private void initScrollListener() {
+        mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener((LinearLayoutManager) mChatRoomMessagesRecyclerView.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 mChatRoomViewModel.fetchMessages(PAGE_SIZE);
             }
         };
         mChatRoomMessagesRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+    }
 
+    private void fetchInitialMessages() {
         mChatRoomViewModel.fetchMessages(PAGE_SIZE);
+    }
+
+    private void listenToLatestMessages() {
         mNewMessageRegistrationListener = mChatRoomViewModel.listenToLatestMessages();
     }
 

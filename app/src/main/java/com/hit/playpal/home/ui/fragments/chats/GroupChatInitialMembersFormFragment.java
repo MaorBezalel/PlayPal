@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.paging.LoadState;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -32,6 +35,11 @@ public class GroupChatInitialMembersFormFragment extends Fragment {
     private RecyclerView mInitialMembersRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private CreateGroupChatInitialMembersAdapter mCreateGroupChatInitialMembersAdapter;
+    private ProgressBar mRecyclerViewProgressBar;
+    private ProgressBar mCreateGroupChatProgressBar;
+    private TextView mNoResultsFound;
+    private TextView mDbError;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater iInflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +53,7 @@ public class GroupChatInitialMembersFormFragment extends Fragment {
         initBackButton(iView);
         initCreateGroupChatButton(iView);
         initInitialMembersRecyclerView(iView);
+        initProgressBarAndLoadingState(iView);
     }
 
     @Override
@@ -70,6 +79,10 @@ public class GroupChatInitialMembersFormFragment extends Fragment {
             } else {
                 CreateGroupChatRoomViewModel viewModel = mFragmentParent.getViewModel();
 
+                mCreateGroupChatProgressBar = iView.findViewById(R.id.progressbar_create_group_chat_create);
+                mCreateGroupChatProgressBar.setVisibility(View.VISIBLE);
+                mCreateGroupChatButton.setVisibility(View.INVISIBLE);
+
                 viewModel.setGroupChatRoomInitialMembers(currentlyLoggedUser, selectedUsers);
                 viewModel.createGroupChatRoom(this::handleCreateGroupChatRoomSuccess, this::handleCreateGroupChatRoomFailure);
             }
@@ -89,11 +102,55 @@ public class GroupChatInitialMembersFormFragment extends Fragment {
     }
 
     private void handleCreateGroupChatRoomSuccess() {
+        mCreateGroupChatProgressBar.setVisibility(View.INVISIBLE);
+        mCreateGroupChatButton.setVisibility(View.VISIBLE);
+
         Toast.makeText(requireContext(), "Group chat room created successfully", Toast.LENGTH_SHORT).show();
         mFragmentParent.dismiss();
     }
 
     private void handleCreateGroupChatRoomFailure() {
+        mCreateGroupChatProgressBar.setVisibility(View.INVISIBLE);
+        mCreateGroupChatButton.setVisibility(View.VISIBLE);
+
         Toast.makeText(requireContext(), "Failed to create group chat room, please try again later", Toast.LENGTH_SHORT).show();
+    }
+
+    private void initProgressBarAndLoadingState(@NonNull View iView) {
+        mRecyclerViewProgressBar = iView.findViewById(R.id.progressbar_create_group_chat_initial_members);
+        mNoResultsFound = iView.findViewById(R.id.textview_create_group_chat_initial_members_no_members);
+        mDbError = iView.findViewById(R.id.textview_create_group_chat_initial_members_error);
+
+        if (mCreateGroupChatInitialMembersAdapter == null) {
+            throw new IllegalStateException("Adapter not initialized");
+        } else {
+            mCreateGroupChatInitialMembersAdapter.addLoadStateListener(loadStates -> {
+                if (loadStates.getRefresh() instanceof LoadState.Loading) {
+                    mRecyclerViewProgressBar.setVisibility(View.VISIBLE);
+                    mNoResultsFound.setVisibility(View.INVISIBLE);
+                    mDbError.setVisibility(View.INVISIBLE);
+                    mInitialMembersRecyclerView.setVisibility(View.INVISIBLE);
+                } else if (loadStates.getRefresh() instanceof LoadState.Error) {
+                    mRecyclerViewProgressBar.setVisibility(View.INVISIBLE);
+                    mNoResultsFound.setVisibility(View.INVISIBLE);
+                    mDbError.setVisibility(View.VISIBLE);
+                    mInitialMembersRecyclerView.setVisibility(View.INVISIBLE);
+                } else if (loadStates.getRefresh() instanceof LoadState.NotLoading) {
+                    if (mCreateGroupChatInitialMembersAdapter.getItemCount() == 0) {
+                        mRecyclerViewProgressBar.setVisibility(View.INVISIBLE);
+                        mNoResultsFound.setVisibility(View.VISIBLE);
+                        mDbError.setVisibility(View.INVISIBLE);
+                        mInitialMembersRecyclerView.setVisibility(View.INVISIBLE);
+                    } else {
+                        mRecyclerViewProgressBar.setVisibility(View.INVISIBLE);
+                        mNoResultsFound.setVisibility(View.INVISIBLE);
+                        mDbError.setVisibility(View.INVISIBLE);
+                        mInitialMembersRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                return null;
+            });
+        }
     }
 }

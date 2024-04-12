@@ -3,6 +3,7 @@ package com.hit.playpal.home.ui.adapters.groupchats;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.paginatedsearch.rooms.utils.IBindableRoom;
 import com.hit.playpal.paginatedsearch.rooms.adapters.IRoomAdapter;
 import com.hit.playpal.paginatedsearch.rooms.adapters.RoomAdapter;
@@ -35,6 +36,11 @@ public class AllGroupChatsAdapter extends RoomAdapter<AllChatRoom> {
             @Override
             public int getMembersCount(AllChatRoom item) {
                 return item.getMembersUid() == null ? 0 : item.getMembersUid().size();
+            }
+
+            @Override
+            public ChatRoom getChatRoom(AllChatRoom item) {
+                return item.convertToChatRoom();
             }
         }, iOwner, AllChatRoom.class, FirebaseFirestore.getInstance().collection("chat_rooms").whereEqualTo("type", ChatRoomType.GROUP));
     }

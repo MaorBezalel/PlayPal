@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -23,12 +24,18 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hit.playpal.R;
 import com.hit.playpal.home.ui.viewmodels.CreateGroupChatRoomViewModel;
+import com.hit.playpal.utils.Out;
 
 public class CreateGroupChatRoomDialogFragment extends DialogFragment {
     private static final String TAG = "CreateGroupChatRoomDialogFragment";
-    private CreateGroupChatRoomViewModel mViewModel = new CreateGroupChatRoomViewModel();
+
+    private CreateGroupChatRoomViewModel mViewModel;
     public CreateGroupChatRoomViewModel getViewModel() {
         return mViewModel;
+    }
+
+    public CreateGroupChatRoomDialogFragment() {
+        mViewModel = new CreateGroupChatRoomViewModel();
     }
 
     @Override

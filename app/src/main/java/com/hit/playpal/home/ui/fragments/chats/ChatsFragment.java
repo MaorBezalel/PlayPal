@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
@@ -16,13 +17,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.hit.playpal.R;
 import com.hit.playpal.home.ui.adapters.recentchats.ChatsViewPagerAdapter;
+import com.hit.playpal.utils.Out;
 
 public class ChatsFragment extends Fragment {
     private static final String TAG = "ChatsFragment";
-    private SearchView mChatsSearchView;
     private ViewPager2 mChatsViewPager2;
     private TabLayout mChatsTabLayout;
     private FloatingActionButton mAddChatGroupButton;
+    MutableLiveData<Boolean> mHasNewChatGroupBeenCreated = new MutableLiveData<Boolean>(false);
 
 
     @Override
@@ -34,26 +36,9 @@ public class ChatsFragment extends Fragment {
     public void onViewCreated(@NonNull View iView, Bundle iSavedInstanceState) {
         super.onViewCreated(iView, iSavedInstanceState);
 
-        initChatsSearchView(iView);
         initChatsViewPager2(iView);
         initChatsTabLayout(iView);
         initAddChatGroupButton(iView);
-    }
-
-    private void initChatsSearchView(@NonNull View iView) {
-        mChatsSearchView = iView.findViewById(R.id.searchview_chats);
-
-        mChatsSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String iQuery) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String iNewText) {
-                return false;
-            }
-        });
     }
 
     private void initChatsViewPager2(@NonNull View iView) {
@@ -96,9 +81,13 @@ public class ChatsFragment extends Fragment {
         Log.i(TAG, "handleAddChatGroupButtonClick: Add chat group button clicked");
         CreateGroupChatRoomDialogFragment dialog = new CreateGroupChatRoomDialogFragment();
         dialog.show(getChildFragmentManager(), "CreateGroupChatRoomDialogFragment");
-    }
 
-    private void handleSuccessfulGroupChatRoomCreation() {
-        // I need to refresh the recycler views in the AllChatsFragment and the GroupChatsFragment that are displayed by the ViewPager2
+        mHasNewChatGroupBeenCreated.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                Log.d(TAG, "handleAddChatGroupButtonClick: New chat group has been created");
+                mChatsViewPager2.getAdapter().notifyDataSetChanged();
+                mHasNewChatGroupBeenCreated.postValue(false);
+            }
+        });
     }
 }

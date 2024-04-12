@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.paging.LoadState;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -29,8 +32,9 @@ public class GroupChatGameFormFragment extends Fragment {
     private RecyclerView mGameListRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private CreateGroupChatGamesAdapter mCreateGroupChatGamesAdapter;
-    private OnBackPressedCallback mOnBackPressedCallback;
-
+    private ProgressBar mProgressBar;
+    private TextView mNoResultsFound;
+    private TextView mDbError;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater iInflater, ViewGroup iContainer,
@@ -45,6 +49,7 @@ public class GroupChatGameFormFragment extends Fragment {
         initBackButton(iView);
         initNextButton(iView);
         initGameListRecyclerView(iView);
+        initProgressBarAndLoadingState(iView);
     }
 
     @Override
@@ -87,5 +92,43 @@ public class GroupChatGameFormFragment extends Fragment {
 
         mGameListRecyclerView.setLayoutManager(mLinearLayoutManager);
         mGameListRecyclerView.setAdapter(mCreateGroupChatGamesAdapter);
+    }
+
+    private void initProgressBarAndLoadingState(@NonNull View iView) {
+        mProgressBar = iView.findViewById(R.id.progressbar_create_group_chat_game_list_loading);
+        mNoResultsFound = iView.findViewById(R.id.textview_create_group_chat_no_games_found);
+        mDbError = iView.findViewById(R.id.textview_create_group_chat_game_list_error);
+
+        if (mCreateGroupChatGamesAdapter == null) {
+            throw new IllegalStateException("Adapter not initialized");
+        } else {
+            mCreateGroupChatGamesAdapter.addLoadStateListener(loadStates -> {
+                if (loadStates.getRefresh() instanceof LoadState.Loading) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    mNoResultsFound.setVisibility(View.INVISIBLE);
+                    mDbError.setVisibility(View.INVISIBLE);
+                    mGameListRecyclerView.setVisibility(View.INVISIBLE);
+                } else if (loadStates.getRefresh() instanceof LoadState.Error) {
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    mNoResultsFound.setVisibility(View.INVISIBLE);
+                    mDbError.setVisibility(View.VISIBLE);
+                    mGameListRecyclerView.setVisibility(View.INVISIBLE);
+                } else if (loadStates.getRefresh() instanceof LoadState.NotLoading) {
+                    if (mCreateGroupChatGamesAdapter.getItemCount() == 0) {
+                        mProgressBar.setVisibility(View.INVISIBLE);
+                        mNoResultsFound.setVisibility(View.VISIBLE);
+                        mDbError.setVisibility(View.INVISIBLE);
+                        mGameListRecyclerView.setVisibility(View.INVISIBLE);
+                    } else {
+                        mProgressBar.setVisibility(View.INVISIBLE);
+                        mNoResultsFound.setVisibility(View.INVISIBLE);
+                        mDbError.setVisibility(View.INVISIBLE);
+                        mGameListRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                return null;
+            });
+        }
     }
 }

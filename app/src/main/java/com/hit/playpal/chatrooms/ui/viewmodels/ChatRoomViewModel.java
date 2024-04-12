@@ -13,10 +13,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.hit.playpal.chatrooms.data.repositories.ChatRoomRepository;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageEventListener;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageRegistrationListener;
+import com.hit.playpal.chatrooms.domain.usecases.chatbody.AddNewMemberToGroupChatRoomUseCase;
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.ListenToLatestMessageUseCase;
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.SendMessageUseCase;
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.UpdateChatRoomLastMessageUseCase;
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.FetchMessagesUseCase;
+import com.hit.playpal.chatrooms.ui.enums.ChatRoomLocation;
 import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.chats.Message;
 import com.hit.playpal.entities.users.User;
@@ -33,6 +35,11 @@ public class ChatRoomViewModel extends ViewModel {
     private final User USER;
     public User getUser() {
         return USER;
+    }
+
+    private final ChatRoomLocation INITIAL_CHAT_ROOM_LOCATION;
+    public ChatRoomLocation getInitialChatRoomLocation() {
+        return INITIAL_CHAT_ROOM_LOCATION;
     }
 
     private DocumentSnapshot mLatestMessageRef = null;
@@ -58,21 +65,32 @@ public class ChatRoomViewModel extends ViewModel {
         return CHAT_ROOM_LIVE_DATA;
     }
 
-
     private final MutableLiveData<Message> ON_MESSAGE_SENT = new MutableLiveData<>();
     public LiveData<Message> onMessageSent() {
         return ON_MESSAGE_SENT;
     }
 
+    private MutableLiveData<String> mOnJoiningGroupChatRoomSuccess = new MutableLiveData<>();
+    public LiveData<String> onJoiningGroupChatRoomSuccess() {
+        return mOnJoiningGroupChatRoomSuccess;
+    }
+
+    private MutableLiveData<String> mOnJoiningGroupChatRoomError = new MutableLiveData<>();
+    public LiveData<String> onJoiningGroupChatRoomError() {
+        return mOnJoiningGroupChatRoomError;
+    }
+
     public ChatRoomViewModel() {
         USER = null;
+        INITIAL_CHAT_ROOM_LOCATION = null;
         CHAT_ROOM_LIVE_DATA = new MutableLiveData<>();
         mNewMessages = new MutableLiveData<>();
         mFetchMessagesSuccess = new MutableLiveData<>();
         mFetchMessagesError = new MutableLiveData<>();
     }
-    public ChatRoomViewModel(@NonNull User iUser, @NonNull ChatRoom iChatRoom) {
+    public ChatRoomViewModel(@NonNull User iUser, @NonNull ChatRoom iChatRoom, @NonNull ChatRoomLocation iChatRoomLocation) {
         USER = iUser;
+        INITIAL_CHAT_ROOM_LOCATION = iChatRoomLocation;
         CHAT_ROOM_LIVE_DATA = new MutableLiveData<>(iChatRoom);
         mNewMessages = new MutableLiveData<>();
         mFetchMessagesSuccess = new MutableLiveData<>();
@@ -115,9 +133,6 @@ public class ChatRoomViewModel extends ViewModel {
 
             @Override
             public void onError(Exception iException) {
-                // TODO: handle error
-
-                // For now...
                 Log.e(TAG, "onError: " + iException.getMessage());
                 Toast.makeText(null, "An error occurred while fetching the latest message", Toast.LENGTH_SHORT).show();
             }
@@ -141,25 +156,40 @@ public class ChatRoomViewModel extends ViewModel {
                         mFetchMessagesError.postValue(exception.getMessage());
                     }
                 });
-        }
+    }
+
+    public void addThisUserToGroupChatRoom() {
+        AddNewMemberToGroupChatRoomUseCase useCase = new AddNewMemberToGroupChatRoomUseCase(new ChatRoomRepository());
+
+        useCase.execute(CHAT_ROOM_LIVE_DATA.getValue().getId(), USER).whenComplete((result, exception) -> {
+            if (exception != null) {
+                Log.e(TAG, "Couldn't add the user to the group chat room", exception);
+                mOnJoiningGroupChatRoomError.postValue("Joining the group chat room failed, please try again later");
+            } else {
+                mOnJoiningGroupChatRoomSuccess.postValue("You have successfully joined the group chat room");
+            }
+        });
+    }
 
     public static class Factory implements ViewModelProvider.Factory {
         private final User USER;
         private final ChatRoom CHAT_ROOM;
+        private final ChatRoomLocation INITIAL_CHAT_ROOM_LOCATION;
 
-        public Factory(@NonNull User iUser, @NonNull ChatRoom iChatRoom) {
+        public Factory(@NonNull User iUser, @NonNull ChatRoom iChatRoom, @NonNull ChatRoomLocation iInitialChatRoomLocation) {
             USER = iUser;
             CHAT_ROOM = iChatRoom;
+            INITIAL_CHAT_ROOM_LOCATION = iInitialChatRoomLocation;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> iModelClass) {
             if (iModelClass.isAssignableFrom(ChatRoomViewModel.class)) {
-                return (T) new ChatRoomViewModel(USER, CHAT_ROOM);
+                return (T) new ChatRoomViewModel(USER, CHAT_ROOM, INITIAL_CHAT_ROOM_LOCATION);
             }
 
-            throw new IllegalArgumentException(TAG+ ": Unknown ViewModel class");
+            throw new IllegalArgumentException(TAG + ": Unknown ViewModel class");
         }
     }
 }
