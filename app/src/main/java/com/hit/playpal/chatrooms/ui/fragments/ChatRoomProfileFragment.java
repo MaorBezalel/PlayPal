@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -45,6 +47,7 @@ public class ChatRoomProfileFragment extends Fragment {
     private MaterialCardView mChatRoomGameCardView;
     private MaterialButton mChatRoomMembersButton;
     private MaterialButton mChatRoomJoinButton;
+    private ProgressBar mChatRoomJoinProgressBar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater iInflater, ViewGroup iContainer, Bundle iSavedInstanceState) {
@@ -62,7 +65,7 @@ public class ChatRoomProfileFragment extends Fragment {
         initChatRoomDescriptionTextView(iView);
         initChatRoomGameCardView(iView);
         initChatRoomMembersButton(iView);
-        initChatRoomJoinButton(iView);
+        initChatRoomJoinButtonAndProgressBar(iView);
         // TODO: Implement this method
     }
 
@@ -144,21 +147,33 @@ public class ChatRoomProfileFragment extends Fragment {
         });
     }
 
-    private void initChatRoomJoinButton(@NonNull View iView) {
+    private void initChatRoomJoinButtonAndProgressBar(@NonNull View iView) {
         mChatRoomJoinButton = iView.findViewById(R.id.button_chat_room_profile_chat_room_join);
+        mChatRoomJoinProgressBar = iView.findViewById(R.id.progressbar_chat_room_profile_chat_room_join);
 
         // check if user is already a member of the group chat room
         if (mGroupChatRoom.getMembersUid().contains(mCurrentUser.getUid())) {
-            //mChatRoomJoinButton.setText(R.string.chat_room_profile_leave);
-
-            // for now, we will disable the join button if the user is already a member
-            mChatRoomJoinButton.setEnabled(false);
-        } else {
-            mChatRoomJoinButton.setOnClickListener(v -> {
-                //mChatRoomViewModel.addNewMember(mCurrentUser.getUid()); // TODO: Implement this method
-
-                // TODO: Listen to the result of the operation and update the UI accordingly
-            });
+            mChatRoomJoinButton.setEnabled(false); // TODO: improve this
         }
+
+        // Listeners
+        mChatRoomJoinButton.setOnClickListener(v -> {
+            mChatRoomJoinProgressBar.setVisibility(View.VISIBLE);
+            mChatRoomJoinButton.setVisibility(View.INVISIBLE);
+            mChatRoomViewModel.addThisUserToGroupChatRoom();
+        });
+
+        mChatRoomViewModel.onJoiningGroupChatRoomSuccess().observe(getViewLifecycleOwner(), message -> {
+            mChatRoomJoinProgressBar.setVisibility(View.INVISIBLE);
+            mChatRoomJoinButton.setVisibility(View.VISIBLE);
+            mChatRoomJoinButton.setEnabled(false);
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        });
+
+        mChatRoomViewModel.onJoiningGroupChatRoomError().observe(getViewLifecycleOwner(), message -> {
+            mChatRoomJoinProgressBar.setVisibility(View.INVISIBLE);
+            mChatRoomJoinButton.setVisibility(View.VISIBLE);
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        });
     }
 }

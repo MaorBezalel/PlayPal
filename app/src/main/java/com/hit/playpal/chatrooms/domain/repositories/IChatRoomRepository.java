@@ -32,4 +32,6 @@ public interface IChatRoomRepository {
     Task<Void> updateLastMessage(String iChatRoomId, Message iMessage);
     Task<DocumentSnapshot> getChatRoom(String iChatRoomId);
     Task<QuerySnapshot> getMessagesInPage(String iChatRoomId, long iPageSize, DocumentSnapshot iAfterThisMessageRef);
+
+    Task<Void> addNewMemberToGroupChatRoom(String iChatRoomId, User iUser);
 }

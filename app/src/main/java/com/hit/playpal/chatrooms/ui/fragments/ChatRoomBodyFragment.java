@@ -121,15 +121,14 @@ public class ChatRoomBodyFragment extends Fragment {
 
     private void observeWhenNewMessageReceived() {
         mChatRoomViewModel.getChatRoomLiveData().observe(getViewLifecycleOwner(), chatRoom -> {
-            if(mInitializeListenerCounter < 2)
-            {
+            if(mInitializeListenerCounter < 2) {
                 mInitializeListenerCounter++;
                 return;
             }
-          if(!chatRoom.getLastMessage().getSender().getUid().equals(CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid()))
-          {
-              mMessageAdapter.addNewMessage(chatRoom.getLastMessage());
-          }
+
+            if (!chatRoom.getLastMessage().getSender().getUid().equals(CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid())) {
+                  mMessageAdapter.addNewMessage(chatRoom.getLastMessage());
+            }
         });
     }
 

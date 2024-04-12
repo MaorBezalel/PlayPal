@@ -112,16 +112,30 @@
         android:textSize="26sp" />
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_chat_room_profile_chat_room_join"
-        android:layout_width="250dp"
-        android:layout_height="70dp"
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:background="@color/primary"
-        android:fontFamily="@font/bebas_neue"
-        android:text="Join Chat Room"
-        android:textColor="@color/white"
-        android:textSize="26sp" />
+        android:layout_marginTop="15dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_chat_room_profile_chat_room_join"
+            android:layout_width="250dp"
+            android:layout_height="70dp"
+            android:background="@color/primary"
+            android:fontFamily="@font/bebas_neue"
+            android:text="Join Chat Room"
+            android:textColor="@color/white"
+            android:textSize="26sp" />
+
+        <ProgressBar
+            android:id="@+id/progressbar_chat_room_profile_chat_room_join"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
 
 </LinearLayout>

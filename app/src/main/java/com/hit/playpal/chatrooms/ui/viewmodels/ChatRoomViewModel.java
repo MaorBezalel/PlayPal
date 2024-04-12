@@ -13,6 +13,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.hit.playpal.chatrooms.data.repositories.ChatRoomRepository;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageEventListener;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageRegistrationListener;
+import com.hit.playpal.chatrooms.domain.usecases.chatbody.AddNewMemberToGroupChatRoomUseCase;
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.ListenToLatestMessageUseCase;
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.SendMessageUseCase;
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.UpdateChatRoomLastMessageUseCase;
@@ -64,10 +65,19 @@ public class ChatRoomViewModel extends ViewModel {
         return CHAT_ROOM_LIVE_DATA;
     }
 
-
     private final MutableLiveData<Message> ON_MESSAGE_SENT = new MutableLiveData<>();
     public LiveData<Message> onMessageSent() {
         return ON_MESSAGE_SENT;
+    }
+
+    private MutableLiveData<String> mOnJoiningGroupChatRoomSuccess = new MutableLiveData<>();
+    public LiveData<String> onJoiningGroupChatRoomSuccess() {
+        return mOnJoiningGroupChatRoomSuccess;
+    }
+
+    private MutableLiveData<String> mOnJoiningGroupChatRoomError = new MutableLiveData<>();
+    public LiveData<String> onJoiningGroupChatRoomError() {
+        return mOnJoiningGroupChatRoomError;
     }
 
     public ChatRoomViewModel() {
@@ -146,7 +156,20 @@ public class ChatRoomViewModel extends ViewModel {
                         mFetchMessagesError.postValue(exception.getMessage());
                     }
                 });
-        }
+    }
+
+    public void addThisUserToGroupChatRoom() {
+        AddNewMemberToGroupChatRoomUseCase useCase = new AddNewMemberToGroupChatRoomUseCase(new ChatRoomRepository());
+
+        useCase.execute(CHAT_ROOM_LIVE_DATA.getValue().getId(), USER).whenComplete((result, exception) -> {
+            if (exception != null) {
+                Log.e(TAG, "Couldn't add the user to the group chat room", exception);
+                mOnJoiningGroupChatRoomError.postValue("Joining the group chat room failed, please try again later");
+            } else {
+                mOnJoiningGroupChatRoomSuccess.postValue("You have successfully joined the group chat room");
+            }
+        });
+    }
 
     public static class Factory implements ViewModelProvider.Factory {
         private final User USER;

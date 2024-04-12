@@ -6,6 +6,8 @@ import com.google.firebase.firestore.PropertyName;
 import com.hit.playpal.entities.chats.enums.UserChatRole;
 import com.hit.playpal.entities.users.User;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -79,6 +81,12 @@ public class GroupProfile {
             this.mDisplayName = iDisplayName;
             this.mProfilePicture = iProfilePicture;
             this.mUserChatRole = iUserChatRole;
+        }
+
+        @NonNull
+        @Contract("_, _ -> new")
+        public static Participant parseUser(@NonNull User iUser, UserChatRole iUserChatRole) {
+            return new Participant(iUser.getUid(), iUser.getDisplayName(), iUser.getProfilePicture(), iUserChatRole);
         }
     }
 }
