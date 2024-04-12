@@ -35,7 +35,7 @@ public class FirebaseFirestoreDataSource {
                 .collection("chat_rooms")
                 .document(iChatRoomId)
                 .collection("group_profile")
-                .document(iChatRoomId)
+                .document("data")
                 .get();
     }
     public Task<DocumentReference> writeMessage(String iChatRoomId, Message iMessage) {

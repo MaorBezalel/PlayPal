@@ -1,5 +1,6 @@
 package com.hit.playpal.chatrooms.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
@@ -20,13 +22,21 @@ import com.hit.playpal.chatrooms.ui.viewmodels.ChatRoomViewModel;
 import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.chats.GroupChatRoom;
 import com.hit.playpal.entities.users.User;
+import com.hit.playpal.game.ui.activities.GameActivity;
+import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.squareup.picasso.Picasso;
 
 
 public class ChatRoomProfileFragment extends Fragment {
     private static final String TAG = "ChatRoomProfileFragment";
 
+    private static final String ARG_CHAT_ROOM_ID = "chatRoomId";
+    private static final String ARG_GAME_ID = "gameId";
+
     private ChatRoomViewModel mChatRoomViewModel;
+    private GroupChatRoom mGroupChatRoom;
+    private User mCurrentUser;
+
     private ImageButton mChatRoomBackButton;
     private ShapeableImageView mChatRoomImageImageView;
     private TextView mChatRoomNameTextView;
@@ -40,66 +50,117 @@ public class ChatRoomProfileFragment extends Fragment {
         return iInflater.inflate(R.layout.fragment_chat_room_profile, iContainer, false);
     }
 
-    private void getViewModelFromActivity() {
-        mChatRoomViewModel = new ViewModelProvider(requireActivity()).get(ChatRoomViewModel.class);
+    @Override
+    public void onViewCreated(@NonNull View iView, Bundle iSavedInstanceState) {
+        super.onViewCreated(iView, iSavedInstanceState);
 
-        // DEBUG CHECK:
-        User user = mChatRoomViewModel.getUser();
-        ChatRoom chatRoom = mChatRoomViewModel.getChatRoomLiveData().getValue();
-
-        if (user == null || chatRoom == null) {
-            throw new IllegalStateException("User or ChatRoom is null");
-        }
+        getViewModelFromActivity();
+        getCurrentUserAndGroupChatRoom();
+        initChatRoomBackButton(iView);
+        initChatRoomImageImageView(iView);
+        initChatRoomNameTextView(iView);
+        initChatRoomDescriptionTextView(iView);
+        initChatRoomGameCardView(iView);
+        initChatRoomMembersButton(iView);
+        initChatRoomJoinButton(iView);
+        // TODO: Implement this method
     }
 
-    private void initViews(@NonNull View iView) {
-        // TODO: Implement this method
+    private void getViewModelFromActivity() {
+        mChatRoomViewModel = new ViewModelProvider(requireActivity()).get(ChatRoomViewModel.class);
+    }
+
+    private void getCurrentUserAndGroupChatRoom() {
+        mCurrentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
+
+        if (mChatRoomViewModel != null) {
+            mGroupChatRoom = (GroupChatRoom) mChatRoomViewModel.getChatRoomLiveData().getValue();
+        } else {
+            throw new IllegalStateException("ChatRoomViewModel is null");
+        }
     }
 
     private void initChatRoomBackButton(@NonNull View iView) {
         mChatRoomBackButton = iView.findViewById(R.id.imagebutton_chat_room_back);
-
-        mChatRoomBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View iView) { // TODO: Implement this method
-                getActivity().onBackPressed();
-            }
-        });
+        mChatRoomBackButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
     }
 
     private void initChatRoomImageImageView(@NonNull View iView) {
-        GroupChatRoom chatRoom = (GroupChatRoom) mChatRoomViewModel.getChatRoomLiveData().getValue();
-
         mChatRoomImageImageView = iView.findViewById(R.id.imageview_chat_room_profile_chat_room_image);
 
-        if (chatRoom.getProfilePicture() == null || chatRoom.getProfilePicture().isEmpty()) {
+        if (mGroupChatRoom.getProfilePicture() == null || mGroupChatRoom.getProfilePicture().isEmpty()) {
             mChatRoomImageImageView.setImageResource(R.drawable.ic_home_nav_search_groupchats);
         } else {
-            Picasso.get().load(chatRoom.getProfilePicture()).into(mChatRoomImageImageView);
+            Picasso.get().load(mGroupChatRoom.getProfilePicture()).into(mChatRoomImageImageView);
         }
     }
 
     private void initChatRoomNameTextView(@NonNull View iView) {
-        GroupChatRoom chatRoom = (GroupChatRoom) mChatRoomViewModel.getChatRoomLiveData().getValue();
-
         mChatRoomNameTextView = iView.findViewById(R.id.textview_chat_room_profile_chat_room_name);
-        mChatRoomNameTextView.setText(chatRoom.getName());
+        mChatRoomNameTextView.setText(mGroupChatRoom.getName());
     }
 
     private void initChatRoomDescriptionTextView(@NonNull View iView) {
-        // TODO: Need to get access to the group chat room description
         mChatRoomDescriptionTextView = iView.findViewById(R.id.textview_chat_room_profile_chat_room_description);
+        // TODO: Need to get access to the group chat room description
+
+        // for now, we will set a default description
+        mChatRoomDescriptionTextView.setText("This is a group chat room for gamers who love to play together.");
     }
 
-    private void mChatRoomGameCardView(@NonNull View iView) {
-        // TODO: Implement this method
+    private void initChatRoomGameCardView(@NonNull View iView) {
+        mChatRoomGameCardView = iView.findViewById(R.id.cardview_chat_room_profile_chat_room_game);
+
+        TextView gameTitle = iView.findViewById(R.id.textview_create_group_chat_game_title);
+        gameTitle.setText(mGroupChatRoom.getGame().getName());
+
+        ImageView gameBackgroundImage = iView.findViewById(R.id.imageview_create_group_chat_game_image);
+        if (mGroupChatRoom.getGame().getBackgroundImage() == null || mGroupChatRoom.getGame().getBackgroundImage().isEmpty()) {
+            gameBackgroundImage.setImageResource(R.drawable.ic_home_nav_search_groupchats);
+        } else {
+            Picasso.get().load(mGroupChatRoom.getGame().getBackgroundImage()).into(gameBackgroundImage);
+        }
+
+        mChatRoomGameCardView.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), GameActivity.class);
+
+            intent.putExtra(ARG_GAME_ID, mGroupChatRoom.getGame().getGameId());
+            startActivity(intent);
+        });
     }
 
     private void initChatRoomMembersButton(@NonNull View iView) {
-        // TODO: Implement this method
+        mChatRoomMembersButton = iView.findViewById(R.id.button_chat_room_profile_chat_room_members);
+
+        mChatRoomMembersButton.setOnClickListener(v -> {
+            ChatInfoMemberSearchFragment chatInfoMemberSearchFragment = new ChatInfoMemberSearchFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putString(ARG_CHAT_ROOM_ID, mGroupChatRoom.getId());
+            chatInfoMemberSearchFragment.setArguments(bundle);
+
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.main, chatInfoMemberSearchFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
     }
 
     private void initChatRoomJoinButton(@NonNull View iView) {
-        // TODO: Implement this method
+        mChatRoomJoinButton = iView.findViewById(R.id.button_chat_room_profile_chat_room_join);
+
+        // check if user is already a member of the group chat room
+        if (mGroupChatRoom.getMembersUid().contains(mCurrentUser.getUid())) {
+            //mChatRoomJoinButton.setText(R.string.chat_room_profile_leave);
+
+            // for now, we will disable the join button if the user is already a member
+            mChatRoomJoinButton.setEnabled(false);
+        } else {
+            mChatRoomJoinButton.setOnClickListener(v -> {
+                //mChatRoomViewModel.addNewMember(mCurrentUser.getUid()); // TODO: Implement this method
+
+                // TODO: Listen to the result of the operation and update the UI accordingly
+            });
+        }
     }
 }

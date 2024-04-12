@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.imageview.ShapeableImageView;
@@ -39,6 +40,7 @@ public class ChatRoomBodyFragment extends Fragment {
 
     private ChatRoomViewModel mChatRoomViewModel;
 
+    private RelativeLayout mChatRoomNameAndImageContainer;
     private TextView mChatRoomNameTextView;
     private ShapeableImageView mChatRoomImageImageView;
     private ImageButton mChatRoomBackButton;
@@ -68,10 +70,10 @@ public class ChatRoomBodyFragment extends Fragment {
         getViewModelFromActivity();
         initViews(iView);
         observeViewModel();
-        Log.d(TAG, "onViewCreated: RecyclerView count: " + mChatRoomMessagesRecyclerView.getChildCount() + ", Adapter count: " + mMessageAdapter.getItemCount());
     }
 
     private void initViews(@NonNull View iView) {
+        initChatRoomNameAndImageContainer(iView);
         initChatRoomNameView(iView);
         initChatRoomProfilePictureView(iView);
         initChatRoomBackButton(iView);
@@ -131,6 +133,20 @@ public class ChatRoomBodyFragment extends Fragment {
         });
     }
 
+    private void initChatRoomNameAndImageContainer(@NonNull View iView) {
+        if (mChatRoomViewModel.getChatRoomLiveData().getValue() instanceof GroupChatRoom) {
+            mChatRoomNameAndImageContainer = iView.findViewById(R.id.relativelayout_chat_room_name_and_profile_picture);
+            mChatRoomNameAndImageContainer.setOnClickListener(v -> {
+                ChatRoomProfileFragment chatRoomProfileFragment = new ChatRoomProfileFragment();
+
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.main, chatRoomProfileFragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
+    }
+
     private void initChatRoomNameView(@NonNull View iView) {
         mChatRoomNameTextView = iView.findViewById(R.id.textview_chat_room_name);
         ChatRoom chatRoom = mChatRoomViewModel.getChatRoomLiveData().getValue();
@@ -168,9 +184,7 @@ public class ChatRoomBodyFragment extends Fragment {
 
     private void initChatRoomBackButton(@NonNull View iView) {
         mChatRoomBackButton = iView.findViewById(R.id.imagebutton_chat_room_back);
-        mChatRoomBackButton.setOnClickListener(v -> {
-            getParentFragmentManager().popBackStack();
-        });
+        mChatRoomBackButton.setOnClickListener(v -> getParentFragmentManager().popBackStack()); // TODO: find out why this is not working
     }
 
     private void initChatRoomMessagesRecyclerView(@NonNull View iView) {
