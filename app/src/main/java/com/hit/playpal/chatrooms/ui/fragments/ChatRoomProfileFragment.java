@@ -18,8 +18,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.hit.playpal.R;
+import com.hit.playpal.chatrooms.ui.enums.ChatRoomLocation;
 import com.hit.playpal.chatrooms.ui.viewmodels.ChatRoomViewModel;
-import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.chats.GroupChatRoom;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.game.ui.activities.GameActivity;
@@ -36,6 +36,7 @@ public class ChatRoomProfileFragment extends Fragment {
     private ChatRoomViewModel mChatRoomViewModel;
     private GroupChatRoom mGroupChatRoom;
     private User mCurrentUser;
+    private ChatRoomLocation mInitialChatRoomLocation;
 
     private ImageButton mChatRoomBackButton;
     private ShapeableImageView mChatRoomImageImageView;
@@ -55,7 +56,6 @@ public class ChatRoomProfileFragment extends Fragment {
         super.onViewCreated(iView, iSavedInstanceState);
 
         getViewModelFromActivity();
-        getCurrentUserAndGroupChatRoom();
         initChatRoomBackButton(iView);
         initChatRoomImageImageView(iView);
         initChatRoomNameTextView(iView);
@@ -68,21 +68,19 @@ public class ChatRoomProfileFragment extends Fragment {
 
     private void getViewModelFromActivity() {
         mChatRoomViewModel = new ViewModelProvider(requireActivity()).get(ChatRoomViewModel.class);
-    }
-
-    private void getCurrentUserAndGroupChatRoom() {
         mCurrentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
-
-        if (mChatRoomViewModel != null) {
-            mGroupChatRoom = (GroupChatRoom) mChatRoomViewModel.getChatRoomLiveData().getValue();
-        } else {
-            throw new IllegalStateException("ChatRoomViewModel is null");
-        }
+        mGroupChatRoom = (GroupChatRoom) mChatRoomViewModel.getChatRoomLiveData().getValue();
+        mInitialChatRoomLocation = mChatRoomViewModel.getInitialChatRoomLocation();
     }
 
     private void initChatRoomBackButton(@NonNull View iView) {
         mChatRoomBackButton = iView.findViewById(R.id.imagebutton_chat_room_back);
-        mChatRoomBackButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
+
+        if (mInitialChatRoomLocation == ChatRoomLocation.GROUP_CHAT_PROFILE) {
+            mChatRoomBackButton.setOnClickListener(v -> requireActivity().finish());
+        } else {
+            mChatRoomBackButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
+        }
     }
 
     private void initChatRoomImageImageView(@NonNull View iView) {

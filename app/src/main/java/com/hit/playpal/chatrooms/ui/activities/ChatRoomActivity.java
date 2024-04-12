@@ -12,9 +12,12 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hit.playpal.R;
+import com.hit.playpal.chatrooms.ui.enums.ChatRoomLocation;
 import com.hit.playpal.chatrooms.ui.fragments.ChatRoomBodyFragment;
+import com.hit.playpal.chatrooms.ui.fragments.ChatRoomProfileFragment;
 import com.hit.playpal.chatrooms.ui.viewmodels.ChatRoomViewModel;
 import com.hit.playpal.entities.chats.ChatRoom;
+import com.hit.playpal.entities.chats.GroupChatRoom;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.hit.playpal.utils.Out;
@@ -22,6 +25,11 @@ import com.hit.playpal.utils.Out;
 public class ChatRoomActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatRoomActivity";
+
+    private static final String ARG_CHAT_ROOM = "chatRoom";
+    private static final String ARG_USER = "user";
+    private static final String ARG_CHAT_ROOM_LOCATION = "chatRoomLocation";
+
     private ChatRoomViewModel mChatRoomViewModel;
 
     @Override
@@ -29,7 +37,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onCreate(iSavedInstanceState);
         defaultOnCreate();
         initViewModels();
-        loadChatRoomBodyFragment();
+        loadTheInitialFragment();
     }
 
     @Override
@@ -51,29 +59,70 @@ public class ChatRoomActivity extends AppCompatActivity {
     private void initViewModels() {
         Out<User> user = Out.of(User.class);
         Out<ChatRoom> chatRoom = Out.of(ChatRoom.class);
+        Out<ChatRoomLocation> chatRoomLocation = Out.of(ChatRoomLocation.class);
 
-        getDataFromIntent(user, chatRoom);
-        ChatRoomViewModel.Factory factory = new ChatRoomViewModel.Factory(user.get(), chatRoom.get());
+        getDataFromIntent(user, chatRoom, chatRoomLocation);
+        ChatRoomViewModel.Factory factory = new ChatRoomViewModel.Factory(user.get(), chatRoom.get(), chatRoomLocation.get());
         mChatRoomViewModel = new ViewModelProvider(this, factory).get(ChatRoomViewModel.class);
     }
 
-    private void getDataFromIntent(@NonNull Out<User> oUser, @NonNull Out<ChatRoom> oChatRoom) {
+    private void getDataFromIntent(@NonNull Out<User> oUser, @NonNull Out<ChatRoom> oChatRoom, @NonNull Out<ChatRoomLocation> oChatRoomLocation) {
         Intent intent = getIntent();
         User parcelableUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
         ChatRoom parcelableChatRoom = intent.getParcelableExtra("chatRoom");
+        ChatRoomLocation serializedChatRoomLocation = (ChatRoomLocation) intent.getSerializableExtra("chatRoomLocation");
 
-        if (parcelableUser == null || parcelableChatRoom == null) {
-            throw new IllegalArgumentException(TAG + ": user or chatRoom is null while trying to get data from intent");
+        if (parcelableUser == null || parcelableChatRoom == null || serializedChatRoomLocation == null) {
+            throw new IllegalArgumentException(TAG + "getDataFromIntent: User, ChatRoom or ChatRoomLocation is null");
         }
 
         oUser.set(parcelableUser);
         oChatRoom.set(parcelableChatRoom);
+        oChatRoomLocation.set(serializedChatRoomLocation);
+    }
+
+    private void loadTheInitialFragment() {
+        switch (mChatRoomViewModel.getInitialChatRoomLocation()) {
+            case CHAT_BODY:
+                loadChatRoomBodyFragment();
+                break;
+            case GROUP_CHAT_PROFILE:
+                loadChatRoomProfileFragment();
+                break;
+            default:
+                throw new IllegalStateException(TAG + "loadTheMainFragment: ChatRoomLocation is not valid");
+        }
     }
 
     private void loadChatRoomBodyFragment() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main, new ChatRoomBodyFragment())
-                .commit();
+        User user = mChatRoomViewModel.getUser();
+        ChatRoom chatRoom = mChatRoomViewModel.getChatRoomLiveData().getValue();
+
+        if (user == null || chatRoom == null) {
+            throw new IllegalStateException(TAG + "loadChatRoomBodyFragment: User or ChatRoom is null");
+        } else if (!chatRoom.getMembersUid().contains(user.getUid())) {
+            throw new IllegalStateException(
+                    TAG
+                    + "loadChatRoomBodyFragment: User is not a member of the chat room, therefore shouldn't have been able to get access to this fragment"
+            );
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main, new ChatRoomBodyFragment())
+                    .commit();
+        }
+    }
+
+    private void loadChatRoomProfileFragment() {
+        ChatRoom chatRoom = mChatRoomViewModel.getChatRoomLiveData().getValue();
+
+        if (chatRoom == null || !(chatRoom instanceof GroupChatRoom)) {
+            throw new IllegalStateException(TAG + "loadChatRoomProfileFragment: ChatRoom is null or is not a GroupChatRoom");
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main, new ChatRoomProfileFragment())
+                    .commit();
+        }
     }
 }

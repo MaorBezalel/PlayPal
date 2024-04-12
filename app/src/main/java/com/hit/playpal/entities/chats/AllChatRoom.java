@@ -69,6 +69,7 @@ public class AllChatRoom implements Parcelable {
     ) {
         mId = iId;
         mType = iType;
+        mMembersUid = iMembersUid;
         mLastMessage = iLastMessage;
         mOtherMemberData = iOtherMemberData;
         mName = iName;
@@ -93,9 +94,9 @@ public class AllChatRoom implements Parcelable {
 
     public ChatRoom convertToChatRoom() {
         if (mType == ChatRoomType.ONE_TO_ONE) {
-            return new OneToOneChatRoom(mId, mLastMessage, mOtherMemberData);
+            return new OneToOneChatRoom(mId, mMembersUid, mLastMessage, mOtherMemberData);
         } else if (mType == ChatRoomType.GROUP) {
-            return new GroupChatRoom(mId, mLastMessage, mName, mProfilePicture, mGame);
+            return new GroupChatRoom(mId, mMembersUid, mLastMessage, mName, mProfilePicture, mGame);
         } else {
             Log.e("AllChatRoom", "Unknown chat room type: " + mType);
             return null;
@@ -106,6 +107,7 @@ public class AllChatRoom implements Parcelable {
     public void writeToParcel(@NonNull Parcel iDest, int iFlags) {
         iDest.writeString(mId);
         iDest.writeString(mType.name());
+        iDest.writeStringList(mMembersUid);
         iDest.writeParcelable(mLastMessage, iFlags);
         iDest.writeMap(mOtherMemberData);
         iDest.writeString(mName);

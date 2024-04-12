@@ -34,9 +34,10 @@ public abstract class ChatRoom implements Parcelable {
         mMembersUid = new ArrayList<>();
         mLastMessage = new Message();
     }
-    public ChatRoom(String iId, ChatRoomType iType, Message iLastMessage) {
+    public ChatRoom(String iId, ChatRoomType iType, List<String> iMembersUid, Message iLastMessage) {
         mId = iId;
         mType = iType;
+        mMembersUid = iMembersUid;
         mLastMessage = iLastMessage;
     }
 

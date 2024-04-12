@@ -2,6 +2,7 @@ package com.hit.playpal.home.ui.fragments.chats;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.Query;
 import com.hit.playpal.R;
 import com.hit.playpal.chatrooms.ui.activities.ChatRoomActivity;
+import com.hit.playpal.chatrooms.ui.enums.ChatRoomLocation;
 import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.chats.GroupChatRoom;
 import com.hit.playpal.entities.chats.OneToOneChatRoom;
@@ -78,19 +80,17 @@ public class ChatsTabFragment extends Fragment {
     }
 
     private void handleChatRoomCardClicked(ChatRoom iChatRoom) {
-        if (iChatRoom instanceof GroupChatRoom) {
-            GroupChatRoom groupChatRoom = (GroupChatRoom) iChatRoom;
+        Intent intent = new Intent(getContext(), ChatRoomActivity.class);
+        intent.putExtra("chatRoomLocation", ChatRoomLocation.CHAT_BODY);
 
-            Intent intent = new Intent(getContext(), ChatRoomActivity.class);
-            intent.putExtra("chatRoom", groupChatRoom);
+        if (iChatRoom instanceof GroupChatRoom) {
+            intent.putExtra("chatRoom", (GroupChatRoom) iChatRoom);
             startActivity(intent);
         } else if (iChatRoom instanceof OneToOneChatRoom) {
-            OneToOneChatRoom oneToOneChatRoom = (OneToOneChatRoom) iChatRoom;
-
-            Intent intent = new Intent(getContext(), ChatRoomActivity.class);
-            intent.putExtra("chatRoom", oneToOneChatRoom);
+            intent.putExtra("chatRoom", (OneToOneChatRoom) iChatRoom);
             startActivity(intent);
         } else {
+            Log.e(TAG, "ChatRoom type not recognized");
             throw new IllegalStateException("ChatRoom type not recognized");
         }
     }

@@ -17,8 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hit.playpal.R;
+import com.hit.playpal.chatrooms.ui.activities.ChatRoomActivity;
+import com.hit.playpal.chatrooms.ui.enums.ChatRoomLocation;
 import com.hit.playpal.chatrooms.ui.fragments.ChatRoomProfileFragment;
 import com.hit.playpal.entities.chats.AllChatRoom;
+import com.hit.playpal.entities.chats.GroupChatRoom;
 import com.hit.playpal.home.ui.adapters.groupchats.AllGroupChatsAdapter;
 import com.hit.playpal.profile.adapters.RoomsOfUserAdapter;
 import com.hit.playpal.paginatedsearch.rooms.enums.RoomFilterType;
@@ -30,7 +33,8 @@ public class RoomSearchFragment extends Fragment {
     private static final String TAG = "RoomSearchFragment";
     private static final String ARG_SEARCH_TYPE = "searchType";
     private static final String ARG_USER_ID = "userId";
-    private static final String ARG_ROOM_ID = "roomId";
+    private static final String ARG_CHAT_ROOM = "chatRoom";
+    private static final String ARG_CHAT_ROOM_LOCATION = "chatRoomLocation";
     private static final String ROOM_SEARCH_ALL_TITLE = "Room Browser";
     private static final String ROOM_SEARCH_JOINED_TITLE = "Joined Rooms";
     private RecyclerView mGroupChatRecyclerView;
@@ -112,26 +116,20 @@ public class RoomSearchFragment extends Fragment {
         switch(mCurrentRoomSearchType)
         {
             case ALL:
-                mGroupChatAdapter = new AllGroupChatsAdapter(new IRoomAdapter<AllChatRoom>() {
-                    @Override
-                    public void onRoomClick(String roomId) {
-                        Intent intent = new Intent(getContext(), ChatRoomProfileFragment.class);
-                        intent.putExtra(ARG_ROOM_ID, roomId);
-                        startActivity(intent); // TODO: Fix this!
-                    }
+                mGroupChatAdapter = new AllGroupChatsAdapter(chatRoom -> {
+                    Intent intent = new Intent(getContext(), ChatRoomActivity.class);
+                    intent.putExtra(ARG_CHAT_ROOM, (GroupChatRoom) chatRoom);
+                    intent.putExtra(ARG_CHAT_ROOM_LOCATION, ChatRoomLocation.GROUP_CHAT_PROFILE);
+                    startActivity(intent);
                 }, this);
-
                 mRoomsSearchTitle.setText(ROOM_SEARCH_ALL_TITLE);
                 break;
             case JOINED:
-                mGroupChatAdapter = new RoomsOfUserAdapter(new IRoomAdapter<AllChatRoom>() {
-                    // TODO: implement onRoomClick after chat profile is created
-                    @Override
-                    public void onRoomClick(String roomId) {
-                        // Intent intent = new Intent(getContext(), ChatInfoProfile.class);
-                        // intent.putExtra(ARG_ROOM_ID, roomId);
-                        // startActivity(intent);
-                    }
+                mGroupChatAdapter = new RoomsOfUserAdapter(chatRoom -> {
+                    Intent intent = new Intent(getContext(), ChatRoomActivity.class);
+                    intent.putExtra(ARG_CHAT_ROOM, (GroupChatRoom) chatRoom);
+                    intent.putExtra(ARG_CHAT_ROOM_LOCATION, ChatRoomLocation.GROUP_CHAT_PROFILE);
+                    startActivity(intent);
                 }, this, mCurrentUserId);
 
                 mRoomsSearchTitle.setText(ROOM_SEARCH_JOINED_TITLE);

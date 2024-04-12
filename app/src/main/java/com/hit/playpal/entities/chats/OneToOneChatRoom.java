@@ -22,8 +22,8 @@ public class OneToOneChatRoom extends ChatRoom {
         super();
         mType = ChatRoomType.ONE_TO_ONE;
     }
-    public OneToOneChatRoom(String iChatRoomId,  Message iLastMessage, HashMap<String, OtherMemberData> iOtherMemberData) {
-       super(iChatRoomId, ChatRoomType.ONE_TO_ONE,  iLastMessage);
+    public OneToOneChatRoom(String iChatRoomId, List<String> iMembersUid,  Message iLastMessage, HashMap<String, OtherMemberData> iOtherMemberData) {
+       super(iChatRoomId, ChatRoomType.ONE_TO_ONE, iMembersUid, iLastMessage);
         mOtherMemberData = iOtherMemberData;
     }
 

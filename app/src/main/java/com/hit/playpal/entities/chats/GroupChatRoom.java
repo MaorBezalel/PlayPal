@@ -34,8 +34,8 @@ public class GroupChatRoom extends ChatRoom {
         super();
         mType = ChatRoomType.GROUP;
     }
-    public GroupChatRoom(String iChatRoomId, Message iLastMessage, String iName, String iProfilePicture, Game iGame) {
-        super(iChatRoomId, ChatRoomType.GROUP, iLastMessage);
+    public GroupChatRoom(String iChatRoomId, List<String> iMembersUid, Message iLastMessage, String iName, String iProfilePicture, Game iGame) {
+        super(iChatRoomId, ChatRoomType.GROUP, iMembersUid, iLastMessage);
         mName = iName;
         mProfilePicture = iProfilePicture;
         mGame = iGame;
