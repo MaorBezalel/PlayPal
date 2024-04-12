@@ -20,7 +20,7 @@
         app:tint="@color/primary" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageview_chat_room_profile_chat_room_picture"
+        android:id="@+id/imageview_chat_room_profile_chat_room_image"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center"
@@ -99,7 +99,20 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_chat_room_profile_chat_room_members"
+        android:layout_width="250dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:background="@color/primary"
+        android:fontFamily="@font/bebas_neue"
+        android:text="Members"
+        android:textColor="@color/white"
+        android:textSize="26sp" />
+
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_chat_room_profile_chat_room_join"
         android:layout_width="250dp"
         android:layout_height="70dp"
