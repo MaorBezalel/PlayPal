@@ -17,6 +17,9 @@ import com.hit.playpal.paginatedsearch.rooms.enums.RoomSearchType;
 import com.hit.playpal.paginatedsearch.users.enums.UserSearchType;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 
+import io.reactivex.rxjava3.exceptions.UndeliverableException;
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
 
@@ -41,6 +44,12 @@ public class HomeActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        RxJavaPlugins.setErrorHandler(e -> {
+            if (e instanceof UndeliverableException && e.getCause() instanceof InterruptedException) {
+                return; // ignore InterruptedExceptions as they were likely caused by dispose being called
+            }
         });
 
         initViews();
