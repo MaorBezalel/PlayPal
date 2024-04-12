@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navbutton_myprofile"
+        android:title="You"
+        android:icon="@drawable/ic_person"/>
+    <item
+        android:id="@+id/navbutton_games"
+        android:title="Games"
+        android:icon="@drawable/ic_bottom_nav_games"/>
+<!--    <item-->
+<!--        android:id="@+id/navbutton_groupsearch"-->
+<!--        android:title="group chats search"-->
+<!--        android:icon="@drawable/ic_bottom_nav_groupsearch"/>-->
+<!--    <item-->
+<!--        android:id="@+id/navbutton_usersearch"-->
+<!--        android:title="user search"-->
+<!--        android:icon="@drawable/ic_bottom_nav_usersearch" />-->
+
+    <item
+        android:id="@+id/navbutton_search"
+        android:title="Search"
+        android:icon="@drawable/ic_bottom_nav_search"/>
+    <item
+        android:id="@+id/navbutton_chats"
+        android:title="Messages"
+        android:icon="@drawable/ic_bottom_nav_chat"/>
+    <item
+        android:id="@+id/navbutton_notifications"
+        android:title="Notifications"
+        android:icon="@drawable/ic_bottom_nav_notifications"/>
+</menu>

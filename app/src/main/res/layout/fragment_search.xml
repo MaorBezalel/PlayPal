@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="5dp"
+    android:background="@color/background"
+    tools:context=".home.ui.fragments.SearchFragment">
+
+    <TextView
+        android:id="@+id/textview_search_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/primary_500"
+        android:fontFamily="@font/dosis_extrabold"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Search for Users or Group Chats"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/linearlayout_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textview_search_toolbar"
+        android:background="@drawable/bg_auth_body"
+        android:orientation="vertical">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tablayout_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_100"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"
+            app:tabIndicatorColor="@color/secondary"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorHeight="3dp"
+            app:tabSelectedTextColor="@color/secondary"
+            app:tabTextColor="@color/text">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabitem_search_users"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Users" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabitem_search_group_chats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Group Chats" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewpager2_search"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -24,8 +24,6 @@ public class ChatsFragment extends Fragment {
     private ViewPager2 mChatsViewPager2;
     private TabLayout mChatsTabLayout;
     private FloatingActionButton mAddChatGroupButton;
-    MutableLiveData<Boolean> mHasNewChatGroupBeenCreated = new MutableLiveData<Boolean>(false);
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater iInflater, ViewGroup iContainer, Bundle iSavedInstanceState) {
@@ -81,13 +79,5 @@ public class ChatsFragment extends Fragment {
         Log.i(TAG, "handleAddChatGroupButtonClick: Add chat group button clicked");
         CreateGroupChatRoomDialogFragment dialog = new CreateGroupChatRoomDialogFragment();
         dialog.show(getChildFragmentManager(), "CreateGroupChatRoomDialogFragment");
-
-        mHasNewChatGroupBeenCreated.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                Log.d(TAG, "handleAddChatGroupButtonClick: New chat group has been created");
-                mChatsViewPager2.getAdapter().notifyDataSetChanged();
-                mHasNewChatGroupBeenCreated.postValue(false);
-            }
-        });
     }
 }
