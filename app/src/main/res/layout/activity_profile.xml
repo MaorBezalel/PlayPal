@@ -59,56 +59,82 @@
                 android:layout_marginStart="5dp"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-                app:srcCompat="@drawable/ic_home_nav_myprofile" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textViewUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="User Name:"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textViewDisplayName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="Display Name:"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
+                app:srcCompat="@drawable/ic_home_nav_myprofile"
+                app:strokeColor="@color/primary_500"
+                app:strokeWidth="2dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/profile_border2"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textViewGetUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="TextView"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="71dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textViewGetDisplayName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="TextView"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/textViewUserName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/profile_border4"
+                        android:fontFamily="@font/dosis_extrabold"
+                        android:paddingStart="100dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginTop="3dp"
+                        android:text="User Name:"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewGetUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dosis_extrabold"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:text="TextView"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewDisplayName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary_500"
+                        android:fontFamily="@font/dosis_extrabold"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:paddingStart="85dp"
+                        android:text="Display Name:"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/textViewGetDisplayName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dosis_extrabold"
+                        android:text="TextView"
+                        android:layout_gravity="center"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -127,15 +153,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:fontFamily="@font/dosis_extrabold"
+                android:background="@drawable/profile_border3"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:textColor="@color/white"
                 android:text="About Me:"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textViewGetAboutMe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
+                android:fontFamily="@font/dosis_extrabold"
+                android:paddingStart="16dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:text="TextView" />
 
         </LinearLayout>
@@ -156,6 +191,7 @@
                 android:background="@drawable/profile_buttons_design"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
+                android:fontFamily="@font/dosis_extrabold"
                 android:onClick="FriendsButtonFunc"
                 android:text="Friends"
                 android:textSize="20sp" />
@@ -169,6 +205,7 @@
                 android:background="@drawable/profile_buttons_design"
                 android:onClick="roomsButtonFunc"
                 android:paddingTop="15dp"
+                android:fontFamily="@font/dosis_extrabold"
                 android:paddingBottom="15dp"
                 android:text="Rooms"
                 android:textSize="20sp" />
@@ -178,6 +215,7 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/dosis_extrabold"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/profile_buttons_design"
                 android:onClick="favGamesButtonFunc"
@@ -192,6 +230,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/profile_buttons_design"
+                android:fontFamily="@font/dosis_extrabold"
                 android:onClick="buttonSettingsFunc"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
@@ -202,6 +241,7 @@
                 android:id="@+id/buttonAddFriend"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/dosis_extrabold"
                 android:layout_gravity="center_horizontal"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
@@ -223,6 +263,7 @@
                     android:background="@drawable/profile_buttons_design"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"
+                    android:fontFamily="@font/dosis_extrabold"
                     android:onClick="buttonRemoveFriendFunc"
                     android:text="Remove Friend"
                     android:textSize="20dp"

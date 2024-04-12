@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hit.playpal.R;
 import com.hit.playpal.entities.chats.GroupProfile;
 import com.hit.playpal.paginatedsearch.users.adapters.IUserAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,8 +42,14 @@ public class UsersInGroupChatAdapter extends RecyclerView.Adapter<UsersInGroupCh
         holder.userDisplayName.setText(user.getDisplayName());
         holder.userCard.setOnClickListener(v -> ON_USER_CLICKED.onUserClick(user.getUserUid()));
 
-        // TODO: find a way to put userimage content inside imageView
-        holder.userImage.setImageResource(R.drawable.ic_home_nav_myprofile);
+        if(user.getProfilePicture() != null && !user.getProfilePicture().isEmpty())
+        {
+            Picasso.get().load(user.getProfilePicture()).into(holder.userImage);
+        }
+        else
+        {
+            holder.userImage.setImageResource(R.drawable.ic_home_nav_myprofile);
+        }
     }
 
     @Override

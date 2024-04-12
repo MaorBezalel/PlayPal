@@ -39,7 +39,7 @@ public class AuthValidations {
         if (isUsernameEmpty(iUsername)) {
             oInvalidationReason.set("Username cannot be empty.");
         } else if (!isUsernameInCorrectLength(iUsername)) {
-            oInvalidationReason.set("Username must be between 2 and 32 characters.");
+            oInvalidationReason.set("Username must be between 2 and 20 characters.");
         } else if (!isUsernameInCorrectFormat(iUsername)) {
             oInvalidationReason.set("Username can only contain letters, numbers, and the following characters: . _ -");
         } else {
@@ -53,7 +53,7 @@ public class AuthValidations {
         return iUsername.isEmpty();
     }
     private static boolean isUsernameInCorrectLength(@NonNull String iUsername) {
-        return iUsername.length() >= 2 && iUsername.length() <= 32;
+        return iUsername.length() >= 2 && iUsername.length() <= 20;
     }
     private static boolean isUsernameInCorrectFormat(@NonNull String iUsername) {
         return iUsername.matches("^[a-zA-Z0-9._-]*$");
@@ -83,7 +83,7 @@ public class AuthValidations {
         if (isDisplayNameEmpty(iDisplayName)) {
             oInvalidationReason.set("Display name cannot be empty.");
         } else if (!isDisplayNameInCorrectLength(iDisplayName)) {
-            oInvalidationReason.set("Display name must be between 2 and 32 characters.");
+            oInvalidationReason.set("Display name must be between 2 and 20 characters.");
         } else {
             isValid = true;
             oInvalidationReason.set(null);
@@ -95,7 +95,7 @@ public class AuthValidations {
         return iDisplayName.isEmpty();
     }
     private static boolean isDisplayNameInCorrectLength(@NonNull String iDisplayName) {
-        return iDisplayName.length() >= 2 && iDisplayName.length() <= 32;
+        return iDisplayName.length() >= 2 && iDisplayName.length() <= 20;
     }
 
     public static boolean isPasswordValid(@NonNull String iPassword, Out<String> oInvalidationReason) {
