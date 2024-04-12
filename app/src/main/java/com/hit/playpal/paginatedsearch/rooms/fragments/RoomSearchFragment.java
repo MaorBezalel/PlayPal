@@ -117,7 +117,7 @@ public class RoomSearchFragment extends Fragment {
                     public void onRoomClick(String roomId) {
                         Intent intent = new Intent(getContext(), ChatRoomProfileFragment.class);
                         intent.putExtra(ARG_ROOM_ID, roomId);
-                        startActivity(intent);
+                        startActivity(intent); // TODO: Fix this!
                     }
                 }, this);
 

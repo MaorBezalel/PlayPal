@@ -184,7 +184,7 @@ public class ChatRoomBodyFragment extends Fragment {
 
     private void initChatRoomBackButton(@NonNull View iView) {
         mChatRoomBackButton = iView.findViewById(R.id.imagebutton_chat_room_back);
-        mChatRoomBackButton.setOnClickListener(v -> getParentFragmentManager().popBackStack()); // TODO: find out why this is not working
+        mChatRoomBackButton.setOnClickListener(v -> requireActivity().finish());
     }
 
     private void initChatRoomMessagesRecyclerView(@NonNull View iView) {
