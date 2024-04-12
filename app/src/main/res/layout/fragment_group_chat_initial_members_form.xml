@@ -72,28 +72,74 @@
             android:text="Select the initial members of your group chat. You can add more members later."
             android:textAlignment="gravity" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_create_group_chat_initial_members"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_create_group_chat_create"
-            style="@style/PrimaryButtonStyle"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview_create_group_chat_initial_members"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ProgressBar
+                android:id="@+id/progressbar_create_group_chat_initial_members"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/textview_create_group_chat_initial_members_no_members"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_users_found"
+                android:textColor="@color/accent"
+                android:textSize="36sp"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/textview_create_group_chat_initial_members_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/fui_error_unknown"
+                android:textColor="@color/error"
+                android:textSize="30sp"
+                android:visibility="invisible"/>
+
+        </FrameLayout>
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/primary"
-            android:fontFamily="@font/comfortaa_bold"
-            android:textStyle="bold"
-            android:paddingStart="20dp"
-            android:paddingTop="15dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="15dp"
-            android:text="@string/create_group_chat_button_text"
-            android:textColor="@color/background"
-            android:textSize="26sp" />
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_create_group_chat_create"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary"
+                android:fontFamily="@font/comfortaa_bold"
+                android:textStyle="bold"
+                android:paddingStart="20dp"
+                android:paddingTop="15dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="15dp"
+                android:text="@string/create_group_chat_button_text"
+                android:textColor="@color/background"
+                android:textSize="26sp" />
+
+            <ProgressBar
+                android:id="@+id/progressbar_create_group_chat_create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="invisible"/>
+
+
+        </FrameLayout>
 
 
     </LinearLayout>

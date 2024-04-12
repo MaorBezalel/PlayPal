@@ -6,9 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.paging.LoadState;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +36,9 @@ public class ChatsTabFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ChatsRecyclerViewAdapter mChatsRecyclerViewAdapter;
     private LinearLayoutManager mLinearLayoutManager;
+    private ProgressBar mProgressBar;
+    private TextView mNoResultsFound;
+    private TextView mDbError;
 
     @Nullable private ChatRoomType mChatRoomType;
 
@@ -54,6 +61,7 @@ public class ChatsTabFragment extends Fragment {
         initLinearLayoutManagerForRecyclerView();
         initAdapterForRecyclerView();
         initRecyclerView(iView);
+        initProgressBarAndLoadingState(iView);
     }
 
     private void initViewModel() {
@@ -74,9 +82,47 @@ public class ChatsTabFragment extends Fragment {
     }
 
     private void initRecyclerView(@NonNull View iView) {
-        mRecyclerView = iView.findViewById(R.id.recyclerview_chats_all_chat_rooms_tab);
+        mRecyclerView = iView.findViewById(R.id.recyclerview_chats_tab);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mChatsRecyclerViewAdapter);
+    }
+
+    private void initProgressBarAndLoadingState(@NonNull View iView) {
+        mProgressBar = iView.findViewById(R.id.progressbar_chats_tab_loading_chats);
+        mNoResultsFound = iView.findViewById(R.id.textview_chats_tab_no_results_found);
+        mDbError = iView.findViewById(R.id.textview_chats_tab_error);
+
+        if (mChatsRecyclerViewAdapter == null) {
+            throw new IllegalStateException("Adapter not initialized");
+        } else {
+            mChatsRecyclerViewAdapter.addLoadStateListener(loadStates -> {
+                if (loadStates.getRefresh() instanceof LoadState.Loading) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    mNoResultsFound.setVisibility(View.INVISIBLE);
+                    mDbError.setVisibility(View.INVISIBLE);
+                    mRecyclerView.setVisibility(View.INVISIBLE);
+                } else if (loadStates.getRefresh() instanceof LoadState.Error) {
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    mNoResultsFound.setVisibility(View.INVISIBLE);
+                    mDbError.setVisibility(View.VISIBLE);
+                    mRecyclerView.setVisibility(View.INVISIBLE);
+                } else if (loadStates.getRefresh() instanceof LoadState.NotLoading) {
+                    if (mChatsRecyclerViewAdapter.getItemCount() == 0) {
+                        mProgressBar.setVisibility(View.INVISIBLE);
+                        mNoResultsFound.setVisibility(View.VISIBLE);
+                        mDbError.setVisibility(View.INVISIBLE);
+                        mRecyclerView.setVisibility(View.INVISIBLE);
+                    } else {
+                        mProgressBar.setVisibility(View.INVISIBLE);
+                        mNoResultsFound.setVisibility(View.INVISIBLE);
+                        mDbError.setVisibility(View.INVISIBLE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                return null;
+            });
+        }
     }
 
     private void handleChatRoomCardClicked(ChatRoom iChatRoom) {

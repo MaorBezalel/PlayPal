@@ -16,6 +16,9 @@
     <string name="back">Back</string>
     <string name="next">Next</string>
     <string name="create_group_chat_button_text">Create</string>
+    <string name="no_chats">Couldn\'t find any chats!</string>
+    <string name="no_games_found">No Games Found!</string>
+    <string name="no_users_found">No users found!</string>
 
     <string-array name="game_platforms">
         <item name="PC">PC</item>

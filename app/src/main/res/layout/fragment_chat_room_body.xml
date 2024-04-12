@@ -60,12 +60,24 @@
 
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_chat_room_messages"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/relativelayout_chat_room_message"
-        android:layout_below="@+id/relativelayout_chat_room_toolbar" />
+        android:layout_below="@+id/relativelayout_chat_room_toolbar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_chat_room_messages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/progressbar_chat_room_messages_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/relativelayout_chat_room_message"

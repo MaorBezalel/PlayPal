@@ -73,12 +73,45 @@
             android:text="Select the game that the group chat will be based on."
             android:textAlignment="gravity" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_create_group_chat_game_list"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview_create_group_chat_game_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ProgressBar
+                android:id="@+id/progressbar_create_group_chat_game_list_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/textview_create_group_chat_no_games_found"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_games_found"
+                android:textColor="@color/accent"
+                android:textSize="36sp"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/textview_create_group_chat_game_list_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/fui_error_unknown"
+                android:textColor="@color/error"
+                android:textSize="30sp"
+                android:visibility="invisible"/>
+
+        </FrameLayout>
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_create_group_chat_next"
