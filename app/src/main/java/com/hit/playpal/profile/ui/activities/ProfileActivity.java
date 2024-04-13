@@ -276,7 +276,7 @@ public class ProfileActivity extends AppCompatActivity {
                     .addToBackStack(null)
                     .commit();
         } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+            Log.e("ProfileActivity", "Failed to navigate to fragment", e);
         }
     }
 

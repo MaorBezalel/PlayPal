@@ -1,8 +1,5 @@
 package com.hit.playpal.settings.ui.utils;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import androidx.annotation.NonNull;
 
 import com.hit.playpal.utils.Out;
