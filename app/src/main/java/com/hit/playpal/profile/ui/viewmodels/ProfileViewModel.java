@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ProfileViewModel extends ViewModel {
-    private MutableLiveData<OneToOneChatRoom> mOnSuccessfulOpenChat = new MutableLiveData<>();
+    private final MutableLiveData<OneToOneChatRoom> mOnSuccessfulOpenChat = new MutableLiveData<>();
     public MutableLiveData<OneToOneChatRoom> getOnSuccessfulOpenChat() {
         return mOnSuccessfulOpenChat;
     }
 
-    private MutableLiveData<Throwable> mOnFailedOpenChat = new MutableLiveData<>();
+    private final MutableLiveData<Throwable> mOnFailedOpenChat = new MutableLiveData<>();
     public MutableLiveData<Throwable> getOnFailedOpenChat() {
         return mOnFailedOpenChat;
     }

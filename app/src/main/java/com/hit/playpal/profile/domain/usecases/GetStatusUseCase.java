@@ -7,7 +7,7 @@ import com.hit.playpal.profile.data.repositories.ProfileRepository;
 
 
 public class GetStatusUseCase {
-    private ProfileRepository mProfileRepository;
+    private final ProfileRepository mProfileRepository;
 
     public GetStatusUseCase() {
         this.mProfileRepository = new ProfileRepository();

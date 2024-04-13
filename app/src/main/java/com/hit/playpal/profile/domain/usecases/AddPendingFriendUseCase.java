@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddPendingFriendUseCase {
-    private ProfileRepository mProfileRepository;
-    private GetProfileAccountInfoUseCase mGetProfileAccountInfoUseCase;
+    private final ProfileRepository mProfileRepository;
+    private final GetProfileAccountInfoUseCase mGetProfileAccountInfoUseCase;
 
-    private SendFriendRequestUseCase mSendFriendRequestUseCase;
+    private final SendFriendRequestUseCase mSendFriendRequestUseCase;
 
     public AddPendingFriendUseCase() {
         this.mProfileRepository = new ProfileRepository();

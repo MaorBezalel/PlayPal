@@ -24,7 +24,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -309,18 +308,15 @@ public class ProfileActivity extends AppCompatActivity {
             otherUserData.put("uid", mUidThatBelongsToThisProfilePage); // Uid is the id of the other user
 
             AddPendingFriendUseCase addPendingFriendUseCase = new AddPendingFriendUseCase();
-            addPendingFriendUseCase.execute(mCurrentUserUid, mUidThatBelongsToThisProfilePage, otherUserData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    mButtonAddFriend.setClickable(true);
+            addPendingFriendUseCase.execute(mCurrentUserUid, mUidThatBelongsToThisProfilePage, otherUserData).addOnCompleteListener(task -> {
+                mButtonAddFriend.setClickable(true);
 
-                    if (task.isSuccessful()) {
-                        mStatusBetweenThisAndOtherUser = "pending";
-                        Toast.makeText(ProfileActivity.this, "Friend request sent!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // Handle the error
-                        Log.e("ProfileActivity", "Failed to send friend request", task.getException());
-                    }
+                if (task.isSuccessful()) {
+                    mStatusBetweenThisAndOtherUser = "pending";
+                    Toast.makeText(ProfileActivity.this, "Friend request sent!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Handle the error
+                    Log.e("ProfileActivity", "Failed to send friend request", task.getException());
                 }
             });
         }
