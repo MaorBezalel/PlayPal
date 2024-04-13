@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.hit.playpal.R;
 import com.hit.playpal.paginatedsearch.games.fragments.GameSearchFragment;
 import com.hit.playpal.paginatedsearch.games.enums.GameSearchType;
@@ -63,6 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FrameLayout mFragmentContainer;
     Button buttonAddFriend;
     Button buttonRemoveFriend;
+    Button buttonChat;
     private ActivityResultLauncher<Intent> settingsResultLauncher;
     private OnBackPressedCallback mOnBackPressedCallback;
 
@@ -76,8 +78,6 @@ public class ProfileActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-
 
 
         Intent intent = getIntent();
@@ -119,7 +119,7 @@ public class ProfileActivity extends AppCompatActivity {
         Button buttonSettings = findViewById(R.id.buttonSettings);
         buttonAddFriend = findViewById(R.id.buttonAddFriend);
         buttonRemoveFriend = findViewById(R.id.buttonRemoveFriend);
-
+        buttonChat = findViewById(R.id.buttonChat);
 
 
         if (!currentUser.equals(Uid)) {
@@ -129,17 +129,19 @@ public class ProfileActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<String> task) {
                     if (task.isSuccessful()) {
                         status = task.getResult();
+                        buttonChat.setVisibility(View.VISIBLE);
                         Log.d("ProfileActivity", "Status: " + status);
-                        if ("noStatus".equals(status) || "pending".equals(status)){
+                        if ("noStatus".equals(status) || "pending".equals(status)) {
                             buttonSettings.setVisibility(View.GONE);
                             buttonAddFriend.setVisibility(View.VISIBLE);
-                        } else if("friends".equals(status)){
+                        } else if ("friends".equals(status)) {
                             buttonRemoveFriend.setVisibility(View.VISIBLE);
                             buttonAddFriend.setVisibility(View.GONE);
                             buttonSettings.setVisibility(View.GONE);
                         }
                     } else {
                         Exception e = task.getException();
+                        Log.e("ProfileActivity", "Error getting status", e);
                     }
                 }
             });
@@ -154,12 +156,9 @@ public class ProfileActivity extends AppCompatActivity {
         mOnBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (mFragmentContainer.getVisibility() == View.VISIBLE)
-                {
+                if (mFragmentContainer.getVisibility() == View.VISIBLE) {
                     mFragmentContainer.setVisibility(View.GONE);
-                }
-                else
-                {
+                } else {
                     finish();
                 }
             }
@@ -234,8 +233,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-
-
     public void buttonSettingsFunc(View view) {
         String displayName = mTextViewGetDisplayName.getText().toString();
         String userName = mTextViewGetUserName.getText().toString();
@@ -256,14 +253,14 @@ public class ProfileActivity extends AppCompatActivity {
         if ("pending".equals(status)) {
             Toast.makeText(ProfileActivity.this, "Friend request is pending", Toast.LENGTH_SHORT).show();
             buttonAddFriend.setClickable(true);
-        } else if("noStatus".equals(status)){
+        } else if ("noStatus".equals(status)) {
             Map<String, Object> otherUserData = new HashMap<>();
             otherUserData.put("display_name", mTextViewGetDisplayName.getText().toString()); // displayName is the display name of the other user
             otherUserData.put("profile_picture", avatarUrl); // avatarUrl is the URL of the other user's avatar
             otherUserData.put("uid", Uid); // Uid is the id of the other user
 
             AddPendingFriendUseCase addPendingFriendUseCase = new AddPendingFriendUseCase();
-            addPendingFriendUseCase.execute(currentUser,Uid, otherUserData).addOnCompleteListener(new OnCompleteListener<Void>() {
+            addPendingFriendUseCase.execute(currentUser, Uid, otherUserData).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     buttonAddFriend.setClickable(true);
@@ -285,7 +282,7 @@ public class ProfileActivity extends AppCompatActivity {
         progressBarRemoveFriend.setVisibility(View.VISIBLE);
         buttonRemoveFriend.setVisibility(View.GONE);
         RemoveFriendUseCase removeFriendUseCase = new RemoveFriendUseCase();
-        removeFriendUseCase.execute(currentUser,Uid).addOnCompleteListener(new OnCompleteListener<Void>() {
+        removeFriendUseCase.execute(currentUser, Uid).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 progressBarRemoveFriend.setVisibility(View.GONE);
@@ -302,4 +299,20 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void buttonChatFunc(View view) {
+        String otherUserDisplayName = mTextViewGetDisplayName.getText().toString();
+        String otherUserAvatarUrl = avatarUrl;
+        String otherUserUid = Uid;
+
+        mProfileAccountInfoUseCase = new GetProfileAccountInfoUseCase();
+        mProfileAccountInfoUseCase.execute(currentUser).addOnSuccessListener(document -> {
+            if (document != null && document.exists()) {
+                String UserDisplayName = document.getString("display_name");
+                String UserAvatarUrl = document.getString("profile_picture");
+                //logged user id is saved in currentUser
+            }
+        });
+    }
+
 }
