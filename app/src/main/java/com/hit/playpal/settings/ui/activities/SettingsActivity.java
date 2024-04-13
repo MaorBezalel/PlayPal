@@ -38,7 +38,6 @@ import com.hit.playpal.profile.ui.activities.ProfileActivity;
 import com.hit.playpal.settings.domain.usecases.CheckIfUserNameIsUniqueUseCase;
 import com.hit.playpal.settings.domain.usecases.UpdateUserProfileUseCase;
 import com.hit.playpal.settings.ui.utils.SettingsValidations;
-import com.hit.playpal.settings.ui.utils.UserPermissions;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.hit.playpal.utils.Out;
 import com.squareup.picasso.Picasso;
@@ -136,36 +135,10 @@ public class SettingsActivity extends AppCompatActivity {
         imageSetViewAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!UserPermissions.checkReadExternalStoragePermission(SettingsActivity.this) ||
-                        !UserPermissions.checkReadMediaImagesPermission(SettingsActivity.this)) {
-                    UserPermissions.requestReadExternalStoragePermission(SettingsActivity.this);
-                    UserPermissions.requestReadMediaImagesPermission(SettingsActivity.this);
-                } else {
-                    openImagePicker();
-                }
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == UserPermissions.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE ||
-                requestCode == UserPermissions.PERMISSIONS_REQUEST_READ_MEDIA_IMAGES) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openImagePicker();
-            } else {
-                Toast.makeText(this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
-            }
-            return;
-        }
-    }
-
-    private void openImagePicker() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
     @Override
