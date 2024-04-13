@@ -47,7 +47,7 @@ import java.io.IOException;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private final String  currentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
+    private final String  currentUser = CurrentlyLoggedUser.get().getUid();
     private EditText editTextSetDisplayName;
     private EditText editTextSetUserName;
     private EditText editTextSetAboutMe;
@@ -311,7 +311,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Only fetch the latest user details from the database if the image has not been changed
         if (!isImageChanged) {
-            String currentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
+            String currentUser = CurrentlyLoggedUser.get().getUid();
             FirebaseFirestore DB = FirebaseFirestore.getInstance();
             DB.collection("users").document(currentUser).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override

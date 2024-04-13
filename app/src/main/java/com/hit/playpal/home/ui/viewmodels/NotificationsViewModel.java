@@ -9,7 +9,6 @@ import com.hit.playpal.home.data.repositories.NotificationsRepository;
 import com.hit.playpal.home.domain.usecases.notifications.GetFriendRequestsOfUserUseCase;
 import com.hit.playpal.home.domain.usecases.notifications.RemoveFriendRequestNotificationUseCase;
 import com.hit.playpal.home.domain.usecases.notifications.UpdateUsersRelationshipStatusUseCase;
-import com.hit.playpal.profile.domain.usecases.RemoveFriendUseCase;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 
 import java.util.List;
@@ -50,7 +49,7 @@ public class NotificationsViewModel extends ViewModel {
     public void fetchFriendRequestsOfCurrentUser()
     {
         GetFriendRequestsOfUserUseCase useCase = new GetFriendRequestsOfUserUseCase(new NotificationsRepository());
-        useCase.execute(CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid()).
+        useCase.execute(CurrentlyLoggedUser.get().getUid()).
                 whenComplete((notifications, throwable) -> {
                     if(throwable != null)
                     {
@@ -70,11 +69,11 @@ public class NotificationsViewModel extends ViewModel {
         RemoveFriendRequestNotificationUseCase removeFriendRequestNotificationUseCase = new RemoveFriendRequestNotificationUseCase(new NotificationsRepository());
 
         return updateUsersRelationshipStatusUseCase.execute(
-                CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid(),
+                CurrentlyLoggedUser.get().getUid(),
                 iOtherUserId,
                 iNewStatus)
                 .thenCompose(aVoid -> removeFriendRequestNotificationUseCase.execute(
-                        CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid(),
+                        CurrentlyLoggedUser.get().getUid(),
                         iOtherUserId))
                 .whenComplete((result, throwable) -> {
                     if(throwable != null)

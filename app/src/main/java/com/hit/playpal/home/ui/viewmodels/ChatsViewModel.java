@@ -10,7 +10,7 @@ import com.hit.playpal.utils.CurrentlyLoggedUser;
 
 public class ChatsViewModel extends ViewModel {
     private static final String TAG = "ChatsViewModel";
-    private final String THIS_USER_ID = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
+    private final String THIS_USER_ID = CurrentlyLoggedUser.get().getUid();
 
     public Query generateQueryForAllChatRooms() {
         return GenerateQueryForAllChatRoomsUseCase.invoke(THIS_USER_ID);

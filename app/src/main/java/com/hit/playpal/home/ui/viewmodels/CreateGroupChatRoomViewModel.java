@@ -1,11 +1,9 @@
 package com.hit.playpal.home.ui.viewmodels;
 
-import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.firestore.Query;
@@ -20,18 +18,15 @@ import com.hit.playpal.home.domain.usecases.chats.UploadGroupChatRoomProfileImag
 import com.hit.playpal.home.domain.usecases.users.GenerateQueryForAllUsersUseCase;
 import com.hit.playpal.home.domain.usecases.games.GenerateQueryForAllGamesUseCase;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
-import com.hit.playpal.utils.Out;
 import com.hit.playpal.utils.UseCaseResult;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
-import kotlin.jvm.functions.Function0;
-
 public class CreateGroupChatRoomViewModel extends ViewModel {
     private static final String TAG = "CreateGroupChatRoomViewModel";
-    private final String THIS_USER_ID = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
+    private final String THIS_USER_ID = CurrentlyLoggedUser.get().getUid();
 
     private GroupChatRoom mGroupChatRoom;
     public GroupChatRoom getGroupChatRoom() {

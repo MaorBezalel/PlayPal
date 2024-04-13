@@ -68,7 +68,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private void getDataFromIntent(@NonNull Out<User> oUser, @NonNull Out<ChatRoom> oChatRoom, @NonNull Out<ChatRoomLocation> oChatRoomLocation) {
         Intent intent = getIntent();
-        User parcelableUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
+        User parcelableUser = CurrentlyLoggedUser.get();
         ChatRoom parcelableChatRoom = intent.getParcelableExtra("chatRoom");
         ChatRoomLocation serializedChatRoomLocation = (ChatRoomLocation) intent.getSerializableExtra("chatRoomLocation");
 

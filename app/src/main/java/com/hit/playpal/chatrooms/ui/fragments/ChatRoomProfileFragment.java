@@ -71,7 +71,7 @@ public class ChatRoomProfileFragment extends Fragment {
 
     private void getViewModelFromActivity() {
         mChatRoomViewModel = new ViewModelProvider(requireActivity()).get(ChatRoomViewModel.class);
-        mCurrentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
+        mCurrentUser = CurrentlyLoggedUser.get();
         mGroupChatRoom = (GroupChatRoom) mChatRoomViewModel.getChatRoomLiveData().getValue();
         mInitialChatRoomLocation = mChatRoomViewModel.getInitialChatRoomLocation();
     }

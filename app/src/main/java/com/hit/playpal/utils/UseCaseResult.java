@@ -48,17 +48,30 @@ public class UseCaseResult<TSuccess, TFailure extends Enum<TFailure>> {
         return mFailure;
     }
 
-    public UseCaseResult() { // upon success (no result)
+    /**
+     * Constructor for a successful use case with no result.
+     */
+    public UseCaseResult() {
         mResult = null;
         mIsSuccessful = true;
         mFailure = null;
     }
-    public UseCaseResult(TSuccess iResult) { // upon success (with result)
+
+    /**
+     * Constructor for a successful use case with a result.
+     * @param iResult The result of the use case upon success.
+     */
+    public UseCaseResult(TSuccess iResult) {
         mResult = iResult;
         mIsSuccessful = true;
         mFailure = null;
     }
-    public UseCaseResult(TFailure iFailure) { // upon failure
+
+    /**
+     * Constructor for a failed use case.
+     * @param iFailure The result of the use case upon failure.
+     */
+    public UseCaseResult(TFailure iFailure) {
         mResult = null;
         mIsSuccessful = false;
         mFailure = iFailure;

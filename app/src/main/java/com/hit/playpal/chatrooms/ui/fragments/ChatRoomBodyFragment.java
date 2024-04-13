@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,7 +152,7 @@ public class ChatRoomBodyFragment extends Fragment {
                 return;
             }
 
-            if (!chatRoom.getLastMessage().getSender().getUid().equals(CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid())) {
+            if (!chatRoom.getLastMessage().getSender().getUid().equals(CurrentlyLoggedUser.get().getUid())) {
                   mMessageAdapter.addNewMessage(chatRoom.getLastMessage());
             }
         });
@@ -237,7 +236,7 @@ public class ChatRoomBodyFragment extends Fragment {
     private void initScrollListener() {
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener((LinearLayoutManager) mChatRoomMessagesRecyclerView.getLayoutManager()) {
             @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+            public void onLoadMore(int iPage, int iTotalItemsCount, RecyclerView iView) {
                 mChatRoomViewModel.fetchMessages(PAGE_SIZE);
             }
         };
