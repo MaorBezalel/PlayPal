@@ -69,8 +69,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     private void getDataFromIntent(@NonNull Out<User> oUser, @NonNull Out<ChatRoom> oChatRoom, @NonNull Out<ChatRoomLocation> oChatRoomLocation) {
         Intent intent = getIntent();
         User parcelableUser = CurrentlyLoggedUser.get();
-        ChatRoom parcelableChatRoom = intent.getParcelableExtra("chatRoom");
-        ChatRoomLocation serializedChatRoomLocation = (ChatRoomLocation) intent.getSerializableExtra("chatRoomLocation");
+        ChatRoom parcelableChatRoom = intent.getParcelableExtra(ARG_CHAT_ROOM);
+        ChatRoomLocation serializedChatRoomLocation = (ChatRoomLocation) intent.getSerializableExtra(ARG_CHAT_ROOM_LOCATION);
 
         if (parcelableUser == null || parcelableChatRoom == null || serializedChatRoomLocation == null) {
             throw new IllegalArgumentException(TAG + "getDataFromIntent: User, ChatRoom or ChatRoomLocation is null");

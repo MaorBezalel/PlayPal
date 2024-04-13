@@ -114,7 +114,11 @@ public class ChatsRecyclerViewAdapter extends FirestorePagingAdapter<AllChatRoom
         if (iChatRoom instanceof OneToOneChatRoom) {
             OneToOneChatRoom oneToOneChatRoom = (OneToOneChatRoom) iChatRoom;
             User thisUser = CurrentlyLoggedUser.get();
-            Picasso.get().load(oneToOneChatRoom.getOtherUserProfilePicture(thisUser.getUid())).into(iHolder.CHAT_ROOM_IMAGE);
+            if (oneToOneChatRoom.getOtherUserProfilePicture(thisUser.getUid()) == null || oneToOneChatRoom.getOtherUserProfilePicture(thisUser.getUid()).isEmpty()) {
+                iHolder.CHAT_ROOM_IMAGE.setImageResource(R.drawable.ic_home_nav_search_groupchats);
+            } else {
+                Picasso.get().load(oneToOneChatRoom.getOtherUserProfilePicture(thisUser.getUid())).into(iHolder.CHAT_ROOM_IMAGE);
+            }
         } else if (iChatRoom instanceof GroupChatRoom) {
             GroupChatRoom groupChatRoom = (GroupChatRoom) iChatRoom;
             if (groupChatRoom.getProfilePicture() == null || groupChatRoom.getProfilePicture().isEmpty()) {

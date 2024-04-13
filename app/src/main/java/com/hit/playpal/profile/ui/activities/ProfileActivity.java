@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -28,6 +29,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.hit.playpal.R;
+import com.hit.playpal.chatrooms.ui.activities.ChatRoomActivity;
+import com.hit.playpal.chatrooms.ui.enums.ChatRoomLocation;
+import com.hit.playpal.entities.chats.o2o.OneToOneChatRoom;
+import com.hit.playpal.entities.users.User;
 import com.hit.playpal.paginatedsearch.games.fragments.GameSearchFragment;
 import com.hit.playpal.paginatedsearch.games.enums.GameSearchType;
 import com.hit.playpal.paginatedsearch.rooms.fragments.RoomSearchFragment;
@@ -39,6 +44,7 @@ import com.hit.playpal.profile.domain.usecases.AddPendingFriendUseCase;
 import com.hit.playpal.profile.domain.usecases.GetProfileAccountInfoUseCase;
 import com.hit.playpal.profile.domain.usecases.GetStatusUseCase;
 import com.hit.playpal.profile.domain.usecases.RemoveFriendUseCase;
+import com.hit.playpal.profile.ui.viewmodels.ProfileViewModel;
 import com.hit.playpal.settings.ui.activities.SettingsActivity;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.squareup.picasso.Picasso;
@@ -48,112 +54,126 @@ import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private GetProfileAccountInfoUseCase mProfileAccountInfoUseCase;
     private TextView mTextViewGetUserName;
     private ShapeableImageView mImageViewAvatar;
     private TextView mTextViewGetDisplayName;
     private TextView mTextViewGetAboutMe;
-    private GetStatusUseCase mGetStatusUseCase;
-    private String status;
-    private String avatarUrl;
+    private Button mButtonAddFriend;
+    private Button mButtonRemoveFriend;
+    private Button mButtonChat;
 
-    private final String  currentUser = CurrentlyLoggedUser.get().getUid();
+    private String mStatusBetweenThisAndOtherUser;
+    private String mProfilePictureUrlInThisProfilePage;
 
-    private String Uid;
+    private final String mCurrentUserUid = CurrentlyLoggedUser.get().getUid();
+
+    private String mUidThatBelongsToThisProfilePage;
 
     private FrameLayout mFragmentContainer;
-    Button buttonAddFriend;
-    Button buttonRemoveFriend;
-    Button buttonChat;
-    private ActivityResultLauncher<Intent> settingsResultLauncher;
-    private OnBackPressedCallback mOnBackPressedCallback;
+    private ActivityResultLauncher<Intent> mSettingsResultLauncher;
+
+    private ProfileViewModel mProfileViewModel;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle iSavedInstanceState) {
+        super.onCreate(iSavedInstanceState);
+        setupUI();
+        setupViewModel();
+        setupButtons();
+        fetchProfileData();
+    }
+
+    private void setupUI() {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        applyWindowInsets(R.id.main);
+        initializeViews();
+        setupActivityResultLauncher();
+    }
+
+    private void applyWindowInsets(int iViewId) {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(iViewId), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
 
-
-        Intent intent = getIntent();
-        Uid = intent.getStringExtra("userId");
-
-        if (Uid == null) {
-            finish();
-            return;
-        }
+    private void initializeViews() {
         mTextViewGetUserName = findViewById(R.id.textViewGetUserName);
         mImageViewAvatar = findViewById(R.id.imageViewAvatar);
         mTextViewGetDisplayName = findViewById(R.id.textViewGetDisplayName);
         mTextViewGetAboutMe = findViewById(R.id.textViewGetAboutMe);
-
-        settingsResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        if (data != null) {
-                            String updatedUserName = data.getStringExtra("username");
-                            String updatedDisplayName = data.getStringExtra("display_name");
-                            String updatedAboutMe = data.getStringExtra("about_me");
-                            String updatedAvatarImage = data.getStringExtra("profile_picture");
-
-                            mTextViewGetUserName.setText(updatedUserName);
-                            mTextViewGetDisplayName.setText(updatedDisplayName);
-                            mTextViewGetAboutMe.setText(updatedAboutMe);
-                            if (updatedAvatarImage != null && !updatedAvatarImage.equals("null") && !updatedAvatarImage.isEmpty()) {
-                                Picasso.get().load(updatedAvatarImage).into(mImageViewAvatar);
-                            }
-                        }
-                    }
-                }
-        );
-
         mFragmentContainer = findViewById(R.id.fragment_container);
-        Button buttonReturn = findViewById(R.id.buttonProfileReturn);
-        Button buttonSettings = findViewById(R.id.buttonSettings);
-        buttonAddFriend = findViewById(R.id.buttonAddFriend);
-        buttonRemoveFriend = findViewById(R.id.buttonRemoveFriend);
-        buttonChat = findViewById(R.id.buttonChat);
+        mButtonAddFriend = findViewById(R.id.buttonAddFriend);
+        mButtonRemoveFriend = findViewById(R.id.buttonRemoveFriend);
+        mButtonChat = findViewById(R.id.buttonChat);
+    }
 
+    private void setupActivityResultLauncher() {
+        mSettingsResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                this::handleActivityResult
+        );
+    }
 
-        if (!currentUser.equals(Uid)) {
-            mGetStatusUseCase = new GetStatusUseCase();
-            mGetStatusUseCase.execute(currentUser, Uid).addOnCompleteListener(new OnCompleteListener<String>() {
-                @Override
-                public void onComplete(@NonNull Task<String> task) {
-                    if (task.isSuccessful()) {
-                        status = task.getResult();
-                        buttonChat.setVisibility(View.VISIBLE);
-                        Log.d("ProfileActivity", "Status: " + status);
-                        if ("noStatus".equals(status) || "pending".equals(status)) {
-                            buttonSettings.setVisibility(View.GONE);
-                            buttonAddFriend.setVisibility(View.VISIBLE);
-                        } else if ("friends".equals(status)) {
-                            buttonRemoveFriend.setVisibility(View.VISIBLE);
-                            buttonAddFriend.setVisibility(View.GONE);
-                            buttonSettings.setVisibility(View.GONE);
-                        }
-                    } else {
-                        Exception e = task.getException();
-                        Log.e("ProfileActivity", "Error getting status", e);
-                    }
-                }
-            });
-        }
-        buttonReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+    private void handleActivityResult(@NonNull ActivityResult iResult) {
+        if (iResult.getResultCode() == Activity.RESULT_OK) {
+            Intent data = iResult.getData();
+            if (data != null) {
+                updateProfileData(data);
             }
-        });
+        }
+    }
 
-        mOnBackPressedCallback = new OnBackPressedCallback(true) {
+    private void updateProfileData(@NonNull Intent iData) {
+        String updatedUserName = iData.getStringExtra("username");
+        String updatedDisplayName = iData.getStringExtra("display_name");
+        String updatedAboutMe = iData.getStringExtra("about_me");
+        String updatedAvatarImage = iData.getStringExtra("profile_picture");
+
+        mTextViewGetUserName.setText(updatedUserName);
+        mTextViewGetDisplayName.setText(updatedDisplayName);
+        mTextViewGetAboutMe.setText(updatedAboutMe);
+
+        if (updatedAvatarImage != null && !updatedAvatarImage.equals("null") && !updatedAvatarImage.isEmpty()) {
+            Picasso.get().load(updatedAvatarImage).into(mImageViewAvatar);
+        }
+    }
+
+    private void setupViewModel() {
+        mProfileViewModel = new ProfileViewModel();
+        mProfileViewModel.getOnSuccessfulOpenChat().observe(this, this::openChatRoom);
+        mProfileViewModel.getOnFailedOpenChat().observe(this, this::handleOpenChatFailure);
+    }
+
+    private void openChatRoom(OneToOneChatRoom iOneToOneChatRoom) {
+        Intent intentChatRoom = new Intent(ProfileActivity.this, ChatRoomActivity.class);
+        intentChatRoom.putExtra("chatRoom", iOneToOneChatRoom);
+        intentChatRoom.putExtra("chatRoomLocation", ChatRoomLocation.CHAT_BODY);
+        startActivity(intentChatRoom);
+    }
+
+    private void handleOpenChatFailure(Throwable iThrowable) {
+        Toast.makeText(ProfileActivity.this, "Failed to open chat room", Toast.LENGTH_SHORT).show();
+        Log.e("ProfileActivity", "Failed to open chat room", iThrowable);
+    }
+
+    private void setupButtons() {
+        setupReturnButton();
+        setupOnBackPressedCallback();
+        setupFriendsButton();
+        setupRoomsButton();
+        setupFavGamesButton();
+    }
+
+    private void setupReturnButton() {
+        Button buttonReturn = findViewById(R.id.buttonProfileReturn);
+        buttonReturn.setOnClickListener(v -> finish());
+    }
+
+    private void setupOnBackPressedCallback() {
+        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 if (mFragmentContainer.getVisibility() == View.VISIBLE) {
@@ -163,64 +183,93 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         };
-
-        this.getOnBackPressedDispatcher().addCallback(this, mOnBackPressedCallback);
-
-        mProfileAccountInfoUseCase = new GetProfileAccountInfoUseCase();
-        mProfileAccountInfoUseCase.execute(Uid).addOnSuccessListener(document -> {
-            if (document != null && document.exists()) {
-                String username = document.getString("username");
-                String displayName = document.getString("display_name");
-                String aboutMe = document.getString("about_me");
-                avatarUrl = document.getString("profile_picture");
-
-                mTextViewGetUserName.setText(username);
-                mTextViewGetDisplayName.setText(displayName);
-                mTextViewGetAboutMe.setText(aboutMe);
-
-// Load the image using Picasso
-                assert avatarUrl != null;
-                if (!avatarUrl.isEmpty()) {
-                    Picasso.get().load(avatarUrl).into(mImageViewAvatar);
-                }
-            } else {
-                Log.d("ProfileActivity", "No such user");
-            }
-        });
-
-        Button buttonFriends = findViewById(R.id.buttonFriends);
-        buttonFriends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToFragment(UserSearchFragment.class, Uid, UserSearchType.FRIENDS.toString());
-            }
-        });
-
-        Button buttonRooms = findViewById(R.id.buttonRooms);
-        buttonRooms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToFragment(RoomSearchFragment.class, Uid, RoomSearchType.JOINED.toString());
-            }
-        });
-
-        Button buttonFavGames = findViewById(R.id.buttonFavGames);
-        buttonFavGames.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToFragment(GameSearchFragment.class, Uid, GameSearchType.FAVORITES.toString());
-            }
-        });
+        this.getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
     }
 
-    private void navigateToFragment(Class<? extends Fragment> fragmentClass, String Uid, String searchType) {
+    private void setupFriendsButton() {
+        Button buttonFriends = findViewById(R.id.buttonFriends);
+        buttonFriends.setOnClickListener(v -> navigateToFragment(UserSearchFragment.class, mUidThatBelongsToThisProfilePage, UserSearchType.FRIENDS.toString()));
+    }
+
+    private void setupRoomsButton() {
+        Button buttonRooms = findViewById(R.id.buttonRooms);
+        buttonRooms.setOnClickListener(v -> navigateToFragment(RoomSearchFragment.class, mUidThatBelongsToThisProfilePage, RoomSearchType.JOINED.toString()));
+    }
+
+    private void setupFavGamesButton() {
+        Button buttonFavGames = findViewById(R.id.buttonFavGames);
+        buttonFavGames.setOnClickListener(v -> navigateToFragment(GameSearchFragment.class, mUidThatBelongsToThisProfilePage, GameSearchType.FAVORITES.toString()));
+    }
+
+    private void fetchProfileData() {
+        Intent intent = getIntent();
+        mUidThatBelongsToThisProfilePage = intent.getStringExtra("userId");
+
+        if (mUidThatBelongsToThisProfilePage == null) {
+            finish();
+            return;
+        }
+
+        if (!mCurrentUserUid.equals(mUidThatBelongsToThisProfilePage)) {
+            fetchStatus();
+        }
+
+        GetProfileAccountInfoUseCase profileAccountInfoUseCase = new GetProfileAccountInfoUseCase();
+        profileAccountInfoUseCase.execute(mUidThatBelongsToThisProfilePage).addOnSuccessListener(this::displayProfileData);
+    }
+
+    private void fetchStatus() {
+        GetStatusUseCase getStatusUseCase = new GetStatusUseCase();
+        getStatusUseCase.execute(mCurrentUserUid, mUidThatBelongsToThisProfilePage).addOnCompleteListener(this::handleStatusResult);
+    }
+
+    private void handleStatusResult(@NonNull Task<String> iTask) {
+        if (iTask.isSuccessful()) {
+            mStatusBetweenThisAndOtherUser = iTask.getResult();
+            mButtonChat.setVisibility(View.VISIBLE);
+            Log.d("ProfileActivity", "Status: " + mStatusBetweenThisAndOtherUser);
+            if ("noStatus".equals(mStatusBetweenThisAndOtherUser) || "pending".equals(mStatusBetweenThisAndOtherUser)) {
+                findViewById(R.id.buttonSettings).setVisibility(View.GONE);
+                mButtonAddFriend.setVisibility(View.VISIBLE);
+            } else if ("friends".equals(mStatusBetweenThisAndOtherUser)) {
+                mButtonRemoveFriend.setVisibility(View.VISIBLE);
+                mButtonAddFriend.setVisibility(View.GONE);
+                findViewById(R.id.buttonSettings).setVisibility(View.GONE);
+            }
+        } else {
+            Exception e = iTask.getException();
+            Log.e("ProfileActivity", "Error getting status", e);
+        }
+    }
+
+    private void displayProfileData(DocumentSnapshot iDocument) {
+        if (iDocument != null && iDocument.exists()) {
+            String username = iDocument.getString("username");
+            String displayName = iDocument.getString("display_name");
+            String aboutMe = iDocument.getString("about_me");
+            mProfilePictureUrlInThisProfilePage = iDocument.getString("profile_picture");
+
+            mTextViewGetUserName.setText(username);
+            mTextViewGetDisplayName.setText(displayName);
+            mTextViewGetAboutMe.setText(aboutMe);
+
+            // Load the image using Picasso
+            if (!mProfilePictureUrlInThisProfilePage.isEmpty()) {
+                Picasso.get().load(mProfilePictureUrlInThisProfilePage).into(mImageViewAvatar);
+            }
+        } else {
+            Log.d("ProfileActivity", "No such user");
+        }
+    }
+
+    private void navigateToFragment(@NonNull Class<? extends Fragment> iFragmentClass, String iUid, String iSearchType) {
         mFragmentContainer.setVisibility(View.VISIBLE);
 
         try {
-            Fragment fragment = fragmentClass.newInstance();
+            Fragment fragment = iFragmentClass.newInstance();
             Bundle args = new Bundle();
-            args.putString("userId", Uid);
-            args.putString("searchType", searchType);
+            args.putString("userId", iUid);
+            args.putString("searchType", iSearchType);
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
@@ -233,7 +282,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    public void buttonSettingsFunc(View view) {
+    public void buttonSettingsFunc(View iView) {
         String displayName = mTextViewGetDisplayName.getText().toString();
         String userName = mTextViewGetUserName.getText().toString();
         String aboutMe = mTextViewGetAboutMe.getText().toString();
@@ -242,31 +291,31 @@ public class ProfileActivity extends AppCompatActivity {
         intent.putExtra("displayName", displayName);
         intent.putExtra("userName", userName);
         intent.putExtra("aboutMe", aboutMe);
-        intent.putExtra("avatarImage", avatarUrl);
+        intent.putExtra("avatarImage", mProfilePictureUrlInThisProfilePage);
 
-        settingsResultLauncher.launch(intent);
+        mSettingsResultLauncher.launch(intent);
     }
 
-    public void AddFriendFunc(View view) {
-        buttonAddFriend.setClickable(false);
+    public void addFriendFunc(View iView) {
+        mButtonAddFriend.setClickable(false);
 
-        if ("pending".equals(status)) {
+        if ("pending".equals(mStatusBetweenThisAndOtherUser)) {
             Toast.makeText(ProfileActivity.this, "Friend request is pending", Toast.LENGTH_SHORT).show();
-            buttonAddFriend.setClickable(true);
-        } else if ("noStatus".equals(status)) {
+            mButtonAddFriend.setClickable(true);
+        } else if ("noStatus".equals(mStatusBetweenThisAndOtherUser)) {
             Map<String, Object> otherUserData = new HashMap<>();
             otherUserData.put("display_name", mTextViewGetDisplayName.getText().toString()); // displayName is the display name of the other user
-            otherUserData.put("profile_picture", avatarUrl); // avatarUrl is the URL of the other user's avatar
-            otherUserData.put("uid", Uid); // Uid is the id of the other user
+            otherUserData.put("profile_picture", mProfilePictureUrlInThisProfilePage); // avatarUrl is the URL of the other user's avatar
+            otherUserData.put("uid", mUidThatBelongsToThisProfilePage); // Uid is the id of the other user
 
             AddPendingFriendUseCase addPendingFriendUseCase = new AddPendingFriendUseCase();
-            addPendingFriendUseCase.execute(currentUser, Uid, otherUserData).addOnCompleteListener(new OnCompleteListener<Void>() {
+            addPendingFriendUseCase.execute(mCurrentUserUid, mUidThatBelongsToThisProfilePage, otherUserData).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    buttonAddFriend.setClickable(true);
+                    mButtonAddFriend.setClickable(true);
 
                     if (task.isSuccessful()) {
-                        status = "pending";
+                        mStatusBetweenThisAndOtherUser = "pending";
                         Toast.makeText(ProfileActivity.this, "Friend request sent!", Toast.LENGTH_SHORT).show();
                     } else {
                         // Handle the error
@@ -277,42 +326,40 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    public void buttonRemoveFriendFunc(View view) {
-        ProgressBar progressBarRemoveFriend = findViewById(R.id.progressBarRemoveFriend);
-        progressBarRemoveFriend.setVisibility(View.VISIBLE);
-        buttonRemoveFriend.setVisibility(View.GONE);
+    public void buttonRemoveFriendFunc(View iView) {
         RemoveFriendUseCase removeFriendUseCase = new RemoveFriendUseCase();
-        removeFriendUseCase.execute(currentUser, Uid).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                progressBarRemoveFriend.setVisibility(View.GONE);
-                buttonAddFriend.setVisibility(View.VISIBLE);
+        ProgressBar progressBarRemoveFriend = findViewById(R.id.progressBarRemoveFriend);
 
-                if (task.isSuccessful()) {
-                    status = "noStatus";
-                    Toast.makeText(ProfileActivity.this, "Friend removed", Toast.LENGTH_SHORT).show();
+        progressBarRemoveFriend.setVisibility(View.VISIBLE);
+        mButtonRemoveFriend.setVisibility(View.GONE);
 
-                } else {
-                    // Handle the error
-                    Log.e("ProfileActivity", "Failed to remove friend", task.getException());
-                }
+        removeFriendUseCase.execute(mCurrentUserUid, mUidThatBelongsToThisProfilePage).addOnCompleteListener(task -> {
+            progressBarRemoveFriend.setVisibility(View.GONE);
+            mButtonAddFriend.setVisibility(View.VISIBLE);
+
+            if (task.isSuccessful()) {
+                mStatusBetweenThisAndOtherUser = "noStatus";
+                Toast.makeText(ProfileActivity.this, "Friend removed", Toast.LENGTH_SHORT).show();
+
+            } else {
+                // Handle the error
+                Log.e("ProfileActivity", "Failed to remove friend", task.getException());
             }
         });
     }
 
-    public void buttonChatFunc(View view) {
+    public void buttonChatFunc(View iView) {
         String otherUserDisplayName = mTextViewGetDisplayName.getText().toString();
-        String otherUserAvatarUrl = avatarUrl;
-        String otherUserUid = Uid;
+        String otherUserAvatarUrl = mProfilePictureUrlInThisProfilePage;
+        String otherUserUid = mUidThatBelongsToThisProfilePage;
 
-        mProfileAccountInfoUseCase = new GetProfileAccountInfoUseCase();
-        mProfileAccountInfoUseCase.execute(currentUser).addOnSuccessListener(document -> {
-            if (document != null && document.exists()) {
-                String UserDisplayName = document.getString("display_name");
-                String UserAvatarUrl = document.getString("profile_picture");
-                //logged user id is saved in currentUser
-            }
-        });
+        User thisUser = CurrentlyLoggedUser.get();
+        User otherUser = new User();
+        otherUser.setUid(otherUserUid);
+        otherUser.setDisplayName(otherUserDisplayName);
+        otherUser.setProfilePicture(otherUserAvatarUrl);
+
+        mProfileViewModel.getOneToOneChatRoom(thisUser, otherUser);
     }
 
 }

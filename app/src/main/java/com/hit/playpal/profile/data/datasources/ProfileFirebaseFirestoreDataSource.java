@@ -110,14 +110,14 @@ public class ProfileFirebaseFirestoreDataSource {
 
     public Task<DocumentSnapshot> getTheExistingOneToOneChatRoom(String iChatRoomId) {
         return DB
-                .collection("o2o_chat_rooms")
+                .collection("chat_rooms")
                 .document(iChatRoomId)
                 .get();
     }
 
     public Task<DocumentReference> createAndGetNewOneToOneChatRoom(OneToOneChatRoom iOneToOneChatRoom) {
         return DB
-                .collection("o2o_chat_rooms")
+                .collection("chat_rooms")
                 .add(iOneToOneChatRoom);
     }
 
