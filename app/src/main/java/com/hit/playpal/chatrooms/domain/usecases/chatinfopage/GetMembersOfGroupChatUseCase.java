@@ -2,7 +2,7 @@ package com.hit.playpal.chatrooms.domain.usecases.chatinfopage;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.hit.playpal.chatrooms.domain.repositories.IChatRoomRepository;
-import com.hit.playpal.chatrooms.domain.utils.exceptions.RoomNotFound;
+import com.hit.playpal.chatrooms.domain.utils.exceptions.RoomNotFoundException;
 import com.hit.playpal.entities.chats.GroupProfile;
 
 import java.util.List;
@@ -33,12 +33,12 @@ public class GetMembersOfGroupChatUseCase {
                                 }
                                 else
                                 {
-                                    future.completeExceptionally(new RoomNotFound());
+                                    future.completeExceptionally(new RoomNotFoundException());
                                 }
                             }
                             else
                             {
-                                future.completeExceptionally(new RoomNotFound());
+                                future.completeExceptionally(new RoomNotFoundException());
                             }
                         }
                         else

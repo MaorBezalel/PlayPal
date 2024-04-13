@@ -3,7 +3,7 @@ package com.hit.playpal.chatrooms.domain.usecases.chatbody;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.chatrooms.domain.repositories.IChatRoomRepository;
-import com.hit.playpal.chatrooms.domain.utils.exceptions.MessagesNotFound;
+import com.hit.playpal.chatrooms.domain.utils.exceptions.MessagesNotFoundException;
 import com.hit.playpal.entities.chats.Message;
 import com.hit.playpal.utils.Out;
 
@@ -34,7 +34,7 @@ public class FetchMessagesUseCase {
                 }
                 else
                 {
-                    future.completeExceptionally(new MessagesNotFound());
+                    future.completeExceptionally(new MessagesNotFoundException());
                 }
             }
             else

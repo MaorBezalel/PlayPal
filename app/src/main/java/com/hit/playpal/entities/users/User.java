@@ -7,8 +7,13 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.PropertyName;
 
+import org.jetbrains.annotations.Contract;
+
+/**
+ * Entity class that represents a user.
+ */
 public class User implements Parcelable {
-    @PropertyName("uid") private String mUid;
+    @PropertyName("uid") private String mUid; // TODO: change to @DocumentId ???
     @PropertyName("uid") public String getUid() { return mUid; }
     @PropertyName("uid") public void setUid(String iUid) { mUid = iUid; }
 
@@ -51,7 +56,7 @@ public class User implements Parcelable {
         mAboutMe = iAboutMe;
     }
 
-    protected User(Parcel in) {
+    protected User(@NonNull Parcel in) {
         mUid = in.readString();
         mUsername = in.readString();
         mDisplayName = in.readString();
@@ -60,11 +65,15 @@ public class User implements Parcelable {
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
+        @NonNull
+        @Contract("_ -> new")
         @Override
         public User createFromParcel(Parcel in) {
             return new User(in);
         }
 
+        @NonNull
+        @Contract(value = "_ -> new", pure = true)
         @Override
         public User[] newArray(int size) {
             return new User[size];

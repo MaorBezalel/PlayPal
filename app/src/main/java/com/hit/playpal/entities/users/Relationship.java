@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 
 import com.hit.playpal.entities.users.enums.RelationshipStatus;
 
+/**
+ * Entity class that represents a relationship between two users.
+ */
 public class Relationship {
     private User mOther_user;
 
