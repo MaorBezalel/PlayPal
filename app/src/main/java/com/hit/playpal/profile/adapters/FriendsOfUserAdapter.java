@@ -24,8 +24,8 @@ public class FriendsOfUserAdapter extends UserAdapter<Relationship> {
             }
 
             @Override
-            public String getDisplayName(Relationship iItem) {
-                return iItem.getOther_user().getDisplayName();
+            public String getUsername(Relationship iItem) {
+                return iItem.getOther_user().getUsername();
             }
         }, iOwner, FirebaseFirestore.getInstance().collection("users").document(iCurrentUserId).collection("relationships").whereEqualTo("status", RelationshipStatus.friends), Relationship.class);
 

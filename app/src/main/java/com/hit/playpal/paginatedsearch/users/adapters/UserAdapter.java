@@ -60,7 +60,7 @@ public class UserAdapter<T> extends FirestorePagingAdapter<T, UserAdapter.UserVi
         } else {
             Picasso.get().load(userImageUrl).into(iUserViewHolder.userImage);
         }
-        iUserViewHolder.userDisplayName.setText(mBindableUser.getDisplayName(iItem));
+        iUserViewHolder.userName.setText(mBindableUser.getUsername(iItem));
 
         iUserViewHolder.userCard.setOnClickListener(v -> {
             mUserAdapter.onUserClick(mBindableUser.getUserId(iItem));
@@ -77,20 +77,20 @@ public class UserAdapter<T> extends FirestorePagingAdapter<T, UserAdapter.UserVi
     public static class UserViewHolder extends RecyclerView.ViewHolder {
         public final CardView userCard;
         public final ImageView userImage;
-        public final TextView userDisplayName;
+        public final TextView userName;
 
         public UserViewHolder(View view) {
             super(view);
             userCard = view.findViewById(R.id.userCard);
             userImage = view.findViewById(R.id.fragment_search_users_image);
-            userDisplayName = view.findViewById(R.id.fragment_search_users_displayname);
+            userName = view.findViewById(R.id.fragment_search_users_displayname);
         }
     }
 
 
-    public void applyFilters(String iUserDisplayName)
+    public void applyFilters(String iUserName)
     {
-        if(iUserDisplayName == null || iUserDisplayName.isEmpty())
+        if(iUserName == null || iUserName.isEmpty())
         {
             super.updateOptions(new FirestorePagingOptions.Builder<T>()
                     .setLifecycleOwner(mCurrentLifecycleOwner)
@@ -103,9 +103,9 @@ public class UserAdapter<T> extends FirestorePagingAdapter<T, UserAdapter.UserVi
         else
         {
             Query filteredQuery = mBaseQuery
-                    .orderBy(mUserPrefixPath + "display_name")
-                    .startAt(iUserDisplayName)
-                    .endAt(iUserDisplayName + "\uf8ff");
+                    .orderBy(mUserPrefixPath + "username")
+                    .startAt(iUserName)
+                    .endAt(iUserName + "\uf8ff");
 
             super.updateOptions(new FirestorePagingOptions.Builder<T>()
                     .setLifecycleOwner(mCurrentLifecycleOwner)

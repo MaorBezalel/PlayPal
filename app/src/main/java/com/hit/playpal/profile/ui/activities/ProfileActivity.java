@@ -307,6 +307,8 @@ public class ProfileActivity extends AppCompatActivity {
             otherUserData.put("display_name", mTextViewGetDisplayName.getText().toString()); // displayName is the display name of the other user
             otherUserData.put("profile_picture", mProfilePictureUrlInThisProfilePage); // avatarUrl is the URL of the other user's avatar
             otherUserData.put("uid", mUidThatBelongsToThisProfilePage); // Uid is the id of the other user
+            otherUserData.put("username", mTextViewGetUserName.getText().toString());
+
 
             AddPendingFriendUseCase addPendingFriendUseCase = new AddPendingFriendUseCase();
             addPendingFriendUseCase.execute(mCurrentUserUid, mUidThatBelongsToThisProfilePage, otherUserData).addOnCompleteListener(new OnCompleteListener<Void>() {

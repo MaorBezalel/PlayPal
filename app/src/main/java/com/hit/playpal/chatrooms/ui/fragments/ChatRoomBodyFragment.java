@@ -23,6 +23,7 @@ import com.hit.playpal.chatrooms.domain.listeners.INewMessageRegistrationListene
 import com.hit.playpal.chatrooms.ui.adapters.MessageAdapter;
 import com.hit.playpal.chatrooms.ui.viewmodels.ChatRoomViewModel;
 import com.hit.playpal.entities.chats.ChatRoom;
+import com.hit.playpal.entities.chats.enums.ChatRoomType;
 import com.hit.playpal.entities.chats.group.GroupChatRoom;
 import com.hit.playpal.entities.messages.Message;
 import com.hit.playpal.entities.chats.o2o.OneToOneChatRoom;
@@ -199,7 +200,14 @@ public class ChatRoomBodyFragment extends Fragment {
         }
 
         if (imageUrl == null || imageUrl.isEmpty()) {
-            mChatRoomImageImageView.setImageResource(R.drawable.ic_home_nav_search_groupchats);
+            if(chatRoom instanceof GroupChatRoom)
+            {
+                mChatRoomImageImageView.setImageResource(R.drawable.ic_home_nav_search_groupchats);
+            }
+            else
+            {
+                mChatRoomImageImageView.setImageResource(R.drawable.ic_home_nav_myprofile);
+            }
         } else {
             Picasso.get()
                     .load(imageUrl)
