@@ -38,7 +38,6 @@ import com.hit.playpal.profile.ui.activities.ProfileActivity;
 import com.hit.playpal.settings.domain.usecases.CheckIfUserNameIsUniqueUseCase;
 import com.hit.playpal.settings.domain.usecases.UpdateUserProfileUseCase;
 import com.hit.playpal.settings.ui.utils.SettingsValidations;
-import com.hit.playpal.settings.ui.utils.UserPermissions;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.hit.playpal.utils.Out;
 import com.squareup.picasso.Picasso;
