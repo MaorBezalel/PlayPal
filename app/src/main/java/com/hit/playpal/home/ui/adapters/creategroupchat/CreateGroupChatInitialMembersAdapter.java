@@ -15,7 +15,6 @@ import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.firestore.Query;
 import com.hit.playpal.R;
-import com.hit.playpal.entities.games.Game;
 import com.hit.playpal.entities.users.User;
 import com.squareup.picasso.Picasso;
 
@@ -28,12 +27,10 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
     private static final int PAGE_PREFETCH_DISTANCE = 5;
     public static final int MINIMUM_NUMBER_OF_MEMBERS = 2;
 
-    private Set<MaterialCardView> mSelectedCardViews;
-
     private LifecycleOwner mOwner;
     private Query mBaseQuery;
-
-    private Set<User> mSelectedUsers;
+    
+    private final Set<User> mSelectedUsers;
     public Set<User> getSelectedUsers() {
         return mSelectedUsers;
     }
@@ -48,11 +45,9 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
                 .build()
         );
 
-        mSelectedCardViews = new HashSet<>();
-        mSelectedUsers = new HashSet<>();
-
         mOwner = iOwner;
         mBaseQuery = iQuery;
+        mSelectedUsers = new HashSet<>();
     }
 
     public static class InitialMembersViewHolder extends RecyclerView.ViewHolder {
@@ -81,16 +76,16 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
         }
 
         iHolder.CARD_VIEW.setOnClickListener(v -> {
-            if (mSelectedCardViews.contains(iHolder.CARD_VIEW)) {
-                mSelectedCardViews.remove(iHolder.CARD_VIEW);
+            if (mSelectedUsers.contains(iCurrentUser)) {
                 mSelectedUsers.remove(iCurrentUser);
                 iHolder.CARD_VIEW.setChecked(false);
             } else {
-                mSelectedCardViews.add(iHolder.CARD_VIEW);
                 mSelectedUsers.add(iCurrentUser);
                 iHolder.CARD_VIEW.setChecked(true);
             }
         });
+
+        iHolder.CARD_VIEW.setChecked(mSelectedUsers.contains(iCurrentUser));
     }
 
     @NonNull

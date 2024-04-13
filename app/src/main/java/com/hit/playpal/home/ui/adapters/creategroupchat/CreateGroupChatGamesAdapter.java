@@ -27,7 +27,7 @@ public class CreateGroupChatGamesAdapter extends FirestorePagingAdapter<Game, Cr
     private LifecycleOwner mOwner;
     private Query mBaseQuery;
 
-    private MaterialCardView mSelectedCardView;
+
 
     private Game mSelectedGame;
     public Game getSelectedGame() {
@@ -64,27 +64,20 @@ public class CreateGroupChatGamesAdapter extends FirestorePagingAdapter<Game, Cr
         iHolder.GAME_TITLE_TEXT_VIEW.setText(iCurrentGame.getGameName());
         Picasso.get().load(iCurrentGame.getBackgroundImage()).into(iHolder.GAME_IMAGE_VIEW);
 
-        Log.i("CreateGroupChatGamesAdapter", "onBindViewHolder: game: " + iCurrentGame.getGameName() + " | checked: " + iHolder.CARD_VIEW.isChecked() + " | equals: " + (iHolder.CARD_VIEW == mSelectedCardView));
 
-        // Outside of onClickListener
-        iHolder.CARD_VIEW.setChecked(iHolder.CARD_VIEW == mSelectedCardView);
+
 
         iHolder.CARD_VIEW.setOnClickListener(v -> {
             if (iHolder.CARD_VIEW.isChecked() && iCurrentGame.equals(mSelectedGame)) {
                 iHolder.CARD_VIEW.setChecked(false);
                 mSelectedGame = null;
-                mSelectedCardView = null;
             } else {
                 iHolder.CARD_VIEW.setChecked(true);
-
-                if (mSelectedCardView != null) {
-                    mSelectedCardView.setChecked(false);
-                }
-
-                mSelectedCardView = iHolder.CARD_VIEW;
                 mSelectedGame = iCurrentGame;
             }
         });
+
+        iHolder.CARD_VIEW.setChecked(iCurrentGame.equals(mSelectedGame));
     }
 
     @NonNull
