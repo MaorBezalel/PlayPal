@@ -49,7 +49,7 @@ public class FavGameDataSource {
     {
         return favGameInstance.
                 whereEqualTo("game.game_name", iGameName).
-                whereEqualTo("user", iCurrentlyLoggedUser).
+                whereEqualTo("user.uid", iCurrentlyLoggedUser.getUid()).
                 get();
     }
 
