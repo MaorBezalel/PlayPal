@@ -19,6 +19,9 @@ public class UpdateUserProfileUseCase {
     public Task<Void> execute(String currentUser, String userName, String displayName, String aboutMe, Uri selectedImageUri) {
         if (selectedImageUri == null) {
             // If selectedImageUri is null, update the user profile without changing the profile picture URL
+
+            CurrentlyLoggedUser.set(new User(currentUser, userName, displayName, CurrentlyLoggedUser.get().getProfilePicture(), aboutMe));
+
             return mUpdateUserProfileRepository.updateUserProfileWithoutPicture(currentUser, userName, displayName, aboutMe);
         } else {
             // If selectedImageUri is not null, upload the profile picture and update the user profile
