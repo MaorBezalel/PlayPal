@@ -72,6 +72,46 @@
             android:text="Select the initial members of your group chat. You can add more members later."
             android:textAlignment="gravity" />
 
+        <SearchView
+            android:id="@+id/searchview_create_group_chat_initial_members"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/home_search_view"
+            android:backgroundTint="@color/secondary_50"
+            android:iconifiedByDefault="false"
+            android:layout_marginTop="10dp"
+            android:queryHint="Ex. Dave"
+            android:queryBackground="@null" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_create_users_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:backgroundTint="@color/accent"
+                android:fontFamily="@font/dosis_extrabold"
+                android:text="Search"
+                android:textSize="16sp"
+                app:cornerRadius="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_create_users_clear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:backgroundTint="@color/error"
+                android:fontFamily="@font/dosis_extrabold"
+                android:text="Clear"
+                android:textSize="16sp"
+                app:cornerRadius="0dp" />
+
+        </LinearLayout>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"

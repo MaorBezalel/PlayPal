@@ -15,6 +15,7 @@ import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.firestore.Query;
 import com.hit.playpal.R;
+import com.hit.playpal.entities.games.Game;
 import com.hit.playpal.entities.users.User;
 import com.squareup.picasso.Picasso;
 
@@ -28,6 +29,9 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
     public static final int MINIMUM_NUMBER_OF_MEMBERS = 2;
 
     private Set<MaterialCardView> mSelectedCardViews;
+
+    private LifecycleOwner mOwner;
+    private Query mBaseQuery;
 
     private Set<User> mSelectedUsers;
     public Set<User> getSelectedUsers() {
@@ -46,6 +50,9 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
 
         mSelectedCardViews = new HashSet<>();
         mSelectedUsers = new HashSet<>();
+
+        mOwner = iOwner;
+        mBaseQuery = iQuery;
     }
 
     public static class InitialMembersViewHolder extends RecyclerView.ViewHolder {
@@ -91,5 +98,17 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
     public InitialMembersViewHolder onCreateViewHolder(@NonNull ViewGroup iParent, int iViewType) {
         View view = View.inflate(iParent.getContext(), R.layout.item_initial_member_for_group_creation, null);
         return new InitialMembersViewHolder(view);
+    }
+
+    public void applyNamingFilter(String iUserName) {
+        Query newQuery = mBaseQuery
+                .orderBy("username")
+                .startAt(iUserName)
+                .endAt(iUserName + "\uf8ff");
+
+        super.updateOptions(new FirestorePagingOptions.Builder<User>()
+                .setLifecycleOwner(mOwner)
+                .setQuery(newQuery, PAGING_CONFIG, User.class)
+                .build());
     }
 }
