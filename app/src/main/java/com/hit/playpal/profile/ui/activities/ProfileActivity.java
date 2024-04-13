@@ -57,7 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String status;
     private String avatarUrl;
 
-    private final String currentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
+    private final String  currentUser = CurrentlyLoggedUser.get().getUid();
 
     private String Uid;
 

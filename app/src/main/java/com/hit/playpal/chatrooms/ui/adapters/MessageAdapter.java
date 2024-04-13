@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.hit.playpal.R;
-import com.hit.playpal.entities.chats.Message;
+import com.hit.playpal.entities.messages.Message;
 import com.hit.playpal.utils.DateUtils;
 import com.squareup.picasso.Picasso;
 

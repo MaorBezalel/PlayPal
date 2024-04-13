@@ -1,33 +1,18 @@
 package com.hit.playpal.chatrooms.data.repositories;
 
-import androidx.lifecycle.ViewModelKt;
-import androidx.paging.CachedPagingDataKt;
-import androidx.paging.Pager;
-import androidx.paging.PagingConfig;
-import androidx.paging.PagingData;
-import androidx.paging.PagingLiveData;
-
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.chatrooms.data.datasources.FirebaseFirestoreDataSource;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageEventListener;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageRegistrationListener;
 import com.hit.playpal.chatrooms.domain.repositories.IChatRoomRepository;
-import com.hit.playpal.entities.chats.GroupProfile;
-import com.hit.playpal.entities.chats.Message;
-import com.hit.playpal.entities.chats.enums.ContentType;
-import com.hit.playpal.entities.chats.enums.UserChatRole;
+import com.hit.playpal.entities.chats.group.GroupProfile;
+import com.hit.playpal.entities.messages.Message;
+import com.hit.playpal.entities.chats.group.enums.GroupChatRoomRole;
 import com.hit.playpal.entities.users.User;
-
-import java.util.Date;
-
-import kotlinx.coroutines.flow.Flow;
 
 public class ChatRoomRepository implements IChatRoomRepository {
     private final FirebaseFirestoreDataSource DB = new FirebaseFirestoreDataSource();
@@ -59,7 +44,7 @@ public class ChatRoomRepository implements IChatRoomRepository {
 
     @Override
     public Task<Void> addNewMemberToGroupChatRoom(String iChatRoomId, User iUser) {
-        GroupProfile.Participant participant = GroupProfile.Participant.parseUser(iUser, UserChatRole.REGULAR);
+        GroupProfile.Participant participant = GroupProfile.Participant.parseUser(iUser, GroupChatRoomRole.REGULAR);
         Task<Void> taskToUpdateGroupChatRoom = DB.updateGroupChatRoomWithNewMember(iChatRoomId, iUser.getUid());
         Task<Void> taskToUpdateGroupProfile = DB.updateGroupProfileWithNewParticipant(iChatRoomId, participant);
 

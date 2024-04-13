@@ -1,4 +1,4 @@
-package com.hit.playpal.entities.chats;
+package com.hit.playpal.entities.messages;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,15 +7,17 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.PropertyName;
-import com.hit.playpal.entities.chats.enums.ContentType;
+import com.hit.playpal.entities.messages.enums.MessageContentType;
 import com.hit.playpal.entities.users.User;
 
 import org.jetbrains.annotations.Contract;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Entity class that represents a message.
+ */
 public class Message implements Parcelable {
     @DocumentId private String mId;
     @DocumentId public String getId() { return mId; }
@@ -48,7 +50,7 @@ public class Message implements Parcelable {
     public Message(String iChatRoomId, @NonNull User iSender, String iTextMessage) {
         mChatRoomId = iChatRoomId;
         mSender = new Sender(iSender.getUid(), iSender.getDisplayName(), iSender.getProfilePicture());
-        mContent = new Content(iTextMessage, ContentType.TEXT);
+        mContent = new Content(iTextMessage, MessageContentType.TEXT);
         mSentAt = new Date();
         //mSentAt = Date.from(LocalDateTime.now().toInstant(java.time.ZoneOffset.UTC)); ???
     }
@@ -109,6 +111,9 @@ public class Message implements Parcelable {
         return Objects.equals(mSentAt, message.mSentAt);
     }
 
+    /**
+     * Inner entity class that represents the sender of a message.
+     */
     public static class Sender implements Parcelable {
         @PropertyName("uid") private String mUid;
         @PropertyName("uid") public String getUid() { return mUid; }
@@ -176,24 +181,27 @@ public class Message implements Parcelable {
         }
     }
 
+    /**
+     * Inner entity class that represents the content of a message.
+     */
     public static class Content implements Parcelable {
         @PropertyName("data") private String mData;
         @PropertyName("data") public String getData() { return mData; }
         @PropertyName("data") public void setData(String iData) { mData = iData; }
 
-        @PropertyName("type") private ContentType mType;
-        @PropertyName("type") public ContentType getType() { return mType; }
-        @PropertyName("type") public void setType(ContentType iType) { mType = iType; }
+        @PropertyName("type") private MessageContentType mType;
+        @PropertyName("type") public MessageContentType getType() { return mType; }
+        @PropertyName("type") public void setType(MessageContentType iType) { mType = iType; }
 
         public Content() { }
-        public Content(String iData, ContentType iType) {
+        public Content(String iData, MessageContentType iType) {
             mData = iData;
             mType = iType;
         }
 
         protected Content(@NonNull Parcel iIn) {
             mData = iIn.readString();
-            mType = ContentType.valueOf(iIn.readString());
+            mType = MessageContentType.valueOf(iIn.readString());
         }
 
         @Override

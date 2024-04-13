@@ -1,4 +1,4 @@
-package com.hit.playpal.entities.chats;
+package com.hit.playpal.entities.chats.o2o;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,13 +6,18 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.PropertyName;
+import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.chats.enums.ChatRoomType;
+import com.hit.playpal.entities.messages.Message;
 
 import org.jetbrains.annotations.Contract;
 
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Inner entity class that represents a one-to-one chat room.
+ */
 public class OneToOneChatRoom extends ChatRoom {
     @PropertyName("other_member_data") private HashMap<String, OtherMemberData> mOtherMemberData;
     @PropertyName("other_member_data") public HashMap<String, OtherMemberData> getOtherMemberBasicData() { return mOtherMemberData; }
@@ -22,7 +27,7 @@ public class OneToOneChatRoom extends ChatRoom {
         super();
         mType = ChatRoomType.ONE_TO_ONE;
     }
-    public OneToOneChatRoom(String iChatRoomId, List<String> iMembersUid,  Message iLastMessage, HashMap<String, OtherMemberData> iOtherMemberData) {
+    public OneToOneChatRoom(String iChatRoomId, List<String> iMembersUid, Message iLastMessage, HashMap<String, OtherMemberData> iOtherMemberData) {
        super(iChatRoomId, ChatRoomType.ONE_TO_ONE, iMembersUid, iLastMessage);
         mOtherMemberData = iOtherMemberData;
     }
@@ -60,6 +65,9 @@ public class OneToOneChatRoom extends ChatRoom {
         }
     };
 
+    /**
+     * Entity class that represents the basic data of the other member of the chat room.
+     */
     public static class OtherMemberData implements Parcelable {
         @PropertyName("display_name") private String mDisplayName;
         @PropertyName("display_name") public String getDisplayName() { return mDisplayName; }

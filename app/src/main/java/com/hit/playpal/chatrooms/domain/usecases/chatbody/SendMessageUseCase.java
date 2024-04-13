@@ -2,7 +2,7 @@ package com.hit.playpal.chatrooms.domain.usecases.chatbody;
 
 import com.hit.playpal.chatrooms.domain.repositories.IChatRoomRepository;
 import com.hit.playpal.chatrooms.domain.utils.enums.ChatBodyFailure;
-import com.hit.playpal.entities.chats.Message;
+import com.hit.playpal.entities.messages.Message;
 import com.hit.playpal.utils.UseCaseResult;
 
 import java.util.concurrent.CompletableFuture;

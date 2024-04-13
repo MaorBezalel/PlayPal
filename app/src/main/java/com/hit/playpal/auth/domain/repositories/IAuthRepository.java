@@ -5,7 +5,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.hit.playpal.entities.users.Settings;
+import com.hit.playpal.entities.settings.Settings;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.entities.users.UserPrivate;
 

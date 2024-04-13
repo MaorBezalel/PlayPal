@@ -1,5 +1,8 @@
 package com.hit.playpal.entities.games.enums;
 
+/**
+ * Enum for the genre of a game
+ */
 public enum Genre {
     ACTION,
     INDIE,

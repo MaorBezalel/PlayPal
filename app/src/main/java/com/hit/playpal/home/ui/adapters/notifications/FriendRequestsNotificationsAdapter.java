@@ -9,13 +9,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.hit.playpal.R;
-import com.hit.playpal.entities.users.Notification;
-import com.hit.playpal.home.ui.adapters.recentchats.ChatsRecyclerViewAdapter;
+import com.hit.playpal.entities.notifications.Notification;
 import com.hit.playpal.utils.DateUtils;
 import com.squareup.picasso.Picasso;
 

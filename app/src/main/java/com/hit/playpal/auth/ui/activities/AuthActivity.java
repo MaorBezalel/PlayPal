@@ -66,7 +66,7 @@ public class AuthActivity extends AppCompatActivity {
 
     private void handleAuthenticatedUser(User user) {
 
-        CurrentlyLoggedUser.setCurrentlyLoggedUser(user);
+        CurrentlyLoggedUser.set(user);
 
         Intent intent = new Intent(this, HomeActivity.class);
         intent.putExtra("user", user);

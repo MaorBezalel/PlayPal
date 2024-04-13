@@ -1,6 +1,6 @@
 package com.hit.playpal.home.domain.usecases.notifications;
 
-import com.hit.playpal.entities.users.Notification;
+import com.hit.playpal.entities.notifications.Notification;
 import com.hit.playpal.home.data.repositories.NotificationsRepository;
 
 import java.util.List;

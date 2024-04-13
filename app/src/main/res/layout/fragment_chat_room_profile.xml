@@ -53,11 +53,11 @@
         android:paddingHorizontal="2dp"
         android:fontFamily="@font/comfortaa_bold"
         android:gravity="top|center"
-        android:lines="8"
+        android:maxLines="6"
         android:text="This is a chat room for fans of Shrek's donkey"
         android:textAlignment="gravity"
         android:textColor="@color/primary"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
 
 
@@ -93,7 +93,7 @@
                 android:gravity="center"
                 android:text="Game Title"
                 android:textColor="@color/secondary"
-                android:textSize="26sp" />
+                android:textSize="23sp" />
 
         </RelativeLayout>
 

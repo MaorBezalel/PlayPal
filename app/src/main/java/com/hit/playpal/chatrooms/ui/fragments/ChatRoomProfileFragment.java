@@ -22,7 +22,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.hit.playpal.R;
 import com.hit.playpal.chatrooms.ui.enums.ChatRoomLocation;
 import com.hit.playpal.chatrooms.ui.viewmodels.ChatRoomViewModel;
-import com.hit.playpal.entities.chats.GroupChatRoom;
+import com.hit.playpal.entities.chats.group.GroupChatRoom;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.game.ui.activities.GameActivity;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
@@ -71,7 +71,7 @@ public class ChatRoomProfileFragment extends Fragment {
 
     private void getViewModelFromActivity() {
         mChatRoomViewModel = new ViewModelProvider(requireActivity()).get(ChatRoomViewModel.class);
-        mCurrentUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
+        mCurrentUser = CurrentlyLoggedUser.get();
         mGroupChatRoom = (GroupChatRoom) mChatRoomViewModel.getChatRoomLiveData().getValue();
         mInitialChatRoomLocation = mChatRoomViewModel.getInitialChatRoomLocation();
     }

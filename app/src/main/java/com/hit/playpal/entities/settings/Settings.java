@@ -1,18 +1,20 @@
-package com.hit.playpal.entities.users;
+package com.hit.playpal.entities.settings;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.PropertyName;
-import com.hit.playpal.entities.users.enums.MessagesPolicy;
-import com.hit.playpal.entities.users.enums.NotificationPolicy;
-import com.hit.playpal.entities.users.enums.ThemePolicy;
+import com.hit.playpal.entities.settings.enums.MessagesPolicy;
+import com.hit.playpal.entities.settings.enums.NotificationPolicy;
+import com.hit.playpal.entities.settings.enums.ThemePolicy;
 
 import org.jetbrains.annotations.Contract;
 
 import java.util.HashMap;
 
+/**
+ * Entity class that represents the settings of a user.
+ */
 public class Settings {
-
     @PropertyName("message_policy") private MessagesPolicy mMessagePolicy;
     @PropertyName("message_policy") public MessagesPolicy getMessagePolicy() { return mMessagePolicy; }
     @PropertyName("message_policy") public void setMessagePolicy(MessagesPolicy iMessagePolicy) { mMessagePolicy = iMessagePolicy; }
@@ -20,7 +22,6 @@ public class Settings {
     @PropertyName("theme_policy") private ThemePolicy mThemePolicy;
     @PropertyName("theme_policy") public ThemePolicy getThemePolicy() { return mThemePolicy; }
     @PropertyName("theme_policy") public void setThemePolicy(ThemePolicy iThemePolicy) { mThemePolicy = iThemePolicy; }
-
 
     @PropertyName("notification_policy") private HashMap<String, Boolean> mNotificationPolicies;
     @PropertyName("notification_policy") public HashMap<String, Boolean> getNotificationPolicy() { return mNotificationPolicies; }

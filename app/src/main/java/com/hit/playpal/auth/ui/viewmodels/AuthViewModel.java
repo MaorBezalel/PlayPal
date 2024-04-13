@@ -17,7 +17,7 @@ import com.hit.playpal.auth.domain.usecases.IsUsernameUniqueUseCase;
 import com.hit.playpal.auth.domain.usecases.LoginWithEmailUseCase;
 import com.hit.playpal.utils.SingleLiveEvent;
 import com.hit.playpal.utils.UseCaseResult;
-import com.hit.playpal.entities.users.Settings;
+import com.hit.playpal.entities.settings.Settings;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.entities.users.UserPrivate;
 

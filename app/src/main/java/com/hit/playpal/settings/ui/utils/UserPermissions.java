@@ -1,4 +1,4 @@
-package com.hit.playpal.settings.ui.utilities;
+package com.hit.playpal.settings.ui.utils;
 
 import android.Manifest;
 import android.app.Activity;

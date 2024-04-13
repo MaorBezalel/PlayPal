@@ -12,8 +12,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.hit.playpal.entities.chats.o2o.OneToOneChatRoom;
+import com.hit.playpal.entities.relationships.OneToOneChatRelationship;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -95,8 +98,35 @@ public class ProfileFirebaseFirestoreDataSource {
                 });
     }
 
+    public Task<QuerySnapshot> tryToGetOneToOneChatRelationship(String iUid1, String iUid2) {
+        String joinedUids1 = OneToOneChatRelationship.joinUids(iUid1, iUid2);
+        String joinedUids2 = OneToOneChatRelationship.joinUids(iUid2, iUid1);
 
+        return DB
+                .collection("o2o_chat_relationships")
+                .whereIn("joined_uids", Arrays.asList(joinedUids1, joinedUids2))
+                .get();
+    }
 
+    public Task<DocumentSnapshot> getTheExistingOneToOneChatRoom(String iChatRoomId) {
+        return DB
+                .collection("o2o_chat_rooms")
+                .document(iChatRoomId)
+                .get();
+    }
+
+    public Task<DocumentReference> createAndGetNewOneToOneChatRoom(OneToOneChatRoom iOneToOneChatRoom) {
+        return DB
+                .collection("o2o_chat_rooms")
+                .add(iOneToOneChatRoom);
+    }
+
+    public Task<Void> createNewOneToOneChatRelationship(OneToOneChatRelationship iOneToOneChatRelationship) {
+        return DB
+                .collection("o2o_chat_relationships")
+                .document()
+                .set(iOneToOneChatRelationship);
+    }
 
 }
 
