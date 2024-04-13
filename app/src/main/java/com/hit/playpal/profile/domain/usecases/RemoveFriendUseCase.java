@@ -6,7 +6,7 @@ import com.hit.playpal.profile.data.repositories.ProfileRepository;
 
 public class RemoveFriendUseCase {
 
-    private ProfileRepository mProfileRepository;
+    private final ProfileRepository mProfileRepository;
 
 
     public RemoveFriendUseCase() {

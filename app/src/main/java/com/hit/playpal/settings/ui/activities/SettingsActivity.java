@@ -2,7 +2,6 @@ package com.hit.playpal.settings.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,15 +17,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,37 +41,34 @@ import com.hit.playpal.utils.Out;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private final String  currentUser = CurrentlyLoggedUser.get().getUid();
-    private EditText editTextSetDisplayName;
-    private EditText editTextSetUserName;
-    private EditText editTextSetAboutMe;
-    private ShapeableImageView imageSetViewAvatar;
-    private Button buttonSettingsReturn;
-    private Button buttonSaveSettings;
-
-    private ProgressBar progressBarSavingSettings;
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private Uri selectedImageUri;
-    private boolean isImageChanged;
-    private String originalUserName;
-    private FirebaseFirestore DB;
+    private final String mCurrentUserUid = CurrentlyLoggedUser.get().getUid();
+    private EditText mEditTextSetDisplayName;
+    private EditText mEditTextSetUserName;
+    private EditText mEditTextSetAboutMe;
+    private ShapeableImageView mImageSetViewProfilePicture;
+    private Button mButtonSaveSettings;
+    private ProgressBar mProgressBarSavingSettings;
+    private Uri mSelectedImageUri;
+    private boolean mIsImageChanged;
+    private String mOriginalUserName;
     private FirebaseAuth mAuth;
-    private Button buttonLogOut;
-
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle iSavedInstanceState) {
+        super.onCreate(iSavedInstanceState);
+        setupUI();
+        setupEditTexts();
+        setupButtons();
+    }
+
+    private void setupUI() {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_settings);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        setupWindowInsets();
 
         Intent intent = getIntent();
         String displayName = intent.getStringExtra("displayName");
@@ -81,27 +76,35 @@ public class SettingsActivity extends AppCompatActivity {
         String aboutMe = intent.getStringExtra("aboutMe");
         String avatarImage = intent.getStringExtra("avatarImage");
 
-        buttonSettingsReturn = findViewById(R.id.buttonSettingsReturn);
-        buttonSaveSettings = findViewById(R.id.buttonSaveSettings);
-        progressBarSavingSettings = findViewById(R.id.progressBarSavingSettings);
-        editTextSetDisplayName = findViewById(R.id.editTextSetDisplayName);
-        editTextSetUserName = findViewById(R.id.editTextSetUserName);
-        editTextSetAboutMe = findViewById(R.id.editTextSetAboutMe);
-        imageSetViewAvatar = findViewById(R.id.imageSetViewAvatar);
-        buttonLogOut = findViewById(R.id.buttonLogOut);
-        DB = FirebaseFirestore.getInstance();
+        mButtonSaveSettings = findViewById(R.id.buttonSaveSettings);
+        mProgressBarSavingSettings = findViewById(R.id.progressBarSavingSettings);
+        mEditTextSetDisplayName = findViewById(R.id.editTextSetDisplayName);
+        mEditTextSetUserName = findViewById(R.id.editTextSetUserName);
+        mEditTextSetAboutMe = findViewById(R.id.editTextSetAboutMe);
+        mImageSetViewProfilePicture = findViewById(R.id.imageSetViewAvatar);
         mAuth = FirebaseAuth.getInstance();
 
-        editTextSetDisplayName.setText(displayName);
-        editTextSetUserName.setText(userName);
-        editTextSetAboutMe.setText(aboutMe);
-        originalUserName = editTextSetUserName.getText().toString().trim();
-        if (avatarImage != null && !avatarImage.isEmpty()) {
-            Picasso.get().load(avatarImage).into(imageSetViewAvatar);
-            // Convert the URL to a Uri and assign it to selectedImageUri
-            selectedImageUri = Uri.parse(avatarImage);
-        }
+        mEditTextSetDisplayName.setText(displayName);
+        mEditTextSetUserName.setText(userName);
+        mEditTextSetAboutMe.setText(aboutMe);
+        mOriginalUserName = mEditTextSetUserName.getText().toString().trim();
 
+        if (avatarImage != null && !avatarImage.isEmpty()) {
+            Picasso.get().load(avatarImage).into(mImageSetViewProfilePicture);
+            // Convert the URL to a Uri and assign it to selectedImageUri
+            mSelectedImageUri = Uri.parse(avatarImage);
+        }
+    }
+
+    private void setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+
+    private void setupEditTexts() {
         // Create a TextWatcher
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -114,83 +117,80 @@ public class SettingsActivity extends AppCompatActivity {
             }
             @Override
             public void afterTextChanged(Editable s) {
-                buttonSaveSettings.setVisibility(View.VISIBLE);
+                mButtonSaveSettings.setVisibility(View.VISIBLE);
             }
         };
 
-        editTextSetDisplayName.addTextChangedListener(textWatcher);
-        editTextSetUserName.addTextChangedListener(textWatcher);
-        editTextSetAboutMe.addTextChangedListener(textWatcher);
+        mEditTextSetDisplayName.addTextChangedListener(textWatcher);
+        mEditTextSetUserName.addTextChangedListener(textWatcher);
+        mEditTextSetAboutMe.addTextChangedListener(textWatcher);
+    }
 
-        buttonSettingsReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SettingsActivity.this, ProfileActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
-                finish();
-            }
+    private void setupButtons() {
+        Button buttonSettingsReturn = findViewById(R.id.buttonSettingsReturn);
+        buttonSettingsReturn.setOnClickListener(v -> {
+            Intent intent12 = new Intent(SettingsActivity.this, ProfileActivity.class);
+            intent12.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent12);
+            finish();
         });
 
-        imageSetViewAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, PICK_IMAGE_REQUEST);
-            }
+        mImageSetViewProfilePicture.setOnClickListener(v -> {
+            Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            mImagePickerLauncher.launch(intent1);
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri newImageUri = data.getData();
-            String filePath = getRealPathFromURI(newImageUri);
-            Out<String> invalidationReason = Out.of(String.class);
-            if (!SettingsValidations.isAvatarImageValid(filePath, invalidationReason)) {
-                Snackbar.make(findViewById(android.R.id.content), invalidationReason.get(), Snackbar.LENGTH_LONG).show();
-                return;
+    private final ActivityResultLauncher<Intent> mImagePickerLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null && data.getData() != null) {
+                        handleImageSelection(data.getData());
+                    }
+                } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                    // Handle the case where the user cancelled the image selection
+                    Toast.makeText(this, "Image selection cancelled", Toast.LENGTH_SHORT).show();
+                }
             }
+    );
 
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), newImageUri);
-                // Set the Bitmap directly to the ImageView
-                imageSetViewAvatar.setImageBitmap(bitmap);
-                // Only update selectedImageUri if everything was successful
-                selectedImageUri = newImageUri;
-                 isImageChanged = true;
-                buttonSaveSettings.setVisibility(View.VISIBLE);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (resultCode == RESULT_CANCELED) {
-            // Handle the case where the user cancelled the image selection
-            Toast.makeText(this, "Image selection cancelled", Toast.LENGTH_SHORT).show();
+    private void handleImageSelection(Uri iNewImageUri) {
+        String filePath = getRealPathFromURI(iNewImageUri);
+        if (filePath == null) {
+            Toast.makeText(this, "Failed to get image path", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Out<String> invalidationReason = Out.of(String.class);
+        if (!SettingsValidations.isAvatarImageValid(filePath, invalidationReason)) {
+            Snackbar.make(findViewById(android.R.id.content), invalidationReason.get(), Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), iNewImageUri);
+            // Set the Bitmap directly to the ImageView
+            mImageSetViewProfilePicture.setImageBitmap(bitmap);
+            // Only update selectedImageUri if everything was successful
+            mSelectedImageUri = iNewImageUri;
+            mIsImageChanged = true;
+            mButtonSaveSettings.setVisibility(View.VISIBLE);
+        } catch (IOException e) {
+            Log.e("SettingsActivity", "Failed to load image", e);
         }
     }
-    public void saveSettings(View view) {
-        String userName = editTextSetUserName.getText().toString().trim();
-        String displayName = editTextSetDisplayName.getText().toString().trim();
-        String aboutMe = editTextSetAboutMe.getText().toString().trim();
-        Uri imageUri = isImageChanged ? selectedImageUri : null;
+
+    public void saveSettings(View iView) {
+        String userName = mEditTextSetUserName.getText().toString().trim();
+        String displayName = mEditTextSetDisplayName.getText().toString().trim();
+        String aboutMe = mEditTextSetAboutMe.getText().toString().trim();
+        Uri imageUri = mIsImageChanged ? mSelectedImageUri : null;
 
         if (performInputValidation(userName, displayName, aboutMe)) {
-            if (!userName.equals(originalUserName)) {
+            if (!userName.equals(mOriginalUserName)) {
                 // The username has been changed, check its uniqueness
-                CheckIfUserNameIsUniqueUseCase checkIfUserNameIsUniqueUseCase = new CheckIfUserNameIsUniqueUseCase();
-                checkIfUserNameIsUniqueUseCase.isUsernameValidAndUnique(userName).addOnCompleteListener(new OnCompleteListener<Boolean>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Boolean> task) {
-                        if (task.isSuccessful()) {
-                            updateProfile(userName, displayName, aboutMe, imageUri);
-                        } else {
-                            // Handle the error
-                            Log.e("ProfileActivity", "Failed to validate username", task.getException());
-                            editTextSetUserName.setError(task.getException().getMessage());
-                        }
-                    }
-                });
+                checkUserNameAndProceed(userName, displayName, aboutMe, imageUri);
             } else {
                 // The username hasn't been changed, no need to check its uniqueness
                 updateProfile(userName, displayName, aboutMe, imageUri);
@@ -198,69 +198,78 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void updateProfile(String userName, String displayName, String aboutMe, Uri imageUri) {
-        progressBarSavingSettings.setVisibility(View.VISIBLE);
-        buttonSaveSettings.setVisibility(View.GONE);
-        UpdateUserProfileUseCase updateUserProfileUseCase = new UpdateUserProfileUseCase();
-        updateUserProfileUseCase.execute(currentUser, userName, displayName, aboutMe, imageUri).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                progressBarSavingSettings.setVisibility(View.GONE);
-
-                if (task.isSuccessful()) {
-                    Toast.makeText(SettingsActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("username", userName);
-                    resultIntent.putExtra("display_name", displayName);
-                    resultIntent.putExtra("about_me", aboutMe);
-                    if (imageUri != null) {
-                        resultIntent.putExtra("profile_picture", imageUri.toString());
-                    }
-                    setResult(Activity.RESULT_OK, resultIntent);
-                    finish();
-                } else {
-                    // Handle the error
-                    Log.e("SettingsActivity", "Failed to update profile", task.getException());
-                    buttonSaveSettings.setVisibility(View.VISIBLE);
-                    Toast.makeText(SettingsActivity.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
-                }
+    private void checkUserNameAndProceed(String iUserName, String iDisplayName, String iAboutMe, Uri mImageUri) {
+        CheckIfUserNameIsUniqueUseCase checkIfUserNameIsUniqueUseCase = new CheckIfUserNameIsUniqueUseCase();
+        checkIfUserNameIsUniqueUseCase.isUsernameValidAndUnique(iUserName).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                updateProfile(iUserName, iDisplayName, iAboutMe, mImageUri);
+            } else {
+                // Handle the error
+                Log.e("ProfileActivity", "Failed to validate username", task.getException());
+                mEditTextSetUserName.setError(Objects.requireNonNull(task.getException()).getMessage());
             }
         });
     }
 
+    private void updateProfile(String iUserName, String iDisplayName, String iAboutMe, Uri mImageUri) {
+        mProgressBarSavingSettings.setVisibility(View.VISIBLE);
+        mButtonSaveSettings.setVisibility(View.GONE);
+        UpdateUserProfileUseCase updateUserProfileUseCase = new UpdateUserProfileUseCase();
+        updateUserProfileUseCase.execute(mCurrentUserUid, iUserName, iDisplayName, iAboutMe, mImageUri).addOnCompleteListener(task -> {
+            mProgressBarSavingSettings.setVisibility(View.GONE);
+
+            if (task.isSuccessful()) {
+                Toast.makeText(SettingsActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("username", iUserName);
+                resultIntent.putExtra("display_name", iDisplayName);
+                resultIntent.putExtra("about_me", iAboutMe);
+                if (mImageUri != null) {
+                    resultIntent.putExtra("profile_picture", mImageUri.toString());
+                }
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            } else {
+                // Handle the error
+                Log.e("SettingsActivity", "Failed to update profile", task.getException());
+                mButtonSaveSettings.setVisibility(View.VISIBLE);
+                Toast.makeText(SettingsActivity.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private boolean performInputValidation(String iUsername, String iDisplayName,String iAboutMe) {
         boolean isValid = true;
         Out<String> invalidationReason = Out.of(String.class);
 
         if (!SettingsValidations.isUsernameValid(iUsername, invalidationReason)) {
-            editTextSetUserName.setError(invalidationReason.get());
+            mEditTextSetUserName.setError(invalidationReason.get());
             isValid = false;
         } else {
-            editTextSetUserName.setError(null);
+            mEditTextSetUserName.setError(null);
         }
 
         if (!SettingsValidations.isDisplayNameValid(iDisplayName, invalidationReason)) {
-            editTextSetDisplayName.setError(invalidationReason.get());
+            mEditTextSetDisplayName.setError(invalidationReason.get());
             isValid = false;
         } else {
-            editTextSetDisplayName.setError(null);
+            mEditTextSetDisplayName.setError(null);
         }
 
         if (!SettingsValidations.isAboutMeValid(iAboutMe, invalidationReason)) {
-            editTextSetAboutMe.setError(invalidationReason.get());
+            mEditTextSetAboutMe.setError(invalidationReason.get());
             isValid = false;
         } else {
-            editTextSetAboutMe.setError(null);
+            mEditTextSetAboutMe.setError(null);
         }
 
         return isValid;
     }
 
-    private String getRealPathFromURI(Uri contentUri) {
+    private String getRealPathFromURI(Uri iContentUri) {
         String[] proj = { MediaStore.Images.Media.DATA };
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        Cursor cursor = getContentResolver().query(iContentUri, proj, null, null, null);
         if (cursor != null) {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
@@ -271,7 +280,7 @@ public class SettingsActivity extends AppCompatActivity {
         return null;
     }
 
-    public void logOutFunc(View view) {
+    public void logOutFunc(View iView) {
         mAuth.signOut();
         Intent intent = new Intent(SettingsActivity.this, AuthActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -284,30 +293,31 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
 
         // Only fetch the latest user details from the database if the image has not been changed
-        if (!isImageChanged) {
-            String currentUser = CurrentlyLoggedUser.get().getUid();
-            FirebaseFirestore DB = FirebaseFirestore.getInstance();
-            DB.collection("users").document(currentUser).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            // Update the UI with the latest user details
-                            String updatedAvatarImage = document.getString("profile_picture");
-                            if (updatedAvatarImage != null && !updatedAvatarImage.isEmpty()) {
-                                Picasso.get().load(updatedAvatarImage).into(imageSetViewAvatar);
-                                // Convert the URL to a Uri and assign it to selectedImageUri
-                                selectedImageUri = Uri.parse(updatedAvatarImage);
-                            }
-                        } else {
-                            Log.d("SettingsActivity", "No such user");
-                        }
-                    } else {
-                        Log.d("SettingsActivity", "Failed to fetch user details", task.getException());
-                    }
-                }
-            });
+        if (!mIsImageChanged) {
+            fetchUserDetails();
         }
+    }
+
+    private void fetchUserDetails() {
+        String currentUser = CurrentlyLoggedUser.get().getUid();
+        FirebaseFirestore DB = FirebaseFirestore.getInstance();
+        DB.collection("users").document(currentUser).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    // Update the UI with the latest user details
+                    String updatedAvatarImage = document.getString("profile_picture");
+                    if (updatedAvatarImage != null && !updatedAvatarImage.isEmpty()) {
+                        Picasso.get().load(updatedAvatarImage).into(mImageSetViewProfilePicture);
+                        // Convert the URL to a Uri and assign it to selectedImageUri
+                        mSelectedImageUri = Uri.parse(updatedAvatarImage);
+                    }
+                } else {
+                    Log.d("SettingsActivity", "No such user");
+                }
+            } else {
+                Log.d("SettingsActivity", "Failed to fetch user details", task.getException());
+            }
+        });
     }
 }

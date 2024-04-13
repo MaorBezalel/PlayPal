@@ -2,9 +2,7 @@ package com.hit.playpal.profile.data.datasources;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
@@ -34,31 +32,22 @@ public class ProfileFirebaseFirestoreDataSource {
         return DB.collection("users").document(iUid).get();
     }
 
-    public Task<DocumentSnapshot> getUserPrivateByUid(String iUid) {
-        return DB.collection("users").document(iUid).collection("private").document("data").get();
-    }
-
-
     public Task<String> getStatus(String iUid, String iOtherUserUid) {
         return DB.collection("users").document(iUid).collection("relationships")
                 .whereEqualTo("other_user.uid", iOtherUserUid).get()
-                .continueWith(new Continuation<QuerySnapshot, String>() {
-                    @Override
-                    public String then(@NonNull Task<QuerySnapshot> task) throws Exception {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
-                            if (!querySnapshot.isEmpty()) {
-                                DocumentSnapshot document = querySnapshot.getDocuments().get(0);
-                                String status = document.getString("status");
-                                return status;
-                            } else {
-                                // Handle the case where the document/sub collection does not exist
-                                return "noStatus";
-                            }
+                .continueWith(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                            return document.getString("status");
                         } else {
-                            // Handle the failure
-                            throw Objects.requireNonNull(task.getException());
+                            // Handle the case where the document/sub collection does not exist
+                            return "noStatus";
                         }
+                    } else {
+                        // Handle the failure
+                        throw Objects.requireNonNull(task.getException());
                     }
                 });
     }
@@ -81,19 +70,16 @@ public class ProfileFirebaseFirestoreDataSource {
     public Task<Void> deleteRelationshipDocument(String iUid, String otherUserUid) {
         return DB.collection("users").document(iUid).collection("relationships")
                 .whereEqualTo("other_user.uid", otherUserUid).get()
-                .continueWithTask(new Continuation<QuerySnapshot, Task<Void>>() {
-                    @Override
-                    public Task<Void> then(@NonNull Task<QuerySnapshot> task) throws Exception {
-                        if (task.isSuccessful()) {
-                            List<Task<Void>> deleteTasks = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                deleteTasks.add(document.getReference().delete());
-                            }
-                            return Tasks.whenAll(deleteTasks);
-                        } else {
-                            Log.d("Firestore", "Error getting documents: ", task.getException());
-                            throw task.getException();
+                .continueWithTask(task -> {
+                    if (task.isSuccessful()) {
+                        List<Task<Void>> deleteTasks = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                            deleteTasks.add(document.getReference().delete());
                         }
+                        return Tasks.whenAll(deleteTasks);
+                    } else {
+                        Log.d("Firestore", "Error getting documents: ", task.getException());
+                        throw Objects.requireNonNull(task.getException());
                     }
                 });
     }

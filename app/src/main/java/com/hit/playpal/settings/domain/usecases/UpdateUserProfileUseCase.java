@@ -6,8 +6,8 @@ import com.google.android.gms.tasks.Task;
 import com.hit.playpal.settings.data.repositories.UpdateUserProfileRepository;
 
 public class UpdateUserProfileUseCase {
-    private UpdateUserProfileRepository mUpdateUserProfileRepository;
-    private UploadUserProfilePictureUseCase mUploadUserProfilePictureUseCase;
+    private final UpdateUserProfileRepository mUpdateUserProfileRepository;
+    private final UploadUserProfilePictureUseCase mUploadUserProfilePictureUseCase;
 
     public UpdateUserProfileUseCase() {
         this.mUpdateUserProfileRepository = new UpdateUserProfileRepository();
