@@ -269,8 +269,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             if (task.isSuccessful()) {
                 Toast.makeText(SettingsActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-
-                CurrentlyLoggedUser.set(new User(mCurrentUserUid, iUserName, iDisplayName, mImageUri.toString(), iAboutMe));
+                
 
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("username", iUserName);

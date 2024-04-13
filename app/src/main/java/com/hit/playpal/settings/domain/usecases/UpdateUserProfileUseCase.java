@@ -3,7 +3,9 @@ package com.hit.playpal.settings.domain.usecases;
 import android.net.Uri;
 
 import com.google.android.gms.tasks.Task;
+import com.hit.playpal.entities.users.User;
 import com.hit.playpal.settings.data.repositories.UpdateUserProfileRepository;
+import com.hit.playpal.utils.CurrentlyLoggedUser;
 
 public class UpdateUserProfileUseCase {
     private final UpdateUserProfileRepository mUpdateUserProfileRepository;
@@ -25,6 +27,9 @@ public class UpdateUserProfileUseCase {
             return uploadTask.continueWithTask(task -> {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
+
+                    CurrentlyLoggedUser.set(new User(currentUser, userName, displayName, downloadUri.toString(), aboutMe));
+
                     return mUpdateUserProfileRepository.updateUserProfile(currentUser, userName, displayName, aboutMe, downloadUri.toString());
                 } else {
                     throw new RuntimeException("Failed to upload profile picture", task.getException());
