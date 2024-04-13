@@ -26,6 +26,7 @@ public class CreateGroupChatGamesAdapter extends FirestorePagingAdapter<Game, Cr
 
     private LifecycleOwner mOwner;
     private Query mBaseQuery;
+    private MaterialCardView mSelectedCardView;
 
 
 
@@ -68,12 +69,23 @@ public class CreateGroupChatGamesAdapter extends FirestorePagingAdapter<Game, Cr
 
 
         iHolder.CARD_VIEW.setOnClickListener(v -> {
-            if (iHolder.CARD_VIEW.isChecked() && iCurrentGame.equals(mSelectedGame)) {
+            if (iCurrentGame.equals(mSelectedGame))
+            {
                 iHolder.CARD_VIEW.setChecked(false);
+                mSelectedCardView = null;
                 mSelectedGame = null;
-            } else {
+            }
+            else
+            {
                 iHolder.CARD_VIEW.setChecked(true);
                 mSelectedGame = iCurrentGame;
+
+                if(mSelectedCardView != null)
+                {
+                    mSelectedCardView.setChecked(false);
+                }
+
+                mSelectedCardView = iHolder.CARD_VIEW;
             }
         });
 

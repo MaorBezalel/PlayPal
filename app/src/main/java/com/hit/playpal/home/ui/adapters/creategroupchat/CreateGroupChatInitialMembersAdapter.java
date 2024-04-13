@@ -76,10 +76,13 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
         }
 
         iHolder.CARD_VIEW.setOnClickListener(v -> {
-            if (mSelectedUsers.contains(iCurrentUser)) {
+            if (mSelectedUsers.contains(iCurrentUser))
+            {
                 mSelectedUsers.remove(iCurrentUser);
                 iHolder.CARD_VIEW.setChecked(false);
-            } else {
+            }
+            else
+            {
                 mSelectedUsers.add(iCurrentUser);
                 iHolder.CARD_VIEW.setChecked(true);
             }
