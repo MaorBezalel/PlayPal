@@ -78,10 +78,7 @@ public class SettingsValidations {
         boolean isValid = false;
 
  {
-            Bitmap bitmap = BitmapFactory.decodeFile(iAvatarImage);
-            if (bitmap == null) {
-                oInvalidationReason.set("Could not decode image. Please select a valid image file.");
-            } else if (!isAvatarImageSizeValid(iAvatarImage)) {
+            if (!isAvatarImageSizeValid(iAvatarImage)) {
                 oInvalidationReason.set("Avatar image file size is too large. Maximum size is 5MB.");
             } else if (!isAvatarImageTypeValid(iAvatarImage)) {
                 oInvalidationReason.set("Invalid file type. Only JPG, JPEG and PNG images are allowed.");
