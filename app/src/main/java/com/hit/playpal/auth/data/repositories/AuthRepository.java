@@ -17,11 +17,9 @@ import com.hit.playpal.auth.domain.utils.exceptions.DisabledAccountException;
 import com.hit.playpal.auth.domain.utils.exceptions.EmailAlreadyTakenException;
 import com.hit.playpal.auth.domain.utils.exceptions.InternalErrorException;
 import com.hit.playpal.auth.domain.utils.exceptions.InvalidDetailsException;
-import com.hit.playpal.entities.users.Settings;
+import com.hit.playpal.entities.settings.Settings;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.entities.users.UserPrivate;
-
-import org.jetbrains.annotations.Contract;
 
 public class AuthRepository implements IAuthRepository {
     private final FirebaseAuthDataSource AUTH = new FirebaseAuthDataSource();

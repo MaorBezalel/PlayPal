@@ -117,7 +117,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void navigateToMyProfileFragment() {
-        String Uid = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
+        String Uid = CurrentlyLoggedUser.get().getUid();
         Bundle bundle = new Bundle();
         bundle.putString(ARG_USER_ID, Uid);
         mNavController.navigate(R.id.profileActivity, bundle);

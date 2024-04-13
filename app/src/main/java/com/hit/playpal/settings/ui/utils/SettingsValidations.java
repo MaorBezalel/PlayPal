@@ -1,4 +1,4 @@
-package com.hit.playpal.settings.ui.utilities;
+package com.hit.playpal.settings.ui.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

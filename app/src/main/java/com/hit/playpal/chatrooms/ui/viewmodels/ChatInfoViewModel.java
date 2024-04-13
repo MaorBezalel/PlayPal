@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.hit.playpal.chatrooms.data.repositories.ChatRoomRepository;
 import com.hit.playpal.chatrooms.domain.usecases.chatinfopage.GetMembersOfGroupChatUseCase;
-import com.hit.playpal.entities.chats.GroupProfile;
+import com.hit.playpal.entities.chats.group.GroupProfile;
 
 import java.util.List;
 

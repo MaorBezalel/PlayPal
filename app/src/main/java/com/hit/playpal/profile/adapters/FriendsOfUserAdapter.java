@@ -4,8 +4,8 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.paginatedsearch.users.adapters.UserAdapter;
-import com.hit.playpal.entities.users.Relationship;
-import com.hit.playpal.entities.users.enums.RelationshipStatus;
+import com.hit.playpal.entities.relationships.Relationship;
+import com.hit.playpal.entities.relationships.enums.RelationshipStatus;
 import com.hit.playpal.paginatedsearch.users.utils.IBindableUser;
 import com.hit.playpal.paginatedsearch.users.adapters.IUserAdapter;
 

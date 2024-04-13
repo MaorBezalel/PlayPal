@@ -4,7 +4,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.settings.data.repositories.UpdateUserProfileRepository;
-import com.hit.playpal.settings.ui.utilities.SettingsValidations;
+import com.hit.playpal.settings.ui.utils.SettingsValidations;
 import com.hit.playpal.utils.Out;
 
 

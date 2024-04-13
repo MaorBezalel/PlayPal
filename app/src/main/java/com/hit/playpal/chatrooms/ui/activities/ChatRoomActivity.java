@@ -17,7 +17,7 @@ import com.hit.playpal.chatrooms.ui.fragments.ChatRoomBodyFragment;
 import com.hit.playpal.chatrooms.ui.fragments.ChatRoomProfileFragment;
 import com.hit.playpal.chatrooms.ui.viewmodels.ChatRoomViewModel;
 import com.hit.playpal.entities.chats.ChatRoom;
-import com.hit.playpal.entities.chats.GroupChatRoom;
+import com.hit.playpal.entities.chats.group.GroupChatRoom;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.hit.playpal.utils.Out;
@@ -68,9 +68,9 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private void getDataFromIntent(@NonNull Out<User> oUser, @NonNull Out<ChatRoom> oChatRoom, @NonNull Out<ChatRoomLocation> oChatRoomLocation) {
         Intent intent = getIntent();
-        User parcelableUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
-        ChatRoom parcelableChatRoom = intent.getParcelableExtra("chatRoom");
-        ChatRoomLocation serializedChatRoomLocation = (ChatRoomLocation) intent.getSerializableExtra("chatRoomLocation");
+        User parcelableUser = CurrentlyLoggedUser.get();
+        ChatRoom parcelableChatRoom = intent.getParcelableExtra(ARG_CHAT_ROOM);
+        ChatRoomLocation serializedChatRoomLocation = (ChatRoomLocation) intent.getSerializableExtra(ARG_CHAT_ROOM_LOCATION);
 
         if (parcelableUser == null || parcelableChatRoom == null || serializedChatRoomLocation == null) {
             throw new IllegalArgumentException(TAG + "getDataFromIntent: User, ChatRoom or ChatRoomLocation is null");

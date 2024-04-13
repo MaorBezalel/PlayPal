@@ -2,7 +2,7 @@ package com.hit.playpal.home.domain.usecases.chats;
 
 import android.util.Log;
 
-import com.hit.playpal.entities.chats.GroupProfile;
+import com.hit.playpal.entities.chats.group.GroupProfile;
 import com.hit.playpal.home.data.repositories.CreateGroupChatRoomRepository;
 import com.hit.playpal.home.domain.enums.CreateGroupChatRoomFailure;
 import com.hit.playpal.home.domain.repositories.ICreateGroupChatRoomRepository;

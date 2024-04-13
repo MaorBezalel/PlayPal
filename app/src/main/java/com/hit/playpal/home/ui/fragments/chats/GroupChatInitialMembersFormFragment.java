@@ -70,7 +70,7 @@ public class GroupChatInitialMembersFormFragment extends Fragment {
     private void initCreateGroupChatButton(@NonNull View iView) {
         mCreateGroupChatButton = iView.findViewById(R.id.button_create_group_chat_create);
         mCreateGroupChatButton.setOnClickListener(v -> {
-            User currentlyLoggedUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
+            User currentlyLoggedUser = CurrentlyLoggedUser.get();
             Set<User> selectedUsers = mCreateGroupChatInitialMembersAdapter.getSelectedUsers();
             int minimumNumberOfMembers = CreateGroupChatInitialMembersAdapter.MINIMUM_NUMBER_OF_MEMBERS;
 
@@ -95,7 +95,7 @@ public class GroupChatInitialMembersFormFragment extends Fragment {
         mInitialMembersRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         mCreateGroupChatInitialMembersAdapter = new CreateGroupChatInitialMembersAdapter(GenerateQueryForAllUsersUseCase.invoke(
-                CurrentlyLoggedUser.getCurrentlyLoggedUser().getUsername()),
+                CurrentlyLoggedUser.get().getUsername()),
                 getViewLifecycleOwner()
         );
         mInitialMembersRecyclerView.setAdapter(mCreateGroupChatInitialMembersAdapter);

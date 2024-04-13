@@ -1,6 +1,6 @@
 package com.hit.playpal.home.domain.utils;
 
-import com.hit.playpal.entities.users.enums.RelationshipStatus;
+import com.hit.playpal.entities.relationships.enums.RelationshipStatus;
 
 public class RelationshipUpdateFailedException extends Exception{
     public RelationshipUpdateFailedException(RelationshipStatus iNewStatus) {

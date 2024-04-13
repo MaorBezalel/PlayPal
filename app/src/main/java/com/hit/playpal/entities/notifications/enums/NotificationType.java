@@ -1,5 +1,8 @@
-package com.hit.playpal.entities.users.enums;
+package com.hit.playpal.entities.notifications.enums;
 
+/**
+ * Enum for the different types of notifications that can be sent to the user
+ */
 public enum NotificationType {
     FRIEND_REQUEST,
     GROUP_INVITATION,

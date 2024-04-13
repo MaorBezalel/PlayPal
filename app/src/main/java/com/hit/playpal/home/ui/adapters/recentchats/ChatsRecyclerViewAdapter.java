@@ -18,8 +18,8 @@ import com.google.firebase.firestore.Query;
 import com.hit.playpal.R;
 import com.hit.playpal.entities.chats.AllChatRoom;
 import com.hit.playpal.entities.chats.ChatRoom;
-import com.hit.playpal.entities.chats.OneToOneChatRoom;
-import com.hit.playpal.entities.chats.GroupChatRoom;
+import com.hit.playpal.entities.chats.o2o.OneToOneChatRoom;
+import com.hit.playpal.entities.chats.group.GroupChatRoom;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.hit.playpal.utils.DateUtils;
@@ -99,7 +99,7 @@ public class ChatsRecyclerViewAdapter extends FirestorePagingAdapter<AllChatRoom
     private void determineAndSetChatRoomName(@NonNull ChatsViewHolder iHolder, @NonNull ChatRoom iChatRoom) {
         if (iChatRoom instanceof OneToOneChatRoom) {
             OneToOneChatRoom oneToOneChatRoom = (OneToOneChatRoom) iChatRoom;
-            User thisUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
+            User thisUser = CurrentlyLoggedUser.get();
             iHolder.CHAT_ROOM_NAME.setText(oneToOneChatRoom.getOtherUserDisplayName(thisUser.getUid()));
         } else if (iChatRoom instanceof GroupChatRoom) {
             GroupChatRoom groupChatRoom = (GroupChatRoom) iChatRoom;
@@ -113,8 +113,12 @@ public class ChatsRecyclerViewAdapter extends FirestorePagingAdapter<AllChatRoom
     private void determineAndSetChatRoomImage(@NonNull ChatsViewHolder iHolder, @NonNull ChatRoom iChatRoom) {
         if (iChatRoom instanceof OneToOneChatRoom) {
             OneToOneChatRoom oneToOneChatRoom = (OneToOneChatRoom) iChatRoom;
-            User thisUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
-            Picasso.get().load(oneToOneChatRoom.getOtherUserProfilePicture(thisUser.getUid())).into(iHolder.CHAT_ROOM_IMAGE);
+            User thisUser = CurrentlyLoggedUser.get();
+            if (oneToOneChatRoom.getOtherUserProfilePicture(thisUser.getUid()) == null || oneToOneChatRoom.getOtherUserProfilePicture(thisUser.getUid()).isEmpty()) {
+                iHolder.CHAT_ROOM_IMAGE.setImageResource(R.drawable.ic_home_nav_search_groupchats);
+            } else {
+                Picasso.get().load(oneToOneChatRoom.getOtherUserProfilePicture(thisUser.getUid())).into(iHolder.CHAT_ROOM_IMAGE);
+            }
         } else if (iChatRoom instanceof GroupChatRoom) {
             GroupChatRoom groupChatRoom = (GroupChatRoom) iChatRoom;
             if (groupChatRoom.getProfilePicture() == null || groupChatRoom.getProfilePicture().isEmpty()) {
@@ -145,7 +149,7 @@ public class ChatsRecyclerViewAdapter extends FirestorePagingAdapter<AllChatRoom
             iHolder.CHAT_ROOM_LAST_MESSAGE_CONTENT.setText("No messages yet");
         } else {
             BiFunction<String, String, String> lastMessageContentFormatter = (iSenderDisplayName, iContent) -> iSenderDisplayName + ": " + iContent;
-            String thisUserUid = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
+            String thisUserUid = CurrentlyLoggedUser.get().getUid();
             String lastMessageContent = iChatRoom.getLastMessage().getContent().getData(); // for now, we assume that the content is a text message
             String lastMessageSenderUid = iChatRoom.getLastMessage().getSender().getUid();
             String lastMessageSenderDisplayName = null;

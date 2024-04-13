@@ -3,8 +3,9 @@ package com.hit.playpal.entities.games;
 import com.google.firebase.firestore.PropertyName;
 import com.hit.playpal.entities.users.User;
 
-
-
+/**
+ * Entity class that represents a favorite game of a user.
+ */
 public class FavoriteGames {
 
     @PropertyName("user") private User mUser;

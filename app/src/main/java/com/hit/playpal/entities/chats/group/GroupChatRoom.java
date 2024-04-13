@@ -1,22 +1,25 @@
-package com.hit.playpal.entities.chats;
+package com.hit.playpal.entities.chats.group;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.PropertyName;
+import com.hit.playpal.entities.chats.ChatRoom;
 import com.hit.playpal.entities.chats.enums.ChatRoomType;
+import com.hit.playpal.entities.messages.Message;
 import com.hit.playpal.entities.users.User;
 
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Entity class that represents a group chat room.
+ */
 public class GroupChatRoom extends ChatRoom {
     @PropertyName("name") private String mName;
     @PropertyName("name") public String getName() { return mName; }
@@ -86,6 +89,9 @@ public class GroupChatRoom extends ChatRoom {
         iRegularMembers.forEach(user -> mMembersUid.add(user.getUid()));
     }
 
+    /**
+     * Inner entity class that represents the game object that the group chat room is associated with.
+     */
     public static class Game implements Parcelable {
         @PropertyName("id") private String mGameId;
         @PropertyName("id") public String getGameId() { return mGameId; }
