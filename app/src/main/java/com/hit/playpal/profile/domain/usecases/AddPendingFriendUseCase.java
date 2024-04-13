@@ -30,11 +30,14 @@ public class AddPendingFriendUseCase {
                 if (document != null && document.exists()) {
                     String displayName = document.getString("display_name");
                     String profilePicture = document.getString("profile_picture");
+                    String userName = document.getString("username");
 
                     Map<String, Object> currentUserData = new HashMap<>();
                     currentUserData.put("display_name", displayName);
                     currentUserData.put("profile_picture", profilePicture);
                     currentUserData.put("uid", currentUser);
+                    currentUserData.put("username", userName);
+
 
                     Task<Void> task0 = mSendFriendRequestUseCase.sendFriendRequest(Uid, currentUser, displayName, profilePicture);
                     Task<Void> task1 = mProfileRepository.addPendingFriend(Uid, currentUserData);

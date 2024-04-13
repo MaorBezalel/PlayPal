@@ -41,8 +41,8 @@ public class GroupProfile {
     public void convertUsersToParticipants(@NonNull User iOwner, @NonNull Set<User> iRegularMembers) {
         mParticipants = new ArrayList<>(iRegularMembers.size() + 1);
 
-        mParticipants.add(new Participant(iOwner.getUid(), iOwner.getDisplayName(), iOwner.getProfilePicture(), GroupChatRoomRole.OWNER));
-        iRegularMembers.forEach(user -> mParticipants.add(new Participant(user.getUid(), user.getDisplayName(), user.getProfilePicture(), GroupChatRoomRole.REGULAR)));
+        mParticipants.add(new Participant(iOwner.getUid(), iOwner.getDisplayName(), iOwner.getProfilePicture(), GroupChatRoomRole.OWNER, iOwner.getUsername()));
+        iRegularMembers.forEach(user -> mParticipants.add(new Participant(user.getUid(), user.getDisplayName(), user.getProfilePicture(), GroupChatRoomRole.REGULAR, user.getUsername())));
     }
 
     /**
@@ -81,18 +81,27 @@ public class GroupProfile {
             mGroupChatRoomRole = iGroupChatRoomRole;
         }
 
+        @PropertyName("username") private String mUsername;
+        @PropertyName("username") public String getUsername() {
+            return mUsername;
+        }
+        @PropertyName("username") public void setUsername(String iUsername) {
+            mUsername = iUsername;
+        }
+
         public Participant() { }
-        public Participant(String iUserUid, String iDisplayName, String iProfilePicture, GroupChatRoomRole iGroupChatRoomRole) {
+        public Participant(String iUserUid, String iDisplayName, String iProfilePicture, GroupChatRoomRole iGroupChatRoomRole, String iUsername) {
             this.mUserUid = iUserUid;
             this.mDisplayName = iDisplayName;
             this.mProfilePicture = iProfilePicture;
             this.mGroupChatRoomRole = iGroupChatRoomRole;
+            this.mUsername = iUsername;
         }
 
         @NonNull
         @Contract("_, _ -> new")
         public static Participant parseUser(@NonNull User iUser, GroupChatRoomRole iGroupChatRoomRole) {
-            return new Participant(iUser.getUid(), iUser.getDisplayName(), iUser.getProfilePicture(), iGroupChatRoomRole);
+            return new Participant(iUser.getUid(), iUser.getDisplayName(), iUser.getProfilePicture(), iGroupChatRoomRole, iUser.getUsername());
         }
     }
 }

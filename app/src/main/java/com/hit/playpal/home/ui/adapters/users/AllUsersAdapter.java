@@ -24,8 +24,8 @@ public class AllUsersAdapter extends UserAdapter<User> {
             }
 
             @Override
-            public String getDisplayName(User iItem) {
-                return iItem.getDisplayName();
+            public String getUsername(User iItem) {
+                return iItem.getUsername();
             }
         }, iOwner, FirebaseFirestore.getInstance().collection("users"), User.class);
 
