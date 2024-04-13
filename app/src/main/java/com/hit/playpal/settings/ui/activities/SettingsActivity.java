@@ -65,6 +65,9 @@ public class SettingsActivity extends AppCompatActivity {
         setupButtons();
     }
 
+    /**
+     * Sets up the user interface for the SettingsActivity. Retrieves user data from the intent, initializes views, and populates them with the user data.
+     */
     private void setupUI() {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_settings);
@@ -96,6 +99,10 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Adjusts the padding of the main view to account for system UI elements like the status bar and navigation bar.
+     * This ensures the content of the app is not obscured by these system elements.
+     */
     private void setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -104,6 +111,11 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets up the EditText fields for the SettingsActivity.
+     * It creates a TextWatcher that makes the save settings button visible after any text changes in the EditText fields.
+     * The TextWatcher is then added to the display name, username, and about me EditText fields.
+     */
     private void setupEditTexts() {
         // Create a TextWatcher
         TextWatcher textWatcher = new TextWatcher() {
@@ -126,6 +138,12 @@ public class SettingsActivity extends AppCompatActivity {
         mEditTextSetAboutMe.addTextChangedListener(textWatcher);
     }
 
+    /**
+     * Sets up the buttons for the SettingsActivity.
+     * It assigns click listeners to the return button and the profile picture view.
+     * The return button starts the ProfileActivity and finishes the current activity.
+     * The profile picture view launches an image picker when clicked.
+     */
     private void setupButtons() {
         Button buttonSettingsReturn = findViewById(R.id.buttonSettingsReturn);
         buttonSettingsReturn.setOnClickListener(v -> {
@@ -141,6 +159,11 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * ActivityResultLauncher for handling the result of an image selection activity.
+     * If the result is OK, it calls the handleImageSelection method with the selected image's URI.
+     * If the result is CANCELED, it shows a toast message indicating that the image selection was cancelled.
+     */
     private final ActivityResultLauncher<Intent> mImagePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -156,6 +179,12 @@ public class SettingsActivity extends AppCompatActivity {
             }
     );
 
+    /**
+     * Handles the selection of an image from the image picker.
+     * It first gets the real path of the image URI and validates the image.
+     * If the image is valid, it sets the image to the ImageView and updates the selectedImageUri.
+     * If the image is not valid or an exception occurs while loading the image, it shows an appropriate message to the user.
+     */
     private void handleImageSelection(Uri iNewImageUri) {
         String filePath = getRealPathFromURI(iNewImageUri);
         if (filePath == null) {
@@ -181,6 +210,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the saving of user settings.
+     * It first retrieves the user input from the EditText fields and validates them.
+     * If the input is valid and the username has been changed, it checks the uniqueness of the new username.
+     * If the username hasn't been changed, it directly updates the user profile with the new settings.
+     */
     public void saveSettings(View iView) {
         String userName = mEditTextSetUserName.getText().toString().trim();
         String displayName = mEditTextSetDisplayName.getText().toString().trim();
@@ -198,6 +233,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if the provided username is unique and proceeds with updating the profile if it is.
+     * It uses the CheckIfUserNameIsUniqueUseCase to validate the uniqueness of the username.
+     * If the username is unique, it calls the updateProfile method to update the user profile.
+     * If the username is not unique, it logs an error and sets an error message on the username EditText field.
+     */
     private void checkUserNameAndProceed(String iUserName, String iDisplayName, String iAboutMe, Uri mImageUri) {
         CheckIfUserNameIsUniqueUseCase checkIfUserNameIsUniqueUseCase = new CheckIfUserNameIsUniqueUseCase();
         checkIfUserNameIsUniqueUseCase.isUsernameValidAndUnique(iUserName).addOnCompleteListener(task -> {
@@ -211,6 +252,13 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Updates the user profile with the provided details.
+     * It first makes the progress bar visible and the save settings button invisible.
+     * Then, it executes the UpdateUserProfileUseCase with the provided details.
+     * If the update is successful, it creates a result intent with the updated details and sets the result of the activity.
+     * If the update is not successful, it logs an error and makes the save settings button visible again.
+     */
     private void updateProfile(String iUserName, String iDisplayName, String iAboutMe, Uri mImageUri) {
         mProgressBarSavingSettings.setVisibility(View.VISIBLE);
         mButtonSaveSettings.setVisibility(View.GONE);
@@ -239,6 +287,13 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Validates the user input for username, display name, and about me.
+     * It uses the SettingsValidations class to validate each input.
+     * If an input is not valid, it sets an error message on the corresponding EditText field and sets the isValid flag to false.
+     * If an input is valid, it clears any existing error message on the corresponding EditText field.
+     * It returns the isValid flag which indicates whether all inputs are valid.
+     */
     private boolean performInputValidation(String iUsername, String iDisplayName,String iAboutMe) {
         boolean isValid = true;
         Out<String> invalidationReason = Out.of(String.class);
@@ -267,6 +322,13 @@ public class SettingsActivity extends AppCompatActivity {
         return isValid;
     }
 
+    /**
+     * Retrieves the real file path from a content URI.
+     * It queries the content resolver with the content URI and the projection MediaStore.Images.Media.DATA.
+     * If the query returns a cursor, it retrieves the column index for MediaStore.Images.Media.DATA, moves the cursor to the first row, and gets the string at the column index.
+     * It then closes the cursor and returns the retrieved path.
+     * If the query does not return a cursor, it returns null.
+     */
     private String getRealPathFromURI(Uri iContentUri) {
         String[] proj = { MediaStore.Images.Media.DATA };
         Cursor cursor = getContentResolver().query(iContentUri, proj, null, null, null);
@@ -280,6 +342,11 @@ public class SettingsActivity extends AppCompatActivity {
         return null;
     }
 
+    /**
+     * Logs out the current user and starts the AuthActivity.
+     * It first signs out the current user using FirebaseAuth.signOut().
+     * Then, it starts the AuthActivity and clears the task stack to prevent the user from going back to the SettingsActivity.
+     */
     public void logOutFunc(View iView) {
         mAuth.signOut();
         Intent intent = new Intent(SettingsActivity.this, AuthActivity.class);
@@ -288,6 +355,9 @@ public class SettingsActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Starts the ProfileActivity and finishes the current activity.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -298,6 +368,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Fetches the latest user details from the database and updates the UI with the new details.
+     * It uses the CurrentlyLoggedUser class to get the current user's UID and fetches the user details from the Firestore database.
+     * If the user details are successfully fetched, it updates the UI with the latest user details.
+     * If the user details are not fetched successfully, it logs an error.
+     */
     private void fetchUserDetails() {
         String currentUser = CurrentlyLoggedUser.get().getUid();
         FirebaseFirestore DB = FirebaseFirestore.getInstance();

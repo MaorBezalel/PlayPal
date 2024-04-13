@@ -27,7 +27,7 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
     private static final int PAGE_PREFETCH_DISTANCE = 5;
     public static final int MINIMUM_NUMBER_OF_MEMBERS = 2;
 
-    private Set<User> mSelectedUsers;
+    private final Set<User> mSelectedUsers;
     public Set<User> getSelectedUsers() {
         return mSelectedUsers;
     }
