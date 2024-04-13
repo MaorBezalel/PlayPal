@@ -27,9 +27,10 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
     private static final int PAGE_PREFETCH_DISTANCE = 5;
     public static final int MINIMUM_NUMBER_OF_MEMBERS = 2;
 
-    private Set<MaterialCardView> mSelectedCardViews;
-
-    private Set<User> mSelectedUsers;
+    private LifecycleOwner mOwner;
+    private Query mBaseQuery;
+    
+    private final Set<User> mSelectedUsers;
     public Set<User> getSelectedUsers() {
         return mSelectedUsers;
     }
@@ -44,7 +45,8 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
                 .build()
         );
 
-        mSelectedCardViews = new HashSet<>();
+        mOwner = iOwner;
+        mBaseQuery = iQuery;
         mSelectedUsers = new HashSet<>();
     }
 
@@ -74,16 +76,16 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
         }
 
         iHolder.CARD_VIEW.setOnClickListener(v -> {
-            if (mSelectedCardViews.contains(iHolder.CARD_VIEW)) {
-                mSelectedCardViews.remove(iHolder.CARD_VIEW);
+            if (mSelectedUsers.contains(iCurrentUser)) {
                 mSelectedUsers.remove(iCurrentUser);
                 iHolder.CARD_VIEW.setChecked(false);
             } else {
-                mSelectedCardViews.add(iHolder.CARD_VIEW);
                 mSelectedUsers.add(iCurrentUser);
                 iHolder.CARD_VIEW.setChecked(true);
             }
         });
+
+        iHolder.CARD_VIEW.setChecked(mSelectedUsers.contains(iCurrentUser));
     }
 
     @NonNull
@@ -91,5 +93,17 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
     public InitialMembersViewHolder onCreateViewHolder(@NonNull ViewGroup iParent, int iViewType) {
         View view = View.inflate(iParent.getContext(), R.layout.item_initial_member_for_group_creation, null);
         return new InitialMembersViewHolder(view);
+    }
+
+    public void applyNamingFilter(String iUserName) {
+        Query newQuery = mBaseQuery
+                .orderBy("username")
+                .startAt(iUserName)
+                .endAt(iUserName + "\uf8ff");
+
+        super.updateOptions(new FirestorePagingOptions.Builder<User>()
+                .setLifecycleOwner(mOwner)
+                .setQuery(newQuery, PAGING_CONFIG, User.class)
+                .build());
     }
 }

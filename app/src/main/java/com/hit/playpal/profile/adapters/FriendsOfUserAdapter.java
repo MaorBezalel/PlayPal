@@ -4,8 +4,8 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.paginatedsearch.users.adapters.UserAdapter;
-import com.hit.playpal.entities.users.Relationship;
-import com.hit.playpal.entities.users.enums.RelationshipStatus;
+import com.hit.playpal.entities.relationships.Relationship;
+import com.hit.playpal.entities.relationships.enums.RelationshipStatus;
 import com.hit.playpal.paginatedsearch.users.utils.IBindableUser;
 import com.hit.playpal.paginatedsearch.users.adapters.IUserAdapter;
 
@@ -24,8 +24,8 @@ public class FriendsOfUserAdapter extends UserAdapter<Relationship> {
             }
 
             @Override
-            public String getDisplayName(Relationship iItem) {
-                return iItem.getOther_user().getDisplayName();
+            public String getUsername(Relationship iItem) {
+                return iItem.getOther_user().getUsername();
             }
         }, iOwner, FirebaseFirestore.getInstance().collection("users").document(iCurrentUserId).collection("relationships").whereEqualTo("status", RelationshipStatus.friends), Relationship.class);
 

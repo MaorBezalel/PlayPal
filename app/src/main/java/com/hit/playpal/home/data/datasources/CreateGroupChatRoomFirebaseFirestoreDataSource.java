@@ -1,21 +1,17 @@
 package com.hit.playpal.home.data.datasources;
 
-import android.util.Log;
-
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.hit.playpal.entities.chats.ChatRoom;
-import com.hit.playpal.entities.chats.GroupChatRoom;
-import com.hit.playpal.entities.chats.GroupProfile;
+import com.hit.playpal.entities.chats.group.GroupChatRoom;
+import com.hit.playpal.entities.chats.group.GroupProfile;
 
 public class CreateGroupChatRoomFirebaseFirestoreDataSource {
     private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
 
     public Query getAllGamesQuery() {
-        return DB.collection("games");
+        return DB.collection("games").orderBy("game_name");
     }
 
     public Query getAllUsersQuery(String iUsername) {

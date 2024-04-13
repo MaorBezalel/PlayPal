@@ -1,6 +1,6 @@
 package com.hit.playpal.home.domain.usecases.notifications;
 
-import com.hit.playpal.entities.users.enums.RelationshipStatus;
+import com.hit.playpal.entities.relationships.enums.RelationshipStatus;
 import com.hit.playpal.home.data.repositories.NotificationsRepository;
 
 import java.util.concurrent.CompletableFuture;

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,13 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hit.playpal.R;
-import com.hit.playpal.entities.users.Notification;
-import com.hit.playpal.entities.users.enums.RelationshipStatus;
+import com.hit.playpal.entities.relationships.enums.RelationshipStatus;
 import com.hit.playpal.home.ui.adapters.notifications.FriendRequestsNotificationsAdapter;
 import com.hit.playpal.home.ui.adapters.notifications.IFriendRequestsNotificationsAdapter;
 import com.hit.playpal.home.ui.viewmodels.NotificationsViewModel;
-
-import java.util.List;
 
 public class NotificationsFragment extends Fragment {
     private static final String TAG = "NotificationsFragment";

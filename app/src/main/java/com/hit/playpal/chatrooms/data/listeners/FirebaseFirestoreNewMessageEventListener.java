@@ -6,9 +6,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageEventListener;
-import com.hit.playpal.entities.chats.ChatRoom;
-import com.hit.playpal.entities.chats.GroupChatRoom;
-import com.hit.playpal.entities.chats.OneToOneChatRoom;
+import com.hit.playpal.entities.chats.group.GroupChatRoom;
+import com.hit.playpal.entities.chats.o2o.OneToOneChatRoom;
 import com.hit.playpal.entities.chats.enums.ChatRoomType;
 
 public class FirebaseFirestoreNewMessageEventListener implements EventListener<DocumentSnapshot> {

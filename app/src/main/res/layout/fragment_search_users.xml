@@ -35,7 +35,7 @@
             android:background="@drawable/home_search_view"
             android:iconifiedByDefault="false"
             android:queryBackground="@null"
-            android:queryHint="Search by display name...">
+            android:queryHint="Search by username...">
 
         </SearchView>
 

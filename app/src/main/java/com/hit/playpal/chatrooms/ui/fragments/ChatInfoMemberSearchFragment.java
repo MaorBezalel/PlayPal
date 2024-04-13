@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.hit.playpal.R;
 import com.hit.playpal.chatrooms.ui.adapters.UsersInGroupChatAdapter;
 import com.hit.playpal.chatrooms.ui.viewmodels.ChatInfoViewModel;
-import com.hit.playpal.entities.chats.GroupProfile;
+import com.hit.playpal.entities.chats.group.GroupProfile;
 import com.hit.playpal.paginatedsearch.users.adapters.IUserAdapter;
 import com.hit.playpal.profile.ui.activities.ProfileActivity;
 

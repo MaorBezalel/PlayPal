@@ -1,9 +1,6 @@
 package com.hit.playpal.game.domain.usecases;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.hit.playpal.entities.games.Game;
-import com.hit.playpal.entities.users.User;
 import com.hit.playpal.game.data.repositories.GameRepository;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 
@@ -16,7 +13,7 @@ public class UpdateFavoriteGameStatusUseCase {
     {
         CompletableFuture<Void> future = new CompletableFuture<>();
 
-        gameRepository.updateGameToFavorites(iGame , iNewStatus, CurrentlyLoggedUser.getCurrentlyLoggedUser()).
+        gameRepository.updateGameToFavorites(iGame , iNewStatus, CurrentlyLoggedUser.get()).
                 addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {

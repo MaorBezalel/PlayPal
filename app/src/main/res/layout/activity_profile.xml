@@ -38,6 +38,18 @@
                 android:text="Return"
                 android:textSize="20sp" />
 
+            <Button
+                android:id="@+id/buttonChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:background="@color/primary_500"
+                android:fontFamily="@font/dosis_extrabold"
+                android:onClick="buttonChatFunc"
+                android:text="Chat"
+                android:visibility="gone"
+                android:textSize="20sp" />
+
         </FrameLayout>
 
         <LinearLayout
@@ -80,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/profile_border4"
                         android:fontFamily="@font/dosis_extrabold"
-                        android:paddingStart="100dp"
+                        android:gravity="center"
                         android:layout_marginStart="3dp"
                         android:layout_marginEnd="3dp"
                         android:layout_marginTop="3dp"
@@ -115,7 +127,7 @@
                         android:fontFamily="@font/dosis_extrabold"
                         android:layout_marginStart="3dp"
                         android:layout_marginEnd="3dp"
-                        android:paddingStart="85dp"
+                        android:gravity="center"
                         android:text="Display Name:"
                         android:textColor="@color/white"
                         android:textSize="20sp"
@@ -246,7 +258,7 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:background="@drawable/profile_buttons_design"
-                android:onClick="AddFriendFunc"
+                android:onClick="addFriendFunc"
                 android:text="Add Friend"
                 android:textSize="20dp"
                 android:visibility="gone" />

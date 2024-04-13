@@ -1,8 +1,8 @@
 package com.hit.playpal.home.domain.repositories;
 
 import com.google.android.gms.tasks.Task;
-import com.hit.playpal.entities.users.Notification;
-import com.hit.playpal.entities.users.enums.RelationshipStatus;
+import com.hit.playpal.entities.notifications.Notification;
+import com.hit.playpal.entities.relationships.enums.RelationshipStatus;
 
 import java.util.List;
 

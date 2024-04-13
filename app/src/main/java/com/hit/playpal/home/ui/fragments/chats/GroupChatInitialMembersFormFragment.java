@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,11 @@ public class GroupChatInitialMembersFormFragment extends Fragment {
     private TextView mNoResultsFound;
     private TextView mDbError;
 
+    private SearchView mSearchView;
+    private MaterialButton mSearchButton;
+    private MaterialButton mClearButton;
+
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater iInflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +58,7 @@ public class GroupChatInitialMembersFormFragment extends Fragment {
 
         initBackButton(iView);
         initCreateGroupChatButton(iView);
+        initSearchViewAndSearchAndClearButtons(iView);
         initInitialMembersRecyclerView(iView);
         initProgressBarAndLoadingState(iView);
     }
@@ -67,10 +74,29 @@ public class GroupChatInitialMembersFormFragment extends Fragment {
         mBackButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
     }
 
+    private void initSearchViewAndSearchAndClearButtons(@NonNull View iView) {
+        mSearchView = iView.findViewById(R.id.searchview_create_group_chat_initial_members);
+        mSearchButton = iView.findViewById(R.id.button_create_users_search);
+        mClearButton = iView.findViewById(R.id.button_create_users_clear);
+
+        mSearchButton.setOnClickListener(v -> {
+            String query = mSearchView.getQuery().toString();
+
+            if (!query.isEmpty()) {
+                mCreateGroupChatInitialMembersAdapter.applyNamingFilter(query);
+            }
+        });
+
+        mClearButton.setOnClickListener(v -> {
+            mSearchView.setQuery("", false);
+            mCreateGroupChatInitialMembersAdapter.applyNamingFilter("");
+        });
+    }
+
     private void initCreateGroupChatButton(@NonNull View iView) {
         mCreateGroupChatButton = iView.findViewById(R.id.button_create_group_chat_create);
         mCreateGroupChatButton.setOnClickListener(v -> {
-            User currentlyLoggedUser = CurrentlyLoggedUser.getCurrentlyLoggedUser();
+            User currentlyLoggedUser = CurrentlyLoggedUser.get();
             Set<User> selectedUsers = mCreateGroupChatInitialMembersAdapter.getSelectedUsers();
             int minimumNumberOfMembers = CreateGroupChatInitialMembersAdapter.MINIMUM_NUMBER_OF_MEMBERS;
 
@@ -95,7 +121,7 @@ public class GroupChatInitialMembersFormFragment extends Fragment {
         mInitialMembersRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         mCreateGroupChatInitialMembersAdapter = new CreateGroupChatInitialMembersAdapter(GenerateQueryForAllUsersUseCase.invoke(
-                CurrentlyLoggedUser.getCurrentlyLoggedUser().getUsername()),
+                CurrentlyLoggedUser.get().getUsername()),
                 getViewLifecycleOwner()
         );
         mInitialMembersRecyclerView.setAdapter(mCreateGroupChatInitialMembersAdapter);

@@ -60,13 +60,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-//        mBtnMyProfile.setOnClickListener(v -> navigateToMyProfileFragment());
-//        mBtnNotifications.setOnClickListener(v -> navigateToNotificationsFragment());
-//        mBtnGames.setOnClickListener(v -> navigateToGamesFragment());
-//        mBtnUserSearch.setOnClickListener(v -> navigateToSearchFragment());
-//        mBtnChats.setOnClickListener(v -> navigateToChatsFragment());
-//        mBtnGroupChatSearch.setOnClickListener(v -> navigateToGroupChatSearchFragment());
-
         mBottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navbutton_myprofile) {
                 navigateToMyProfileFragment();
@@ -80,22 +73,10 @@ public class HomeActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.navbutton_chats) {
                 navigateToChatsFragment();
                 return true;
-            }
-
-//                else if (item.getItemId() == R.id.navbutton_usersearch) {
-//                    navigateToUserSearchFragment();
-//                    return true;
-//                }
-//              else if (item.getItemId() == R.id.navbutton_groupsearch) {
-//                navigateToGroupChatSearchFragment();
-//                return true;
-//            }
-                else if (item.getItemId() == R.id.navbutton_search) {
+            } else if (item.getItemId() == R.id.navbutton_search) {
                 navigateToSearchFragment();
                 return true;
-                }
-
-              else {
+            } else {
                 return false;
             }
         });
@@ -107,17 +88,10 @@ public class HomeActivity extends AppCompatActivity {
         mBottomNavigationView = findViewById(R.id.bottomNavigationView);
         mBottomNavigationView.setSelectedItemId(R.id.navbutton_chats);
         mNavController = ((NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.homeContainerFragments)).getNavController();
-
-//        mBtnMyProfile = findViewById(R.id.myProfileButton);
-//        mBtnNotifications = findViewById(R.id.notificationsButton);
-//        mBtnGames = findViewById(R.id.gamesButton);
-//        mBtnUserSearch = findViewById(R.id.userSearchButton);
-//        mBtnChats = findViewById(R.id.chatsButton);
-//        mBtnGroupChatSearch = findViewById(R.id.groupChatSearchButton);
     }
 
     private void navigateToMyProfileFragment() {
-        String Uid = CurrentlyLoggedUser.getCurrentlyLoggedUser().getUid();
+        String Uid = CurrentlyLoggedUser.get().getUid();
         Bundle bundle = new Bundle();
         bundle.putString(ARG_USER_ID, Uid);
         mNavController.navigate(R.id.profileActivity, bundle);

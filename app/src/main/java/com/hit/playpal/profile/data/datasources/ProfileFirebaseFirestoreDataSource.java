@@ -2,9 +2,7 @@ package com.hit.playpal.profile.data.datasources;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
@@ -12,8 +10,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.hit.playpal.entities.chats.o2o.OneToOneChatRoom;
+import com.hit.playpal.entities.relationships.OneToOneChatRelationship;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,31 +32,22 @@ public class ProfileFirebaseFirestoreDataSource {
         return DB.collection("users").document(iUid).get();
     }
 
-    public Task<DocumentSnapshot> getUserPrivateByUid(String iUid) {
-        return DB.collection("users").document(iUid).collection("private").document("data").get();
-    }
-
-
     public Task<String> getStatus(String iUid, String iOtherUserUid) {
         return DB.collection("users").document(iUid).collection("relationships")
                 .whereEqualTo("other_user.uid", iOtherUserUid).get()
-                .continueWith(new Continuation<QuerySnapshot, String>() {
-                    @Override
-                    public String then(@NonNull Task<QuerySnapshot> task) throws Exception {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
-                            if (!querySnapshot.isEmpty()) {
-                                DocumentSnapshot document = querySnapshot.getDocuments().get(0);
-                                String status = document.getString("status");
-                                return status;
-                            } else {
-                                // Handle the case where the document/sub collection does not exist
-                                return "noStatus";
-                            }
+                .continueWith(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                            return document.getString("status");
                         } else {
-                            // Handle the failure
-                            throw Objects.requireNonNull(task.getException());
+                            // Handle the case where the document/sub collection does not exist
+                            return "noStatus";
                         }
+                    } else {
+                        // Handle the failure
+                        throw Objects.requireNonNull(task.getException());
                     }
                 });
     }
@@ -78,25 +70,49 @@ public class ProfileFirebaseFirestoreDataSource {
     public Task<Void> deleteRelationshipDocument(String iUid, String otherUserUid) {
         return DB.collection("users").document(iUid).collection("relationships")
                 .whereEqualTo("other_user.uid", otherUserUid).get()
-                .continueWithTask(new Continuation<QuerySnapshot, Task<Void>>() {
-                    @Override
-                    public Task<Void> then(@NonNull Task<QuerySnapshot> task) throws Exception {
-                        if (task.isSuccessful()) {
-                            List<Task<Void>> deleteTasks = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                deleteTasks.add(document.getReference().delete());
-                            }
-                            return Tasks.whenAll(deleteTasks);
-                        } else {
-                            Log.d("Firestore", "Error getting documents: ", task.getException());
-                            throw task.getException();
+                .continueWithTask(task -> {
+                    if (task.isSuccessful()) {
+                        List<Task<Void>> deleteTasks = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                            deleteTasks.add(document.getReference().delete());
                         }
+                        return Tasks.whenAll(deleteTasks);
+                    } else {
+                        Log.d("Firestore", "Error getting documents: ", task.getException());
+                        throw Objects.requireNonNull(task.getException());
                     }
                 });
     }
 
+    public Task<QuerySnapshot> tryToGetOneToOneChatRelationship(String iUid1, String iUid2) {
+        String joinedUids1 = OneToOneChatRelationship.joinUids(iUid1, iUid2);
+        String joinedUids2 = OneToOneChatRelationship.joinUids(iUid2, iUid1);
 
+        return DB
+                .collection("o2o_chat_relationships")
+                .whereIn("joined_uids", Arrays.asList(joinedUids1, joinedUids2))
+                .get();
+    }
 
+    public Task<DocumentSnapshot> getTheExistingOneToOneChatRoom(String iChatRoomId) {
+        return DB
+                .collection("chat_rooms")
+                .document(iChatRoomId)
+                .get();
+    }
+
+    public Task<DocumentReference> createAndGetNewOneToOneChatRoom(OneToOneChatRoom iOneToOneChatRoom) {
+        return DB
+                .collection("chat_rooms")
+                .add(iOneToOneChatRoom);
+    }
+
+    public Task<Void> createNewOneToOneChatRelationship(OneToOneChatRelationship iOneToOneChatRelationship) {
+        return DB
+                .collection("o2o_chat_relationships")
+                .document()
+                .set(iOneToOneChatRelationship);
+    }
 
 }
 

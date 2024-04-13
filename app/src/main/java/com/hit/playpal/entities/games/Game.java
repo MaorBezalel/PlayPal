@@ -6,9 +6,12 @@ import com.hit.playpal.entities.games.enums.Platform;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * Entity class that represents a game.
+ */
 public class Game {
-
     @PropertyName("game_id")  private String mGameId;
     @PropertyName("game_id") public String getGameId() { return mGameId; }
     @PropertyName("game_id") public void setGameId(String iGameId) { mGameId = iGameId; }
@@ -67,4 +70,16 @@ public class Game {
         mRating = iGameRating;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return this.getGameId().equals(game.mGameId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mGameId, mGameName, mBackgroundImage, mGenres, mPlatforms, mRating, mReleaseDate);
+    }
 }

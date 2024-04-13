@@ -19,14 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hit.playpal.R;
 import com.hit.playpal.chatrooms.ui.activities.ChatRoomActivity;
 import com.hit.playpal.chatrooms.ui.enums.ChatRoomLocation;
-import com.hit.playpal.chatrooms.ui.fragments.ChatRoomProfileFragment;
-import com.hit.playpal.entities.chats.AllChatRoom;
-import com.hit.playpal.entities.chats.GroupChatRoom;
+import com.hit.playpal.entities.chats.group.GroupChatRoom;
 import com.hit.playpal.home.ui.adapters.groupchats.AllGroupChatsAdapter;
 import com.hit.playpal.profile.adapters.RoomsOfUserAdapter;
 import com.hit.playpal.paginatedsearch.rooms.enums.RoomFilterType;
 import com.hit.playpal.paginatedsearch.rooms.enums.RoomSearchType;
-import com.hit.playpal.paginatedsearch.rooms.adapters.IRoomAdapter;
 import com.hit.playpal.paginatedsearch.rooms.adapters.RoomAdapter;
 
 public class RoomSearchFragment extends Fragment {

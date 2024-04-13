@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,10 @@ public class GroupChatGameFormFragment extends Fragment {
     private TextView mNoResultsFound;
     private TextView mDbError;
 
+    private SearchView mSearchView;
+    private MaterialButton mSearchButton;
+    private MaterialButton mClearButton;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater iInflater, ViewGroup iContainer,
                              Bundle savedInstanceState) {
@@ -48,6 +53,7 @@ public class GroupChatGameFormFragment extends Fragment {
 
         initBackButton(iView);
         initNextButton(iView);
+        initSearchViewAndSearchAndClearButtons(iView);
         initGameListRecyclerView(iView);
         initProgressBarAndLoadingState(iView);
     }
@@ -82,6 +88,25 @@ public class GroupChatGameFormFragment extends Fragment {
             } else {
                 Toast.makeText(requireContext(), "Please select a game", Toast.LENGTH_SHORT).show();
             }
+        });
+    }
+
+    private void initSearchViewAndSearchAndClearButtons(@NonNull View iView) {
+        mSearchView = iView.findViewById(R.id.searchview_create_games_search);
+        mSearchButton = iView.findViewById(R.id.button_create_games_search);
+        mClearButton = iView.findViewById(R.id.button_create_games_clear);
+
+        mSearchButton.setOnClickListener(v -> {
+            String query = mSearchView.getQuery().toString();
+
+            if (!query.isEmpty()) {
+                mCreateGroupChatGamesAdapter.applyNamingFilter(query);
+            }
+        });
+
+        mClearButton.setOnClickListener(v -> {
+            mSearchView.setQuery("", false);
+            mCreateGroupChatGamesAdapter.applyNamingFilter("");
         });
     }
 

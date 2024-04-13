@@ -1,12 +1,10 @@
 package com.hit.playpal.home.data.datasources;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.hit.playpal.entities.users.enums.NotificationType;
-import com.hit.playpal.entities.users.enums.RelationshipStatus;
-import com.hit.playpal.home.domain.repositories.INotificationsRepository;
+import com.hit.playpal.entities.notifications.enums.NotificationType;
+import com.hit.playpal.entities.relationships.enums.RelationshipStatus;
 
 public class NotificationsFirebaseFirestoreDataSource {
     private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
