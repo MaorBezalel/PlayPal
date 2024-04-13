@@ -32,6 +32,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hit.playpal.R;
 import com.hit.playpal.auth.ui.activities.AuthActivity;
+import com.hit.playpal.entities.users.User;
 import com.hit.playpal.profile.ui.activities.ProfileActivity;
 import com.hit.playpal.settings.domain.usecases.CheckIfUserNameIsUniqueUseCase;
 import com.hit.playpal.settings.domain.usecases.UpdateUserProfileUseCase;
@@ -268,6 +269,8 @@ public class SettingsActivity extends AppCompatActivity {
 
             if (task.isSuccessful()) {
                 Toast.makeText(SettingsActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+
+                CurrentlyLoggedUser.set(new User(mCurrentUserUid, iUserName, iDisplayName, mImageUri.toString(), iAboutMe));
 
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("username", iUserName);
