@@ -38,4 +38,9 @@
         android:id="@+id/chatInfoMemberSearchFragment"
         android:name="com.hit.playpal.chatrooms.ui.fragments.ChatInfoMemberSearchFragment"
         android:label="ChatInfoMemberSearchFragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.hit.playpal.home.ui.fragments.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 </navigation>

@@ -102,6 +102,12 @@ public class UserSearchFragment extends Fragment {
                     }
                 }, this);
 
+                if (USER_SEARCH_ALL_TITLE == "Members") {
+                    mUserSearchTitle.setVisibility(View.VISIBLE);
+                } else {
+                    mUserSearchTitle.setVisibility(View.GONE);
+                }
+
                 mUserSearchTitle.setText(USER_SEARCH_ALL_TITLE);
                 break;
 

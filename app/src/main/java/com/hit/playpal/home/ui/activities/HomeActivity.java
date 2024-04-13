@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hit.playpal.R;
 import com.hit.playpal.paginatedsearch.games.enums.GameSearchType;
 import com.hit.playpal.paginatedsearch.rooms.enums.RoomSearchType;
@@ -33,6 +34,8 @@ public class HomeActivity extends AppCompatActivity {
     private ImageButton mBtnUserSearch;
     private ImageButton mBtnChats;
     private ImageButton mBtnGroupChatSearch;
+
+    private BottomNavigationView mBottomNavigationView;
 
 
     @Override
@@ -57,24 +60,60 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        mBtnMyProfile.setOnClickListener(v -> navigateToMyProfileFragment());
-        mBtnNotifications.setOnClickListener(v -> navigateToNotificationsFragment());
-        mBtnGames.setOnClickListener(v -> navigateToGamesFragment());
-        mBtnUserSearch.setOnClickListener(v -> navigateToSearchFragment());
-        mBtnChats.setOnClickListener(v -> navigateToChatsFragment());
-        mBtnGroupChatSearch.setOnClickListener(v -> navigateToGroupChatSearchFragment());
+//        mBtnMyProfile.setOnClickListener(v -> navigateToMyProfileFragment());
+//        mBtnNotifications.setOnClickListener(v -> navigateToNotificationsFragment());
+//        mBtnGames.setOnClickListener(v -> navigateToGamesFragment());
+//        mBtnUserSearch.setOnClickListener(v -> navigateToSearchFragment());
+//        mBtnChats.setOnClickListener(v -> navigateToChatsFragment());
+//        mBtnGroupChatSearch.setOnClickListener(v -> navigateToGroupChatSearchFragment());
+
+        mBottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navbutton_myprofile) {
+                navigateToMyProfileFragment();
+                return true;
+            } else if (item.getItemId() == R.id.navbutton_notifications) {
+                navigateToNotificationsFragment();
+                return true;
+            } else if (item.getItemId() == R.id.navbutton_games) {
+                navigateToGamesFragment();
+                return true;
+            } else if (item.getItemId() == R.id.navbutton_chats) {
+                navigateToChatsFragment();
+                return true;
+            }
+
+//                else if (item.getItemId() == R.id.navbutton_usersearch) {
+//                    navigateToUserSearchFragment();
+//                    return true;
+//                }
+//              else if (item.getItemId() == R.id.navbutton_groupsearch) {
+//                navigateToGroupChatSearchFragment();
+//                return true;
+//            }
+                else if (item.getItemId() == R.id.navbutton_search) {
+                navigateToSearchFragment();
+                return true;
+                }
+
+              else {
+                return false;
+            }
+        });
     }
 
 
 
     private void initViews() {
+        mBottomNavigationView = findViewById(R.id.bottomNavigationView);
+        mBottomNavigationView.setSelectedItemId(R.id.navbutton_chats);
         mNavController = ((NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.homeContainerFragments)).getNavController();
-        mBtnMyProfile = findViewById(R.id.myProfileButton);
-        mBtnNotifications = findViewById(R.id.notificationsButton);
-        mBtnGames = findViewById(R.id.gamesButton);
-        mBtnUserSearch = findViewById(R.id.userSearchButton);
-        mBtnChats = findViewById(R.id.chatsButton);
-        mBtnGroupChatSearch = findViewById(R.id.groupChatSearchButton);
+
+//        mBtnMyProfile = findViewById(R.id.myProfileButton);
+//        mBtnNotifications = findViewById(R.id.notificationsButton);
+//        mBtnGames = findViewById(R.id.gamesButton);
+//        mBtnUserSearch = findViewById(R.id.userSearchButton);
+//        mBtnChats = findViewById(R.id.chatsButton);
+//        mBtnGroupChatSearch = findViewById(R.id.groupChatSearchButton);
     }
 
     private void navigateToMyProfileFragment() {
@@ -95,6 +134,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void navigateToSearchFragment() {
+        mNavController.navigate(R.id.searchFragment);
+    }
+
+    private void navigateToUserSearchFragment() {
         Bundle bundle = new Bundle();
         bundle.putString(ARG_SEARCH_TYPE, UserSearchType.ALL.toString());
         mNavController.navigate(R.id.userSearchFragment, bundle);
