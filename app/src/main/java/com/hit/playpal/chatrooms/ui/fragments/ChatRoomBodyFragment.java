@@ -23,9 +23,9 @@ import com.hit.playpal.chatrooms.domain.listeners.INewMessageRegistrationListene
 import com.hit.playpal.chatrooms.ui.adapters.MessageAdapter;
 import com.hit.playpal.chatrooms.ui.viewmodels.ChatRoomViewModel;
 import com.hit.playpal.entities.chats.ChatRoom;
-import com.hit.playpal.entities.chats.GroupChatRoom;
-import com.hit.playpal.entities.chats.Message;
-import com.hit.playpal.entities.chats.OneToOneChatRoom;
+import com.hit.playpal.entities.chats.group.GroupChatRoom;
+import com.hit.playpal.entities.messages.Message;
+import com.hit.playpal.entities.chats.o2o.OneToOneChatRoom;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.hit.playpal.utils.EndlessRecyclerViewScrollListener;

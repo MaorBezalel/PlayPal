@@ -8,8 +8,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hit.playpal.chatrooms.domain.listeners.INewMessageEventListener;
-import com.hit.playpal.entities.chats.GroupProfile;
-import com.hit.playpal.entities.chats.Message;
+import com.hit.playpal.entities.chats.group.GroupProfile;
+import com.hit.playpal.entities.messages.Message;
 import com.hit.playpal.chatrooms.data.listeners.FirebaseFirestoreNewMessageRegistrationListener;
 import com.hit.playpal.chatrooms.data.listeners.FirebaseFirestoreNewMessageEventListener;
 

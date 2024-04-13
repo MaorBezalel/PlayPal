@@ -20,7 +20,7 @@ import com.hit.playpal.chatrooms.domain.usecases.chatbody.UpdateChatRoomLastMess
 import com.hit.playpal.chatrooms.domain.usecases.chatbody.FetchMessagesUseCase;
 import com.hit.playpal.chatrooms.ui.enums.ChatRoomLocation;
 import com.hit.playpal.entities.chats.ChatRoom;
-import com.hit.playpal.entities.chats.Message;
+import com.hit.playpal.entities.messages.Message;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.utils.Out;
 import com.hit.playpal.utils.UseCaseResult;

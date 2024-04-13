@@ -1,7 +1,7 @@
-package com.hit.playpal.entities.users;
+package com.hit.playpal.entities.notifications;
 
 import com.google.firebase.firestore.PropertyName;
-import com.hit.playpal.entities.users.enums.NotificationType;
+import com.hit.playpal.entities.notifications.enums.NotificationType;
 
 import java.util.Date;
 

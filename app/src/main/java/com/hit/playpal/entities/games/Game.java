@@ -7,8 +7,10 @@ import com.hit.playpal.entities.games.enums.Platform;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Entity class that represents a game.
+ */
 public class Game {
-
     @PropertyName("game_id")  private String mGameId;
     @PropertyName("game_id") public String getGameId() { return mGameId; }
     @PropertyName("game_id") public void setGameId(String iGameId) { mGameId = iGameId; }

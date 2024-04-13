@@ -17,7 +17,7 @@ import com.hit.playpal.chatrooms.ui.fragments.ChatRoomBodyFragment;
 import com.hit.playpal.chatrooms.ui.fragments.ChatRoomProfileFragment;
 import com.hit.playpal.chatrooms.ui.viewmodels.ChatRoomViewModel;
 import com.hit.playpal.entities.chats.ChatRoom;
-import com.hit.playpal.entities.chats.GroupChatRoom;
+import com.hit.playpal.entities.chats.group.GroupChatRoom;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.utils.CurrentlyLoggedUser;
 import com.hit.playpal.utils.Out;

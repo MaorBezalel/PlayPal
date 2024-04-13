@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.firestore.Query;
-import com.hit.playpal.entities.chats.GroupChatRoom;
-import com.hit.playpal.entities.chats.GroupProfile;
+import com.hit.playpal.entities.chats.group.GroupChatRoom;
+import com.hit.playpal.entities.chats.group.GroupProfile;
 import com.hit.playpal.entities.games.Game;
 import com.hit.playpal.entities.users.User;
 import com.hit.playpal.home.domain.usecases.chats.CreateGroupChatProfileUseCase;

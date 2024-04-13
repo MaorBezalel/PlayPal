@@ -3,7 +3,7 @@ package com.hit.playpal.auth.domain.usecases;
 import com.hit.playpal.auth.domain.repositories.IAuthRepository;
 import com.hit.playpal.auth.domain.utils.enums.AuthServerFailure;
 import com.hit.playpal.utils.UseCaseResult;
-import com.hit.playpal.entities.users.Settings;
+import com.hit.playpal.entities.settings.Settings;
 
 import java.util.concurrent.CompletableFuture;
 

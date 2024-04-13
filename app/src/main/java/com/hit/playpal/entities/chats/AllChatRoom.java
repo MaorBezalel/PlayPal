@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.PropertyName;
 import com.hit.playpal.entities.chats.enums.ChatRoomType;
-import com.hit.playpal.entities.users.User;
+import com.hit.playpal.entities.chats.group.GroupChatRoom;
+import com.hit.playpal.entities.chats.o2o.OneToOneChatRoom;
+import com.hit.playpal.entities.messages.Message;
 
 import org.jetbrains.annotations.Contract;
 
@@ -17,8 +19,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Entity class contain all the data of a one-to-one chat room or a group chat room.
+ * This class is used to display all the chat rooms of the user in the chat rooms
+ * firestore paginated recycler view list, regardless of the chat room type.
+ */
 public class AllChatRoom implements Parcelable {
-    // Common Data
+
+    // ---------------------------------------------ChatRoom Data----------------------------------------------------- //
     @DocumentId
     protected String mId;
     @DocumentId public String getId() { return mId; }
@@ -35,15 +43,17 @@ public class AllChatRoom implements Parcelable {
     @PropertyName("last_message") protected Message mLastMessage;
     @PropertyName("last_message") public Message getLastMessage() { return mLastMessage; }
     @PropertyName("last_message") public void setLastMessage(Message iLastMessage) { mLastMessage = iLastMessage; }
+    // ---------------------------------------------ChatRoom Data----------------------------------------------------- //
 
 
-    // OneToOneChatRoom Data
+    // ---------------------------------------------OneToOneChatRoom Data----------------------------------------------------- //
     @PropertyName("other_member_data") private HashMap<String, OneToOneChatRoom.OtherMemberData> mOtherMemberData;
     @PropertyName("other_member_data") public HashMap<String, OneToOneChatRoom.OtherMemberData> getOtherMemberBasicData() { return mOtherMemberData; }
     @PropertyName("other_member_data") public void setOtherMemberBasicData(HashMap<String, OneToOneChatRoom.OtherMemberData> iOtherMemberData) { mOtherMemberData = iOtherMemberData; }
+    // ---------------------------------------------OneToOneChatRoom Data----------------------------------------------------- //
 
 
-    // GroupChatRoom Data
+    // ---------------------------------------------GroupChatRoom Data----------------------------------------------------- //
     @PropertyName("name") private String mName;
     @PropertyName("name") public String getName() { return mName; }
     @PropertyName("name") public void setName(String iName) { mName = iName; }
@@ -59,6 +69,7 @@ public class AllChatRoom implements Parcelable {
     @PropertyName("game") private GroupChatRoom.Game mGame;
     @PropertyName("game") public GroupChatRoom.Game getGame() { return mGame; }
     @PropertyName("game") public void setGame(GroupChatRoom.Game iGame) { mGame = iGame; }
+    // ---------------------------------------------GroupChatRoom Data----------------------------------------------------- //
 
     public AllChatRoom() { }
     public AllChatRoom(
@@ -100,6 +111,10 @@ public class AllChatRoom implements Parcelable {
         mGame = iIn.readParcelable(GroupChatRoom.Game.class.getClassLoader());
     }
 
+    /**
+     * Convert this AllChatRoom object to a ChatRoom object (either OneToOneChatRoom or GroupChatRoom).
+     * @return A polymorphic ChatRoom object.
+     */
     public ChatRoom convertToChatRoom() {
         if (mType == ChatRoomType.ONE_TO_ONE) {
             return new OneToOneChatRoom(mId, mMembersUid, mLastMessage, mOtherMemberData);

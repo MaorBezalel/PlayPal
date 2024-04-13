@@ -3,8 +3,8 @@ package com.hit.playpal.home.ui.viewmodels;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.hit.playpal.entities.users.Notification;
-import com.hit.playpal.entities.users.enums.RelationshipStatus;
+import com.hit.playpal.entities.notifications.Notification;
+import com.hit.playpal.entities.relationships.enums.RelationshipStatus;
 import com.hit.playpal.home.data.repositories.NotificationsRepository;
 import com.hit.playpal.home.domain.usecases.notifications.GetFriendRequestsOfUserUseCase;
 import com.hit.playpal.home.domain.usecases.notifications.RemoveFriendRequestNotificationUseCase;

@@ -1,11 +1,11 @@
-package com.hit.playpal.entities.users;
+package com.hit.playpal.entities.settings;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.PropertyName;
-import com.hit.playpal.entities.users.enums.MessagesPolicy;
-import com.hit.playpal.entities.users.enums.NotificationPolicy;
-import com.hit.playpal.entities.users.enums.ThemePolicy;
+import com.hit.playpal.entities.settings.enums.MessagesPolicy;
+import com.hit.playpal.entities.settings.enums.NotificationPolicy;
+import com.hit.playpal.entities.settings.enums.ThemePolicy;
 
 import org.jetbrains.annotations.Contract;
 

@@ -9,10 +9,14 @@ import androidx.annotation.NonNull;
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.PropertyName;
 import com.hit.playpal.entities.chats.enums.ChatRoomType;
+import com.hit.playpal.entities.messages.Message;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity class that represents a chat room.
+ */
 public abstract class ChatRoom implements Parcelable {
     @DocumentId protected String mId;
     @DocumentId public String getId() { return mId; }

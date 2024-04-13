@@ -1,9 +1,9 @@
-package com.hit.playpal.entities.chats;
+package com.hit.playpal.entities.chats.group;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.PropertyName;
-import com.hit.playpal.entities.chats.enums.UserChatRole;
+import com.hit.playpal.entities.chats.group.enums.GroupChatRoomRole;
 import com.hit.playpal.entities.users.User;
 
 import org.jetbrains.annotations.Contract;
@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Entity class that represents a group profile.
+ */
 public class GroupProfile {
     @PropertyName("description") private String mDescription;
     @PropertyName("description") public String getDescription() {
@@ -38,10 +41,13 @@ public class GroupProfile {
     public void convertUsersToParticipants(@NonNull User iOwner, @NonNull Set<User> iRegularMembers) {
         mParticipants = new ArrayList<>(iRegularMembers.size() + 1);
 
-        mParticipants.add(new Participant(iOwner.getUid(), iOwner.getDisplayName(), iOwner.getProfilePicture(), UserChatRole.OWNER));
-        iRegularMembers.forEach(user -> mParticipants.add(new Participant(user.getUid(), user.getDisplayName(), user.getProfilePicture(), UserChatRole.REGULAR)));
+        mParticipants.add(new Participant(iOwner.getUid(), iOwner.getDisplayName(), iOwner.getProfilePicture(), GroupChatRoomRole.OWNER));
+        iRegularMembers.forEach(user -> mParticipants.add(new Participant(user.getUid(), user.getDisplayName(), user.getProfilePicture(), GroupChatRoomRole.REGULAR)));
     }
 
+    /**
+     * Entity class that represents a participant in a group chat room.
+     */
     public static class Participant {
         @PropertyName("uid") private String mUserUid;
         @PropertyName("uid")  public String getUserUid() {
@@ -67,26 +73,26 @@ public class GroupProfile {
             mProfilePicture = iProfilePicture;
         }
 
-        @PropertyName("chat_role") private UserChatRole mUserChatRole;
-        @PropertyName("chat_role")  public UserChatRole getUserChatRole() {
-            return mUserChatRole;
+        @PropertyName("chat_role") private GroupChatRoomRole mGroupChatRoomRole;
+        @PropertyName("chat_role")  public GroupChatRoomRole getUserChatRole() {
+            return mGroupChatRoomRole;
         }
-        @PropertyName("chat_role")  public void setUserChatRole(UserChatRole iUserChatRole) {
-            mUserChatRole = iUserChatRole;
+        @PropertyName("chat_role")  public void setUserChatRole(GroupChatRoomRole iGroupChatRoomRole) {
+            mGroupChatRoomRole = iGroupChatRoomRole;
         }
 
         public Participant() { }
-        public Participant(String iUserUid, String iDisplayName, String iProfilePicture, UserChatRole iUserChatRole) {
+        public Participant(String iUserUid, String iDisplayName, String iProfilePicture, GroupChatRoomRole iGroupChatRoomRole) {
             this.mUserUid = iUserUid;
             this.mDisplayName = iDisplayName;
             this.mProfilePicture = iProfilePicture;
-            this.mUserChatRole = iUserChatRole;
+            this.mGroupChatRoomRole = iGroupChatRoomRole;
         }
 
         @NonNull
         @Contract("_, _ -> new")
-        public static Participant parseUser(@NonNull User iUser, UserChatRole iUserChatRole) {
-            return new Participant(iUser.getUid(), iUser.getDisplayName(), iUser.getProfilePicture(), iUserChatRole);
+        public static Participant parseUser(@NonNull User iUser, GroupChatRoomRole iGroupChatRoomRole) {
+            return new Participant(iUser.getUid(), iUser.getDisplayName(), iUser.getProfilePicture(), iGroupChatRoomRole);
         }
     }
 }
