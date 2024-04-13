@@ -9,7 +9,7 @@ import com.hit.playpal.utils.Out;
 
 
 public class CheckIfUserNameIsUniqueUseCase {
-    private UpdateUserProfileRepository mUpdateUserProfileRepository;
+    private final UpdateUserProfileRepository mUpdateUserProfileRepository;
 
     public CheckIfUserNameIsUniqueUseCase() {
         this.mUpdateUserProfileRepository = new UpdateUserProfileRepository();

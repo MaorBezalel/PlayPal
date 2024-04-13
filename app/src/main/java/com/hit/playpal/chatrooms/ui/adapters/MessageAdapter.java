@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.hit.playpal.R;
+import com.hit.playpal.entities.chats.enums.ChatRoomType;
 import com.hit.playpal.entities.messages.Message;
 import com.hit.playpal.utils.DateUtils;
 import com.squareup.picasso.Picasso;
@@ -41,7 +42,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         holder.MESSAGE_BODY.setText(message.getContent().getData());
 
         if (message.getSender().getProfilePicture() == null || message.getSender().getProfilePicture().isEmpty()) {
-            holder.MESSAGE_SENDER_PROFILE_PICTURE.setImageResource(R.drawable.ic_home_nav_search_groupchats);
+            holder.MESSAGE_SENDER_PROFILE_PICTURE.setImageResource(R.drawable.ic_home_nav_myprofile);
         } else {
             Picasso.get().load(message.getSender().getProfilePicture()).into(holder.MESSAGE_SENDER_PROFILE_PICTURE);
         }

@@ -39,7 +39,7 @@ public class UsersInGroupChatAdapter extends RecyclerView.Adapter<UsersInGroupCh
     @Override
     public void onBindViewHolder(@NonNull UsersInGroupChatAdapter.UserViewHolder holder, int position) {
         GroupProfile.Participant user = mCurrentFilteredParticipantsList.get(position);
-        holder.userDisplayName.setText(user.getDisplayName());
+        holder.userName.setText(user.getUsername());
         holder.userCard.setOnClickListener(v -> ON_USER_CLICKED.onUserClick(user.getUserUid()));
 
         if(user.getProfilePicture() != null && !user.getProfilePicture().isEmpty())
@@ -60,19 +60,19 @@ public class UsersInGroupChatAdapter extends RecyclerView.Adapter<UsersInGroupCh
     public static class UserViewHolder extends RecyclerView.ViewHolder {
         public final CardView userCard;
         public final ImageView userImage;
-        public final TextView userDisplayName;
+        public final TextView userName;
 
         public UserViewHolder(View view) {
             super(view);
             userCard = view.findViewById(R.id.userCard);
             userImage = view.findViewById(R.id.fragment_search_users_image);
-            userDisplayName = view.findViewById(R.id.fragment_search_users_displayname);
+            userName = view.findViewById(R.id.fragment_search_users_displayname);
         }
     }
 
-    public void applyFilters(String iUserDisplayName)
+    public void applyFilters(String iUserName)
     {
-        if(iUserDisplayName == null || iUserDisplayName.isEmpty())
+        if(iUserName == null || iUserName.isEmpty())
         {
             mCurrentFilteredParticipantsList = mParticipantsList;
         }
@@ -80,7 +80,7 @@ public class UsersInGroupChatAdapter extends RecyclerView.Adapter<UsersInGroupCh
         {
             mCurrentFilteredParticipantsList = mParticipantsList.
                     stream().
-                    filter(user -> user.getDisplayName().contains(iUserDisplayName)).
+                    filter(user -> user.getUsername().contains(iUserName)).
                     collect(Collectors.toList());
         }
 

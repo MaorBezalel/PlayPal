@@ -1,6 +1,5 @@
 package com.hit.playpal.profile.domain.usecases;
 
-import com.hit.playpal.entities.relationships.OneToOneChatRelationship;
 import com.hit.playpal.profile.data.repositories.ProfileRepository;
 import com.hit.playpal.profile.domain.repositories.IProfileRepository;
 
