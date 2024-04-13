@@ -27,8 +27,6 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
     private static final int PAGE_PREFETCH_DISTANCE = 5;
     public static final int MINIMUM_NUMBER_OF_MEMBERS = 2;
 
-    private Set<MaterialCardView> mSelectedCardViews;
-
     private Set<User> mSelectedUsers;
     public Set<User> getSelectedUsers() {
         return mSelectedUsers;
@@ -44,7 +42,6 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
                 .build()
         );
 
-        mSelectedCardViews = new HashSet<>();
         mSelectedUsers = new HashSet<>();
     }
 
@@ -74,16 +71,16 @@ public class CreateGroupChatInitialMembersAdapter extends FirestorePagingAdapter
         }
 
         iHolder.CARD_VIEW.setOnClickListener(v -> {
-            if (mSelectedCardViews.contains(iHolder.CARD_VIEW)) {
-                mSelectedCardViews.remove(iHolder.CARD_VIEW);
+            if (mSelectedUsers.contains(iCurrentUser)) {
                 mSelectedUsers.remove(iCurrentUser);
                 iHolder.CARD_VIEW.setChecked(false);
             } else {
-                mSelectedCardViews.add(iHolder.CARD_VIEW);
                 mSelectedUsers.add(iCurrentUser);
                 iHolder.CARD_VIEW.setChecked(true);
             }
         });
+
+        iHolder.CARD_VIEW.setChecked(mSelectedUsers.contains(iCurrentUser));
     }
 
     @NonNull

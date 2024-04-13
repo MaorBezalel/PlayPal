@@ -1,5 +1,6 @@
 package com.hit.playpal.home.ui.adapters.creategroupchat;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -23,7 +24,6 @@ public class CreateGroupChatGamesAdapter extends FirestorePagingAdapter<Game, Cr
     private static final int PAGE_PREFETCH_DISTANCE = 5;
     private static final PagingConfig PAGING_CONFIG = new PagingConfig(PAGE_SIZE, PAGE_PREFETCH_DISTANCE, false);
 
-    private MaterialCardView mSelectedCardView;
 
     private Game mSelectedGame;
     public Game getSelectedGame() {
@@ -58,21 +58,16 @@ public class CreateGroupChatGamesAdapter extends FirestorePagingAdapter<Game, Cr
         Picasso.get().load(iCurrentGame.getBackgroundImage()).into(iHolder.GAME_IMAGE_VIEW);
 
         iHolder.CARD_VIEW.setOnClickListener(v -> {
-            if (iHolder.CARD_VIEW.isChecked() && iCurrentGame == mSelectedGame) {
+            if (iHolder.CARD_VIEW.isChecked() && iCurrentGame.equals(mSelectedGame)) {
                 iHolder.CARD_VIEW.setChecked(false);
                 mSelectedGame = null;
-                mSelectedCardView = null;
             } else {
                 iHolder.CARD_VIEW.setChecked(true);
-
-                if (mSelectedCardView != null) {
-                    mSelectedCardView.setChecked(false);
-                }
-
-                mSelectedCardView = iHolder.CARD_VIEW;
                 mSelectedGame = iCurrentGame;
             }
         });
+
+        iHolder.CARD_VIEW.setChecked(iCurrentGame.equals(mSelectedGame));
     }
 
     @NonNull

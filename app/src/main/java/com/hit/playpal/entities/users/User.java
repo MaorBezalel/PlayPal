@@ -9,6 +9,8 @@ import com.google.firebase.firestore.PropertyName;
 
 import org.jetbrains.annotations.Contract;
 
+import java.util.Objects;
+
 /**
  * Entity class that represents a user.
  */
@@ -92,5 +94,18 @@ public class User implements Parcelable {
         dest.writeString(mDisplayName);
         dest.writeString(mProfilePicture);
         dest.writeString(mAboutMe);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return this.getUid().equals(user.mUid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mUid, mUsername, mDisplayName, mProfilePicture, mAboutMe);
     }
 }
