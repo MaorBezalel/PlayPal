@@ -1,5 +1,6 @@
 package com.hit.playpal.home.ui.adapters.creategroupchat;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,8 +21,11 @@ import com.squareup.picasso.Picasso;
 
 public class CreateGroupChatGamesAdapter extends FirestorePagingAdapter<Game, CreateGroupChatGamesAdapter.GameViewHolder> {
     private static final int PAGE_SIZE = 20;
-    private static final int PAGE_PREFETCH_DISTANCE = 5;
+    private static final int PAGE_PREFETCH_DISTANCE = 10;
     private static final PagingConfig PAGING_CONFIG = new PagingConfig(PAGE_SIZE, PAGE_PREFETCH_DISTANCE, false);
+
+    private LifecycleOwner mOwner;
+    private Query mBaseQuery;
 
     private MaterialCardView mSelectedCardView;
 
@@ -36,6 +40,9 @@ public class CreateGroupChatGamesAdapter extends FirestorePagingAdapter<Game, Cr
                 .setQuery(iQuery, PAGING_CONFIG, Game.class)
                 .build()
         );
+
+        mOwner = iOwner;
+        mBaseQuery = iQuery;
     }
 
     public static class GameViewHolder extends RecyclerView.ViewHolder {
@@ -57,8 +64,13 @@ public class CreateGroupChatGamesAdapter extends FirestorePagingAdapter<Game, Cr
         iHolder.GAME_TITLE_TEXT_VIEW.setText(iCurrentGame.getGameName());
         Picasso.get().load(iCurrentGame.getBackgroundImage()).into(iHolder.GAME_IMAGE_VIEW);
 
+        Log.i("CreateGroupChatGamesAdapter", "onBindViewHolder: game: " + iCurrentGame.getGameName() + " | checked: " + iHolder.CARD_VIEW.isChecked() + " | equals: " + (iHolder.CARD_VIEW == mSelectedCardView));
+
+        // Outside of onClickListener
+        iHolder.CARD_VIEW.setChecked(iHolder.CARD_VIEW == mSelectedCardView);
+
         iHolder.CARD_VIEW.setOnClickListener(v -> {
-            if (iHolder.CARD_VIEW.isChecked() && iCurrentGame == mSelectedGame) {
+            if (iHolder.CARD_VIEW.isChecked() && iCurrentGame.equals(mSelectedGame)) {
                 iHolder.CARD_VIEW.setChecked(false);
                 mSelectedGame = null;
                 mSelectedCardView = null;
@@ -80,5 +92,16 @@ public class CreateGroupChatGamesAdapter extends FirestorePagingAdapter<Game, Cr
     public GameViewHolder onCreateViewHolder(@NonNull ViewGroup iParent, int iViewType) {
         View view = View.inflate(iParent.getContext(), R.layout.item_game_for_group_creation, null);
         return new GameViewHolder(view);
+    }
+
+    public void applyNamingFilter(String iGameName) {
+        Query newQuery = mBaseQuery
+                .startAt(iGameName)
+                .endAt(iGameName + "\uf8ff");
+
+        super.updateOptions(new FirestorePagingOptions.Builder<Game>()
+                .setLifecycleOwner(mOwner)
+                .setQuery(newQuery, PAGING_CONFIG, Game.class)
+                .build());
     }
 }

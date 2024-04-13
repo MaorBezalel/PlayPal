@@ -11,7 +11,7 @@ public class CreateGroupChatRoomFirebaseFirestoreDataSource {
     private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
 
     public Query getAllGamesQuery() {
-        return DB.collection("games");
+        return DB.collection("games").orderBy("game_name");
     }
 
     public Query getAllUsersQuery(String iUsername) {
